@@ -1,13 +1,55 @@
 <!-- MacOSDock Component -->
 @auth
-<div id="macos-dock-wrapper" class="fixed inset-x-0 bottom-4 z-[9999] flex items-end justify-center pointer-events-none">
-    <div id="macos-dock" class="backdrop-blur-md pointer-events-auto flex items-end"
-         style="background: rgba(45, 45, 45, 0.75); border: 1px solid rgba(255, 255, 255, 0.15); transition: width 0.1s ease-out;">
-        <div id="macos-dock-icons-container" class="relative w-full overflow-visible">
-            <!-- Icons will be rendered here via JS -->
+<div id="macos-dock-container" class="w-full flex justify-center bg-transparent shrink-0 pointer-events-none">
+    <div id="macos-dock-wrapper" class="z-[9999] flex items-end justify-center pointer-events-none">
+        <div id="macos-dock" class="backdrop-blur-md pointer-events-auto flex items-end"
+             style="background: rgba(45, 45, 45, 0.75); border: 1px solid rgba(255, 255, 255, 0.15);">
+            <div id="macos-dock-icons-container" class="relative w-full overflow-visible">
+                <!-- Icons will be rendered here via JS -->
+            </div>
         </div>
     </div>
 </div>
+
+<style>
+    /* Fixed positioning ensures it's always at the bottom of the viewport */
+    #macos-dock-container {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        z-index: 99999;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        padding-bottom: 1rem;
+        background: transparent;
+        pointer-events: none;
+    }
+
+    #macos-dock-wrapper {
+        pointer-events: auto;
+    }
+
+    /* 
+       CRITICAL: This ensures the page content NEVER goes under the dock.
+       The content area will strictly end above the dock's height.
+    */
+    main, #main-content, .flex-1.overflow-y-auto, .min-h-screen {
+        margin-bottom: 90px !important; /* Reduced space for smaller dock */
+    }
+
+    /* Specific adjustment for the dashboard/admin scrollable areas */
+    .scrollable-content {
+        padding-bottom: 20px !important;
+    }
+
+    /* Mobile adjustments: less margin for smaller dock */
+    @media (max-width: 768px) {
+        main, #main-content, .flex-1.overflow-y-auto, .min-h-screen {
+            margin-bottom: 70px !important;
+        }
+    }
+</style>
 
 <script>
     (function() {
@@ -75,18 +117,21 @@
             }
         });
 
-        // Config from React component
+        // Config from React component - Reduced values for a more compact look
         function getResponsiveConfig() {
             const smallerDimension = Math.min(window.innerWidth, window.innerHeight);
             if (smallerDimension < 480) {
-              return { baseIconSize: 32, maxScale: 1.4, effectWidth: smallerDimension * 0.4 };
+              return { baseIconSize: 32, maxScale: 1.3, effectWidth: 140 };
             }
             if (smallerDimension < 768) {
-              return { baseIconSize: 40, maxScale: 1.5, effectWidth: smallerDimension * 0.35 };
+              return { baseIconSize: 40, maxScale: 1.4, effectWidth: 180 };
+            }
+            if (smallerDimension < 1024) {
+              return { baseIconSize: 44, maxScale: 1.5, effectWidth: 220 };
             }
             return {
               baseIconSize: 48,
-              maxScale: 1.8,
+              maxScale: 1.6,
               effectWidth: 250,
             };
         }
@@ -134,7 +179,8 @@
             });
         }
 
-        const dockRef = document.getElementById("macos-dock");
+        const dockWrapper = document.getElementById("macos-dock");
+        const dockAreaContainer = document.getElementById("macos-dock-container");
         const containerRef = document.getElementById("macos-dock-icons-container");
         const itemNodes = [];
 
@@ -194,16 +240,20 @@
 
         function updateStyles() {
             const baseSpacing = getBaseSpacing();
-            const padding = 12;
+            const padding = 10;
             
             const contentWidth = currentPositions.length > 0 
                 ? Math.max(...currentPositions.map((p, i) => p + (config.baseIconSize * currentScales[i]) / 2))
                 : apps.length * (config.baseIconSize + baseSpacing) - baseSpacing;
 
-            dockRef.style.width = `${contentWidth + padding * 2}px`;
-            dockRef.style.padding = `${padding}px`;
-            dockRef.style.borderRadius = "20px";
-            dockRef.style.boxShadow = `
+            dockWrapper.style.width = `${contentWidth + padding * 2}px`;
+            dockWrapper.style.padding = `${padding}px`;
+            dockWrapper.style.borderRadius = "16px";
+            
+            // Adjust container height to include space for bounce
+            dockAreaContainer.style.minHeight = `${config.baseIconSize * 1.5 + padding * 2}px`;
+
+            dockWrapper.style.boxShadow = `
                 0 20px 25px -5px rgba(0, 0, 0, 0.5),
                 0 10px 10px -5px rgba(0, 0, 0, 0.4),
                 inset 0 1px 0 rgba(255, 255, 255, 0.1)
@@ -260,7 +310,7 @@
         }
 
         window.addEventListener("mousemove", (e) => {
-            const rect = dockRef.getBoundingClientRect();
+            const rect = dockWrapper.getBoundingClientRect();
             const padding = 12;
             
             const margin = 100;

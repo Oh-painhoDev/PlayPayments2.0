@@ -1111,6 +1111,7 @@
             <!-- Content Area -->
             <div class="flex-1 overflow-y-auto overflow-x-hidden scrollable-content w-full" style="background-color: #000000;">
                 <?php echo $__env->yieldContent('content'); ?>
+                <div class="dock-spacer"></div>
             </div>
         </main>
     </div>

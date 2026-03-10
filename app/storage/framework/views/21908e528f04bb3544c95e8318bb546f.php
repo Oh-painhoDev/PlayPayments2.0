@@ -13,7 +13,6 @@
         href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;800&family=Syncopate:wght@400;700&display=swap"
         rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
-    <link rel="stylesheet" href="<?php echo e(asset('css/macos-dock.css')); ?>">
     <style>
         :root {
             --bg: #030303;
