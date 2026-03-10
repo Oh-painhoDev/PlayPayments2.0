@@ -435,11 +435,11 @@
             background: #af8a2a;
             color: #fff;
             border: none;
-            padding: 13px;
+            padding: 10px;
             width: 100%;
             box-sizing: border-box;
             font-family: var(--font-display);
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             letter-spacing: 1px;
             text-transform: uppercase;
             font-weight: 700;
