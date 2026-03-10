@@ -1,0 +1,29 @@
+{
+  "name": "globo-3d-standalone",
+  "version": "1.0.0",
+  "description": "Globo 3D interativo para visualizar vendas ao redor do mundo - Versão Standalone",
+  "main": "index.html",
+  "scripts": {
+    "start": "php -S localhost:8000",
+    "start:python": "python -m http.server 8000",
+    "build": "echo 'Neste caso, build do standalone já está completo'"
+  },
+  "keywords": [
+    "globo",
+    "3d",
+    "vendas",
+    "mapa",
+    "world",
+    "visualization"
+  ],
+  "author": "Seu Nome",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "dependencies": {
+    "three": "^r128",
+    "globe.gl": "^2.42.0"
+  }
+}

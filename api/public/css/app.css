@@ -1,0 +1,9 @@
+/* App CSS - PHP Puro */
+/* Estilos customizados adicionais além do Tailwind CDN */
+
+body {
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Estilos adicionais podem ser adicionados aqui */
+

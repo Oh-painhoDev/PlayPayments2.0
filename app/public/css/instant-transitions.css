@@ -1,0 +1,83 @@
+/**
+ * Instant Navigation Transitions
+ * Transições suaves para navegação instantânea
+ */
+
+/* Transição de fade ao navegar */
+body {
+    opacity: 1;
+    transition: opacity 0.1s ease-in-out;
+}
+
+body.navigating {
+    opacity: 0.98;
+}
+
+/* Otimizar renderização com GPU */
+.sidebar-item,
+.dashboard-card,
+.page-content {
+    will-change: transform;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+}
+
+/* Transição suave ao trocar de página */
+main, .content-area {
+    animation: fadeIn 0.15s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Skeleton loading para indicar carregamento instantâneo */
+.skeleton-loading {
+    background: linear-gradient(
+        90deg,
+        #f0f0f0 25%,
+        #e0e0e0 50%,
+        #f0f0f0 75%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* Hover nos links - indicar que vai ser rápido */
+a:not(.no-prefetch) {
+    transition: all 0.15s ease-in-out;
+}
+
+a:not(.no-prefetch):hover {
+    transform: translateX(2px);
+}
+
+/* Otimizar scroll */
+* {
+    scroll-behavior: smooth;
+}
+
+/* Preloader invisível para cache */
+.prefetch-loader {
+    position: absolute;
+    width: 0;
+    height: 0;
+    opacity: 0;
+    pointer-events: none;
+}

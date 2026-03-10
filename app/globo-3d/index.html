@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Globo 3D - Vendas por Localização</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Globo 3D Interativo -->
+        <section class="bg-billing-chart">
+            <div class="graphic-header">
+                <h3>Vendas por Localização</h3>
+                <p>Visualize de onde vêm suas vendas ao redor do mundo</p>
+            </div>
+            
+            <div id="globe-container">
+                <div id="globeViz">
+                    <div class="loading">Carregando globo 3D...</div>
+                </div>
+            </div>
+
+            <!-- Estatísticas -->
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-label">Total de Vendas</div>
+                    <div class="stat-value" id="total-sales">R$ 0,00</div>
+                    <div class="stat-change">+15% vs mês anterior</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Países Ativos</div>
+                    <div class="stat-value" id="active-countries">0</div>
+                    <div class="stat-change">+3 novos países</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Transações</div>
+                    <div class="stat-value" id="total-transactions">0</div>
+                    <div class="stat-change">+8% vs mês anterior</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Ticket Médio</div>
+                    <div class="stat-value" id="avg-ticket">R$ 0,00</div>
+                    <div class="stat-change">+2% vs mês anterior</div>
+                </div>
+            </div>
+
+            <!-- Legenda -->
+            <div class="legend">
+                <div class="legend-title">Legenda de Intensidade</div>
+                <div class="legend-items">
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #10b981;"></div>
+                        <span>Baixas vendas</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #fbbf24;"></div>
+                        <span>Vendas moderadas</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #f97316;"></div>
+                        <span>Altas vendas</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #ef4444;"></div>
+                        <span>Vendas muito altas</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Bibliotecas externas -->
+    <script src="lib/three.min.js"></script>
+    <script src="lib/globe.gl.min.js"></script>
+
+    <!-- Script da aplicação -->
+    <script src="js/app.js"></script>
+</body>
+</html>

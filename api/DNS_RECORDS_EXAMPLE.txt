@@ -1,0 +1,70 @@
+# Exemplo de Registros DNS para Configurar
+
+## Para o Subdomínio API (api.seudominio.com)
+
+Type: A
+Name: api
+Points to: [SEU_IP_AQUI]
+TTL: 14400
+
+## Para o Subdomínio App (app.seudominio.com)
+
+Type: A
+Name: app
+Points to: [SEU_IP_AQUI]
+TTL: 14400
+
+## Para o Domínio Principal (seudominio.com) - Opcional
+
+Type: A
+Name: @
+Points to: [SEU_IP_AQUI]
+TTL: 14400
+
+## Para WWW (www.seudominio.com) - Opcional
+
+Type: A
+Name: www
+Points to: [SEU_IP_AQUI]
+TTL: 14400
+
+OU
+
+Type: CNAME
+Name: www
+Points to: seudominio.com
+TTL: 14400
+
+---
+
+## Exemplo Prático
+
+Se seu servidor está no IP: 192.0.2.1
+
+1. Registro para API:
+   - Type: A
+   - Name: api
+   - Points to: 192.0.2.1
+   - TTL: 14400
+
+2. Registro para App:
+   - Type: A
+   - Name: app
+   - Points to: 192.0.2.1
+   - TTL: 14400
+
+3. Registro Principal:
+   - Type: A
+   - Name: @
+   - Points to: 192.0.2.1
+   - TTL: 14400
+
+---
+
+## Notas Importantes
+
+- Substitua [SEU_IP_AQUI] pelo IP real do seu servidor
+- O TTL pode variar (14400 = 4 horas, 3600 = 1 hora, 300 = 5 minutos)
+- A propagação DNS pode levar de 1 a 24 horas
+- Use ferramentas como https://dnschecker.org/ para verificar a propagação
+

@@ -1,0 +1,47 @@
+<?php
+/**
+ * Deployment Environment Configuration
+ * Forces configuration when Replit secrets are not available
+ */
+
+// CRITICAL: Aggressively remove DATABASE_URL from all sources
+// This prevents Laravel from using the problematic DATABASE_URL with special chars
+unset($_ENV['DATABASE_URL']);
+unset($_SERVER['DATABASE_URL']);
+unset($_ENV['DB_URL']);
+unset($_SERVER['DB_URL']);
+putenv('DATABASE_URL');
+putenv('DB_URL');
+
+// Get password from CLOUD_SQL_PASSWORD secret
+$dbPassword = getenv('CLOUD_SQL_PASSWORD');
+if (!$dbPassword) {
+    // Fallback: try to get from .env file or other sources
+    $dbPassword = $_ENV['CLOUD_SQL_PASSWORD'] ?? $_SERVER['CLOUD_SQL_PASSWORD'] ?? '';
+}
+
+// Set database configuration using individual variables
+$dbConfig = [
+    'DB_CONNECTION' => 'pgsql',
+    'DB_HOST' => getenv('CLOUD_SQL_HOST') ?: '34.187.233.200',
+    'DB_PORT' => getenv('CLOUD_SQL_PORT') ?: '5432',
+    'DB_DATABASE' => getenv('CLOUD_SQL_DATABASE') ?: 'brpix',
+    'DB_USERNAME' => getenv('CLOUD_SQL_USER') ?: 'brpix_user',
+    'DB_PASSWORD' => $dbPassword,
+];
+
+// Set session/cache configuration
+$sessionConfig = [
+    'SESSION_DRIVER' => 'file',
+    'CACHE_DRIVER' => 'file',
+    'QUEUE_CONNECTION' => 'sync',
+    'SESSION_SECURE_COOKIE' => 'false',
+    'SESSION_SAME_SITE' => 'lax',
+];
+
+// Apply all configurations
+foreach (array_merge($dbConfig, $sessionConfig) as $key => $value) {
+    putenv("$key=$value");
+    $_ENV[$key] = $value;
+    $_SERVER[$key] = $value;
+}

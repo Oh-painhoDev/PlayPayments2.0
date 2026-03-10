@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Globo 3D - Vendas por Localização</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .bg-billing-chart {
+            background: #1a1a1a;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            margin-top: 24px;
+            border: 1px solid #333;
+        }
+
+        .graphic-header {
+            margin-bottom: 20px;
+        }
+
+        .graphic-header h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+
+        .graphic-header p {
+            color: #707070;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        #globe-container {
+            width: 100%;
+            height: 500px;
+            background: #000000;
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+
+        #globeViz {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            margin: 0;
+            padding: 0;
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        .stat-card {
+            background: #252525;
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px solid #333;
+        }
+
+        .stat-label {
+            color: #707070;
+            font-size: 12px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .stat-change {
+            color: #10b981;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        .legend {
+            margin-top: 20px;
+            padding: 16px;
+            background: #252525;
+            border-radius: 8px;
+            border: 1px solid #333;
+        }
+
+        .legend-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: #707070;
+            margin-bottom: 12px;
+        }
+
+        .legend-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+        }
+
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        @media (max-width: 768px) {
+            .bg-billing-chart {
+                padding: 16px;
+            }
+
+            #globe-container {
+                height: 350px;
+            }
+
+            .graphic-header h3 {
+                font-size: 16px;
+            }
+
+            .stats-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Globo 3D Interativo -->
+        <section class="bg-billing-chart">
+            <div class="graphic-header">
+                <h3>Vendas por Localização</h3>
+                <p>Visualize de onde vêm suas vendas ao redor do mundo</p>
+            </div>
+            
+            <div id="globe-container">
+                <div id="globeViz"></div>
+            </div>
+
+            <!-- Estatísticas -->
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-label">Total de Vendas</div>
+                    <div class="stat-value" id="total-sales">R$ 0,00</div>
+                    <div class="stat-change">+15% vs mês anterior</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Países Ativos</div>
+                    <div class="stat-value" id="active-countries">0</div>
+                    <div class="stat-change">+3 novos países</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Transações</div>
+                    <div class="stat-value" id="total-transactions">0</div>
+                    <div class="stat-change">+8% vs mês anterior</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Ticket Médio</div>
+                    <div class="stat-value" id="avg-ticket">R$ 0,00</div>
+                    <div class="stat-change">+2% vs mês anterior</div>
+                </div>
+            </div>
+
+            <!-- Legenda -->
+            <div class="legend">
+                <div class="legend-title">Legenda de Intensidade</div>
+                <div class="legend-items">
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #10b981;"></div>
+                        <span>Baixas vendas</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #fbbf24;"></div>
+                        <span>Vendas moderadas</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #f97316;"></div>
+                        <span>Altas vendas</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #ef4444;"></div>
+                        <span>Vendas muito altas</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Bibliotecas externas -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/globe.gl@2.42.0/dist/globe.gl.min.js"></script>
+
+    <script>
+        // Dados de vendas por localização (latitude, longitude, intensidade, país)
+        const salesData = [
+            { lat: -23.5505, lng: -46.6333, value: 85, country: "Brasil", sales: 450000 },
+            { lat: 40.7128, lng: -74.0060, value: 92, country: "EUA", sales: 890000 },
+            { lat: 51.5074, lng: -0.1278, value: 78, country: "Inglaterra", sales: 340000 },
+            { lat: 48.8566, lng: 2.3522, value: 72, country: "França", sales: 280000 },
+            { lat: 52.5200, lng: 13.4050, value: 68, country: "Alemanha", sales: 250000 },
+            { lat: 41.9028, lng: 12.4964, value: 65, country: "Itália", sales: 220000 },
+            { lat: 32.0853, lng: 34.7818, value: 55, country: "Israel", sales: 180000 },
+            { lat: 35.6762, lng: 139.6503, value: 88, country: "Japão", sales: 750000 },
+            { lat: 22.3193, lng: 114.1694, value: 82, country: "Hong Kong", sales: 620000 },
+            { lat: 1.3521, lng: 103.8198, value: 75, country: "Singapura", sales: 310000 },
+            { lat: -33.8688, lng: 151.2093, value: 70, country: "Austrália", sales: 290000 },
+            { lat: 31.2304, lng: 30.0444, value: 48, country: "Egito", sales: 95000 },
+            { lat: -34.6037, lng: -58.3816, value: 62, country: "Argentina", sales: 198000 },
+            { lat: 19.4326, lng: -99.1332, value: 66, country: "México", sales: 240000 },
+            { lat: 55.7558, lng: 37.6173, value: 58, country: "Rússia", sales: 170000 },
+            { lat: 28.6139, lng: 77.2090, value: 64, country: "Índia", sales: 215000 },
+            { lat: 39.9042, lng: 116.4074, value: 85, country: "China", sales: 580000 },
+            { lat: 37.7749, lng: -122.4194, value: 90, country: "EUA (SF)", sales: 820000 },
+        ];
+
+        // Inicializar o globo
+        const globe = Globe()
+            .globeImageUrl('//cdn.jsdelivr.net/npm/three-globe/example/img/earth-dark.jpg')
+            .bumpImageUrl('//cdn.jsdelivr.net/npm/three-globe/example/img/earth-topology.png')
+            .backgroundImageUrl('//cdn.jsdelivr.net/npm/three-globe/example/img/night-sky.png')
+            .pointsData(salesData)
+            .pointAltitude('value')
+            .pointColor(d => {
+                const intensity = d.value;
+                if (intensity >= 85) return '#ef4444'; // Vermelho - muito alto
+                if (intensity >= 75) return '#f97316'; // Laranja - alto
+                if (intensity >= 60) return '#fbbf24'; // Amarelo - moderado
+                return '#10b981'; // Verde - baixo
+            })
+            .pointRadius(d => (d.value / 100) * 0.8)
+            .pointsMerge(false)
+            .pointLabel(d => `
+                <div style="background: #1a1a1a; padding: 12px; border-radius: 8px; border: 1px solid #333;">
+                    <div style="font-weight: 600; margin-bottom: 8px;">${d.country}</div>
+                    <div style="font-size: 12px; color: #fbbf24;">Vendas: R$ ${(d.sales / 1000).toFixed(0)}k</div>
+                    <div style="font-size: 12px; color: #707070; margin-top: 4px;">Intensidade: ${d.value}%</div>
+                </div>
+            `)
+            .onPointHover(hoverD => {
+                // Mudar cor ao passar o mouse
+                if (hoverD) {
+                    document.body.style.cursor = 'pointer';
+                } else {
+                    document.body.style.cursor = 'default';
+                }
+            })
+            .rotationSpeed(0.5)
+            .controls().autoRotate = true
+            .controls().autoRotateSpeed = 2;
+
+        // Configurar o container
+        const container = document.getElementById('globeViz');
+        globe(container);
+
+        // Ajustar distância da câmera
+        globe.scene().camera.positionZ = 300;
+
+        // Auto-rotação
+        setInterval(() => {
+            globe.controls().autoRotate = true;
+        }, 1);
+
+        // Calcular estatísticas
+        function updateStats() {
+            const totalSales = salesData.reduce((sum, item) => sum + item.sales, 0);
+            const totalTransactions = salesData.length * Math.floor(Math.random() * 100 + 50);
+            const avgTicket = totalSales / totalTransactions;
+            const activeCountries = [...new Set(salesData.map(d => d.country))].length;
+
+            document.getElementById('total-sales').textContent = 
+                'R$ ' + (totalSales / 1000000).toFixed(2).replace('.', ',') + 'M';
+            document.getElementById('active-countries').textContent = activeCountries;
+            document.getElementById('total-transactions').textContent = totalTransactions.toLocaleString('pt-BR');
+            document.getElementById('avg-ticket').textContent = 
+                'R$ ' + (avgTicket / 1000).toFixed(0).replace('.', ',') + 'k';
+        }
+
+        updateStats();
+
+        // Responsividade
+        window.addEventListener('resize', () => {
+            const container = document.getElementById('globeViz');
+            container.style.width = '100%';
+        });
+
+        // Interação com clique
+        document.getElementById('globeViz').addEventListener('click', (event) => {
+            // Adicionar efeito de clique se desejar
+            globe.controls().autoRotate = !globe.controls().autoRotate;
+        });
+
+        // Iniciar com auto-rotação
+        globe.controls().autoRotate = true;
+        globe.controls().autoRotateSpeed = 2;
+    </script>
+</body>
+</html>

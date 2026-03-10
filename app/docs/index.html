@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark" style="color-scheme: dark;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>playpayments API - Documentação</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { darkMode: 'class', theme: { extend: { colors: { primary: '#D4AF37', 'primary-light': '#8B0000', 'primary-dark': '#4A0000' } } } }
+    </script>
+    <style>
+        :root { --primary: 106 0 0; --primary-light: 139 0 0; --primary-dark: 74 0 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #000000; color: #ffffff; }
+        .method-badge { padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: bold; min-width: 48px; text-align: center; }
+        .method-get { background: #22C55E; color: #000; }
+        .method-post { background: #3B82F6; color: #fff; }
+        .method-put { background: #F59E0B; color: #000; }
+        .method-delete { background: #EF4444; color: #fff; }
+        .sidebar-link { transition: all 0.2s; padding-left: 1rem; }
+        .sidebar-link:hover { background: #1E1E1E; }
+        .sidebar-link.active { background: rgba(106, 0, 0, 0.1); color: #D4AF37; border-left: 3px solid #D4AF37; }
+        .code-block { background: #0a0a0a; border: 1px solid #333; }
+        .scrollbar-thin::-webkit-scrollbar { width: 6px; }
+        .scrollbar-thin::-webkit-scrollbar-track { background: #1a1a1a; }
+        .scrollbar-thin::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+        .scrollbar-thin::-webkit-scrollbar-thumb:hover { background: #444; }
+        .tab-active { color: #ffffff; border-bottom: 2px solid #D4AF37; }
+        .tab-inactive { color: #6B7280; }
+        .tab-inactive:hover { color: #ffffff; }
+        .endpoint-section { display: none; }
+        .endpoint-section.active { display: block; }
+        #sidebar { left: 0; padding-left: 3rem; padding-right: 0; }
+        #sidebar-content { height: calc(100vh - 7rem); }
+        @media (min-width: 1280px) {
+            #content-area { margin-left: 18rem; padding-left: 3rem; }
+        }
+        @media (max-width: 1279px) {
+            #sidebar { display: none !important; }
+        }
+    </style>
+</head>
+<body class="relative antialiased text-gray-400 bg-black">
+    <!-- Navbar -->
+    <div id="navbar" class="z-30 fixed lg:sticky top-0 w-full">
+        <div id="navbar-transition" class="absolute w-full h-full backdrop-blur flex-none transition-colors duration-500 border-b border-gray-800 data-[is-opaque=true]:bg-black/95 data-[is-opaque=false]:bg-black/60" data-is-opaque="false"></div>
+        <div class="max-w-8xl mx-auto relative">
+            <div class="flex items-center lg:px-12 h-16 min-w-0 mx-4 lg:mx-0">
+                <div class="h-full relative flex-1 flex items-center gap-x-4 min-w-0 border-b border-gray-800">
+                    <div class="flex-1 flex items-center gap-x-4">
+                        <a href="/" class="flex items-center gap-2">
+                            <div class="w-8 h-8 bg-[#D4AF37] rounded flex items-center justify-center">
+                                <span class="text-white font-bold text-lg">V</span>
+                            </div>
+                            <span class="text-white font-semibold text-lg">playpayments</span>
+                        </a>
+                    </div>
+                    <div class="flex-1 relative hidden lg:flex items-center justify-center">
+                        <button type="button" class="flex pointer-events-auto rounded-xl w-full items-center text-sm leading-6 h-9 pl-3.5 pr-3 text-gray-500 bg-black ring-1 ring-gray-800 hover:ring-gray-700 justify-between truncate gap-2 min-w-[43px]">
+                            <div class="flex items-center gap-2 min-w-[42px]">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="min-w-4 flex-none text-gray-400">
+                                    <circle cx="11" cy="11" r="8"></circle>
+                                    <path d="m21 21-4.3-4.3"></path>
+                                </svg>
+                                <div class="truncate min-w-0">Search...</div>
+                            </div>
+                            <span class="flex-none text-xs font-semibold">Ctrl K</span>
+                        </button>
+                    </div>
+                    <div class="flex-1 relative hidden lg:flex items-center ml-auto justify-end space-x-4">
+                        <nav class="text-sm">
+                            <ul class="flex space-x-6 items-center">
+                                <li><a href="https://playpayments.com" class="flex items-center gap-1.5 whitespace-nowrap font-medium text-gray-400 hover:text-white">Suporte</a></li>
+                                <li><a href="https://playpayments.com" class="group px-4 py-1.5 relative inline-flex items-center text-sm font-medium">
+                                    <span class="absolute inset-0 bg-[#D4AF37] rounded-xl group-hover:opacity-90"></span>
+                                    <span class="z-10 text-white">Plataforma</span>
+                                    <svg width="3" height="24" viewBox="0 -9 3 24" class="h-5 rotate-0 overflow-visible text-white/90 ml-1">
+                                        <path d="M0 0L3 3L0 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+                                    </svg>
+                                </a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <div class="hidden lg:flex px-12 h-12 border-b border-gray-800">
+                <div class="nav-tabs h-full flex text-sm gap-x-6">
+                    <a href="#" class="link nav-tabs-item group relative h-full gap-2 flex items-center font-medium tab-inactive">Guia de implementação</a>
+                    <a href="#" class="link nav-tabs-item group relative h-full gap-2 flex items-center font-medium tab-active">Referências da API</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="flex flex-row gap-12 box-border w-full pt-40 lg:pt-24">
+        <!-- Left Sidebar -->
+        <div class="hidden xl:block fixed bottom-0 right-auto w-[18rem]" id="sidebar" style="top: 7rem;">
+            <div class="absolute inset-0 z-10 stable-scrollbar-gutter overflow-auto pr-8 pb-10 scrollbar-thin" id="sidebar-content">
+                <div class="relative lg:text-sm lg:leading-6">
+                    <div class="sticky top-0 h-8 z-10 bg-gradient-to-b from-black"></div>
+                    <div id="navigation-items">
+                            <!-- Autenticação -->
+                            <div class="mt-6 lg:mt-8">
+                                <div class="sidebar-group-header flex items-center gap-2.5 pl-4 mb-3.5 lg:mb-2.5 font-semibold text-white"><h5>Autenticação</h5></div>
+                                <ul class="space-y-px">
+                                    <li><a href="#autenticacao" data-section="autenticacao" class="sidebar-link active group flex items-center pr-3 py-1.5 cursor-pointer gap-x-3 text-left rounded-xl w-full outline-offset-[-1px] bg-[#D4AF37]/10 text-[#D4AF37] border-l-3 border-[#D4AF37]">
+                                        <span class="method-badge method-post">POST</span>
+                                        <span class="flex-1">Autenticar conta</span>
+                                    </a></li>
+                                </ul>
+                            </div>
+                            
+                            <!-- Transações -->
+                            <div class="mt-6 lg:mt-8">
+                                <div class="sidebar-group-header flex items-center gap-2.5 pl-4 mb-3.5 lg:mb-2.5 font-semibold text-white"><h5>Transações</h5></div>
+                                <ul class="space-y-px">
+                                    <li><a href="#gerar-transacao" data-section="gerar-transacao" class="sidebar-link group flex items-center pr-3 py-1.5 cursor-pointer gap-x-3 text-left rounded-xl w-full outline-offset-[-1px] hover:bg-[#1E1E1E] text-gray-400 hover:text-white">
+                                        <span class="method-badge method-post">POST</span>
+                                        <span class="flex-1">Gerar transação</span>
+                                    </a></li>
+                                    <li><a href="#listar-transacoes" data-section="listar-transacoes" class="sidebar-link group flex items-center pr-3 py-1.5 cursor-pointer gap-x-3 text-left rounded-xl w-full outline-offset-[-1px] hover:bg-[#1E1E1E] text-gray-400 hover:text-white">
+                                        <span class="method-badge method-get">GET</span>
+                                        <span class="flex-1">Listar transações</span>
+                                    </a></li>
+                                    <li><a href="#detalhar-transacao" data-section="detalhar-transacao" class="sidebar-link group flex items-center pr-3 py-1.5 cursor-pointer gap-x-3 text-left rounded-xl w-full outline-offset-[-1px] hover:bg-[#1E1E1E] text-gray-400 hover:text-white">
+                                        <span class="method-badge method-get">GET</span>
+                                        <span class="flex-1">Detalhar transação</span>
+                                    </a></li>
+                                </ul>
+                            </div>
+                            
+                            <!-- Clientes -->
+                            <div class="mt-6 lg:mt-8">
+                                <div class="sidebar-group-header flex items-center gap-2.5 pl-4 mb-3.5 lg:mb-2.5 font-semibold text-white"><h5>Clientes</h5></div>
+                                <ul class="space-y-px">
+                                    <li><a href="#adicionar-cliente" data-section="adicionar-cliente" class="sidebar-link group flex items-center pr-3 py-1.5 cursor-pointer gap-x-3 text-left rounded-xl w-full outline-offset-[-1px] hover:bg-[#1E1E1E] text-gray-400 hover:text-white">
+                                        <span class="method-badge method-post">POST</span>
+                                        <span class="flex-1">Adicionar cliente</span>
+                                    </a></li>
+                                    <li><a href="#listar-clientes" data-section="listar-clientes" class="sidebar-link group flex items-center pr-3 py-1.5 cursor-pointer gap-x-3 text-left rounded-xl w-full outline-offset-[-1px] hover:bg-[#1E1E1E] text-gray-400 hover:text-white">
+                                        <span class="method-badge method-get">GET</span>
+                                        <span class="flex-1">Listar clientes</span>
+                                    </a></li>
+                                    <li><a href="#atualizar-cliente" data-section="atualizar-cliente" class="sidebar-link group flex items-center pr-3 py-1.5 cursor-pointer gap-x-3 text-left rounded-xl w-full outline-offset-[-1px] hover:bg-[#1E1E1E] text-gray-400 hover:text-white">
+                                        <span class="method-badge method-put">PUT</span>
+                                        <span class="flex-1">Atualizar cliente</span>
+                                    </a></li>
+                                    <li><a href="#remover-cliente" data-section="remover-cliente" class="sidebar-link group flex items-center pr-3 py-1.5 cursor-pointer gap-x-3 text-left rounded-xl w-full outline-offset-[-1px] hover:bg-[#1E1E1E] text-gray-400 hover:text-white">
+                                        <span class="method-badge method-delete">DEL</span>
+                                        <span class="flex-1">Remover cliente</span>
+                                    </a></li>
+                                </ul>
+                            </div>
+                            
+                            <!-- Saques -->
+                            <div class="mt-6 lg:mt-8">
+                                <div class="sidebar-group-header flex items-center gap-2.5 pl-4 mb-3.5 lg:mb-2.5 font-semibold text-white"><h5>Saldo e Transferências</h5></div>
+                                <ul class="space-y-px">
+                                    <li><a href="#listar-saques" data-section="listar-saques" class="sidebar-link group flex items-center pr-3 py-1.5 cursor-pointer gap-x-3 text-left rounded-xl w-full outline-offset-[-1px] hover:bg-[#1E1E1E] text-gray-400 hover:text-white">
+                                        <span class="method-badge method-get">GET</span>
+                                        <span class="flex-1">Listar saques</span>
+                                    </a></li>
+                                    <li><a href="#detalhar-saque" data-section="detalhar-saque" class="sidebar-link group flex items-center pr-3 py-1.5 cursor-pointer gap-x-3 text-left rounded-xl w-full outline-offset-[-1px] hover:bg-[#1E1E1E] text-gray-400 hover:text-white">
+                                        <span class="method-badge method-get">GET</span>
+                                        <span class="flex-1">Detalhar saque</span>
+                                    </a></li>
+                                    <li><a href="#solicitar-saque" data-section="solicitar-saque" class="sidebar-link group flex items-center pr-3 py-1.5 cursor-pointer gap-x-3 text-left rounded-xl w-full outline-offset-[-1px] hover:bg-[#1E1E1E] text-gray-400 hover:text-white">
+                                        <span class="method-badge method-post">POST</span>
+                                        <span class="flex-1">Solicitar saque</span>
+                                    </a></li>
+                                    <li><a href="#consultar-saldos" data-section="consultar-saldos" class="sidebar-link group flex items-center pr-3 py-1.5 cursor-pointer gap-x-3 text-left rounded-xl w-full outline-offset-[-1px] hover:bg-[#1E1E1E] text-gray-400 hover:text-white">
+                                        <span class="method-badge method-get">GET</span>
+                                        <span class="flex-1">Consultar saldos</span>
+                                    </a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="relative grow box-border flex-col w-full mx-auto px-4" id="content-area">
+            <!-- Content will be dynamically loaded here -->
+            <div id="endpoint-content"></div>
+        </div>
+    </div>
+
+    <script>
+        // Endpoint data
+        const endpoints = {
+            'autenticacao': {
+                category: 'Autenticação',
+                title: 'Autenticar conta',
+                method: 'POST',
+                url: 'https://playpayments.com/api/v1/transactions',
+                description: 'A rota permite criar transações PIX. Para criar transações, você precisa fornecer AMBOS os headers: X-Public-Key e X-Private-Key.',
+                warning: 'Recomenda-se nunca armazenar as chaves em ambientes front-end, sempre utilizar em ambientes protegidos por um certificado SSL e NUNCA compartilhar suas credenciais com outras pessoas.',
+                headers: [
+                    { name: 'X-Public-Key', desc: 'Sua Public Key (PB-playpayments-...)' },
+                    { name: 'X-Private-Key', desc: 'Sua Private Key (SK-playpayments-...)' },
+                    { name: 'Content-Type', desc: 'application/json' }
+                ],
+                bodyParams: [
+                    { field: 'amount', type: 'number', required: true, desc: 'Valor da transação' },
+                    { field: 'payment_method', type: 'string', required: true, desc: 'Método de pagamento (pix)' },
+                    { field: 'customer.name', type: 'string', required: true, desc: 'Nome do cliente' },
+                    { field: 'customer.email', type: 'string', required: true, desc: 'Email do cliente' },
+                    { field: 'customer.document', type: 'string', required: true, desc: 'CPF/CNPJ do cliente' },
+                    { field: 'customer.phone', type: 'string', required: false, desc: 'Telefone do cliente' },
+                    { field: 'description', type: 'string', required: false, desc: 'Descrição da transação' },
+                    { field: 'external_id', type: 'string', required: false, desc: 'ID externo único' },
+                    { field: 'expires_in', type: 'integer', required: false, desc: 'Tempo de expiração em segundos (padrão: 1800)' }
+                ],
+                curl: `curl --request POST \\
+  --url https://playpayments.com/api/v1/transactions \\
+  --header 'X-Public-Key: PB-playpayments-8901-5484-5014' \\
+  --header 'X-Private-Key: SK-playpayments-7368-2562-6002' \\
+  --header 'Content-Type: application/json' \\
+  --data '{
+  "amount": 20.00,
+  "payment_method": "pix",
+  "customer": {
+    "name": "João Silva",
+    "email": "joao@example.com",
+    "document": "12345678900",
+    "phone": "11999999999"
+  },
+  "description": "Pagamento de produto",
+  "external_id": "ORDER-12345",
+  "expires_in": 1800
+}'`,
+                response: `{
+  "success": true,
+  "data": {
+    "transaction_id": "PXB_6915258E28A96_1762993550",
+    "external_id": "ORDER-12345",
+    "amount": 20.00,
+    "fee_amount": 0.65,
+    "net_amount": 19.35,
+    "currency": "BRL",
+    "payment_method": "pix",
+    "status": "pending",
+    "customer": {
+      "name": "João Silva",
+      "email": "joao@example.com",
+      "document": "12345678900",
+      "phone": "11999999999"
+    },
+    "pix": {
+      "qr_code": "00020101021226840014...",
+      "payload": "00020101021226840014...",
+      "expiration_date": "2025-11-13T00:55:00.000Z"
+    },
+    "created_at": "2025-11-13T00:25:00.000Z",
+    "expires_at": "2025-11-13T00:55:00.000Z"
+  }
+}`
+            },
+            'gerar-transacao': {
+                category: 'Transações',
+                title: 'Gerar transação',
+                method: 'POST',
+                url: 'https://playpayments.com/api/v1/transactions',
+                description: 'Cria uma nova transação PIX e retorna o QR Code para pagamento. A transação será processada através do gateway configurado para o usuário autenticado.',
+                headers: [
+                    { name: 'X-Public-Key', desc: 'Sua Public Key (PB-playpayments-...)' },
+                    { name: 'X-Private-Key', desc: 'Sua Private Key (SK-playpayments-...)' },
+                    { name: 'Content-Type', desc: 'application/json' }
+                ],
+                bodyParams: [
+                    { field: 'amount', type: 'number', required: true, desc: 'Valor da transação' },
+                    { field: 'payment_method', type: 'string', required: true, desc: 'Método de pagamento (pix)' },
+                    { field: 'customer.name', type: 'string', required: true, desc: 'Nome do cliente' },
+                    { field: 'customer.email', type: 'string', required: true, desc: 'Email do cliente' },
+                    { field: 'customer.document', type: 'string', required: true, desc: 'CPF/CNPJ do cliente' },
+                    { field: 'customer.phone', type: 'string', required: false, desc: 'Telefone do cliente' },
+                    { field: 'description', type: 'string', required: false, desc: 'Descrição da transação' },
+                    { field: 'external_id', type: 'string', required: false, desc: 'ID externo único' },
+                    { field: 'expires_in', type: 'integer', required: false, desc: 'Tempo de expiração em segundos (padrão: 1800)' }
+                ],
+                curl: `curl --request POST \\
+  --url https://playpayments.com/api/v1/transactions \\
+  --header 'X-Public-Key: PB-playpayments-8901-5484-5014' \\
+  --header 'X-Private-Key: SK-playpayments-7368-2562-6002' \\
+  --header 'Content-Type: application/json' \\
+  --data '{
+  "amount": 20.00,
+  "payment_method": "pix",
+  "customer": {
+    "name": "João Silva",
+    "email": "joao@example.com",
+    "document": "12345678900",
+    "phone": "11999999999"
+  },
+  "description": "Pagamento de produto",
+  "external_id": "ORDER-12345",
+  "expires_in": 1800
+}'`,
+                response: `{
+  "success": true,
+  "data": {
+    "transaction_id": "PXB_6915258E28A96_1762993550",
+    "external_id": "ORDER-12345",
+    "amount": 20.00,
+    "fee_amount": 0.65,
+    "net_amount": 19.35,
+    "currency": "BRL",
+    "payment_method": "pix",
+    "status": "pending",
+    "customer": {
+      "name": "João Silva",
+      "email": "joao@example.com",
+      "document": "12345678900",
+      "phone": "11999999999"
+    },
+    "pix": {
+      "qr_code": "00020101021226840014...",
+      "payload": "00020101021226840014...",
+      "expiration_date": "2025-11-13T00:55:00.000Z"
+    },
+    "created_at": "2025-11-13T00:25:00.000Z",
+    "expires_at": "2025-11-13T00:55:00.000Z"
+  }
+}`
+            },
+            'listar-transacoes': {
+                category: 'Transações',
+                title: 'Listar transações',
+                method: 'GET',
+                url: 'https://playpayments.com/api/v1/transactions',
+                description: 'Lista todas as transações do usuário autenticado. Suporta filtros por status, método de pagamento, data e busca por texto.',
+                queryParams: [
+                    { field: 'per_page', type: 'integer', required: false, desc: 'Itens por página (padrão: 15)' },
+                    { field: 'status', type: 'string', required: false, desc: 'Filtrar por status (pending, paid, expired, etc)' },
+                    { field: 'payment_method', type: 'string', required: false, desc: 'Filtrar por método de pagamento' },
+                    { field: 'start_date', type: 'string', required: false, desc: 'Data inicial (YYYY-MM-DD)' },
+                    { field: 'end_date', type: 'string', required: false, desc: 'Data final (YYYY-MM-DD)' },
+                    { field: 'search', type: 'string', required: false, desc: 'Buscar por transaction_id, external_id, nome ou email' }
+                ],
+                curl: `curl --request GET \\
+  --url 'https://playpayments.com/api/v1/transactions?per_page=15&status=pending' \\
+  --header 'X-Public-Key: PB-playpayments-8901-5484-5014' \\
+  --header 'Content-Type: application/json'`,
+                response: `{
+  "success": true,
+  "data": [
+    {
+      "transaction_id": "PXB_6915258E28A96_1762993550",
+      "external_id": "ORDER-12345",
+      "amount": 20.00,
+      "status": "pending",
+      "payment_method": "pix",
+      "created_at": "2025-11-13T00:25:00.000Z"
+    }
+  ],
+  "pagination": {
+    "total": 100,
+    "per_page": 15,
+    "current_page": 1,
+    "last_page": 7
+  }
+}`
+            },
+            'detalhar-transacao': {
+                category: 'Transações',
+                title: 'Detalhar transação',
+                method: 'GET',
+                url: 'https://playpayments.com/api/v1/transactions/{id}',
+                description: 'Retorna os detalhes completos de uma transação específica pelo seu ID.',
+                pathParams: [
+                    { field: 'id', type: 'string', required: true, desc: 'ID da transação (transaction_id)' }
+                ],
+                curl: `curl --request GET \\
+  --url https://playpayments.com/api/v1/transactions/PXB_6915258E28A96_1762993550 \\
+  --header 'X-Public-Key: PB-playpayments-8901-5484-5014' \\
+  --header 'Content-Type: application/json'`,
+                response: `{
+  "success": true,
+  "data": {
+    "transaction_id": "PXB_6915258E28A96_1762993550",
+    "external_id": "ORDER-12345",
+    "amount": 20.00,
+    "fee_amount": 0.65,
+    "net_amount": 19.35,
+    "currency": "BRL",
+    "payment_method": "pix",
+    "status": "paid",
+    "customer": {
+      "name": "João Silva",
+      "email": "joao@example.com",
+      "document": "12345678900",
+      "phone": "11999999999"
+    },
+    "pix": {
+      "qr_code": "00020101021226840014...",
+      "payload": "00020101021226840014..."
+    },
+    "created_at": "2025-11-13T00:25:00.000Z",
+    "paid_at": "2025-11-13T00:30:00.000Z"
+  }
+}`
+            },
+            'adicionar-cliente': {
+                category: 'Clientes',
+                title: 'Adicionar cliente',
+                method: 'POST',
+                url: 'https://playpayments.com/api/v1/customers',
+                description: 'Cria um novo cliente. Os clientes são criados automaticamente quando uma transação é gerada, mas você pode criar clientes separadamente.',
+                bodyParams: [
+                    { field: 'name', type: 'string', required: true, desc: 'Nome completo do cliente' },
+                    { field: 'email', type: 'string', required: true, desc: 'Email do cliente' },
+                    { field: 'document', type: 'string', required: true, desc: 'CPF/CNPJ (apenas números)' },
+                    { field: 'phone', type: 'string', required: false, desc: 'Telefone (apenas números)' },
+                    { field: 'address', type: 'object', required: false, desc: 'Endereço do cliente' }
+                ],
+                curl: `curl --request POST \\
+  --url https://playpayments.com/api/v1/customers \\
+  --header 'X-Public-Key: PB-playpayments-8901-5484-5014' \\
+  --header 'Content-Type: application/json' \\
+  --data '{
+  "name": "João Silva",
+  "email": "joao@example.com",
+  "document": "12345678900",
+  "phone": "11999999999"
+}'`,
+                response: `{
+  "success": true,
+  "data": {
+    "id": "12345678900",
+    "name": "João Silva",
+    "email": "joao@example.com",
+    "document": "12345678900",
+    "phone": "11999999999",
+    "total_transactions": 0,
+    "total_spent": 0.00,
+    "created_at": "2025-11-13T00:25:00.000Z"
+  }
+}`
+            },
+            'listar-clientes': {
+                category: 'Clientes',
+                title: 'Listar clientes',
+                method: 'GET',
+                url: 'https://playpayments.com/api/v1/customers',
+                description: 'Lista todos os clientes únicos do usuário autenticado, agrupados por documento (CPF/CNPJ).',
+                queryParams: [
+                    { field: 'per_page', type: 'integer', required: false, desc: 'Itens por página (padrão: 15)' },
+                    { field: 'search', type: 'string', required: false, desc: 'Buscar por nome, email, documento ou telefone' }
+                ],
+                curl: `curl --request GET \\
+  --url 'https://playpayments.com/api/v1/customers?per_page=15' \\
+  --header 'X-Public-Key: PB-playpayments-8901-5484-5014' \\
+  --header 'Content-Type: application/json'`,
+                response: `{
+  "success": true,
+  "data": [
+    {
+      "id": "12345678900",
+      "name": "João Silva",
+      "email": "joao@example.com",
+      "document": "12345678900",
+      "phone": "11999999999",
+      "total_transactions": 5,
+      "total_spent": 150.00,
+      "first_transaction_at": "2025-10-01T00:00:00.000Z",
+      "last_transaction_at": "2025-11-13T00:25:00.000Z"
+    }
+  ],
+  "pagination": {
+    "total": 50,
+    "per_page": 15,
+    "current_page": 1,
+    "last_page": 4
+  }
+}`
+            },
+            'atualizar-cliente': {
+                category: 'Clientes',
+                title: 'Atualizar cliente',
+                method: 'PUT',
+                url: 'https://playpayments.com/api/v1/customers/{id}',
+                description: 'Atualiza os dados de um cliente existente. O ID do cliente é o documento (CPF/CNPJ).',
+                pathParams: [
+                    { field: 'id', type: 'string', required: true, desc: 'ID do cliente (documento CPF/CNPJ)' }
+                ],
+                bodyParams: [
+                    { field: 'name', type: 'string', required: false, desc: 'Nome completo do cliente' },
+                    { field: 'email', type: 'string', required: false, desc: 'Email do cliente' },
+                    { field: 'phone', type: 'string', required: false, desc: 'Telefone (apenas números)' },
+                    { field: 'address', type: 'object', required: false, desc: 'Endereço do cliente' }
+                ],
+                curl: `curl --request PUT \\
+  --url https://playpayments.com/api/v1/customers/12345678900 \\
+  --header 'X-Public-Key: PB-playpayments-8901-5484-5014' \\
+  --header 'Content-Type: application/json' \\
+  --data '{
+  "name": "João Silva Santos",
+  "email": "joao.santos@example.com",
+  "phone": "11988887777"
+}'`,
+                response: `{
+  "success": true,
+  "data": {
+    "id": "12345678900",
+    "name": "João Silva Santos",
+    "email": "joao.santos@example.com",
+    "document": "12345678900",
+    "phone": "11988887777",
+    "updated_at": "2025-11-13T01:00:00.000Z"
+  }
+}`
+            },
+            'remover-cliente': {
+                category: 'Clientes',
+                title: 'Remover cliente',
+                method: 'DELETE',
+                url: 'https://playpayments.com/api/v1/customers/{id}',
+                description: 'Remove um cliente. Esta ação não remove as transações associadas, apenas remove o cliente da lista de clientes.',
+                pathParams: [
+                    { field: 'id', type: 'string', required: true, desc: 'ID do cliente (documento CPF/CNPJ)' }
+                ],
+                curl: `curl --request DELETE \\
+  --url https://playpayments.com/api/v1/customers/12345678900 \\
+  --header 'X-Public-Key: PB-playpayments-8901-5484-5014' \\
+  --header 'Content-Type: application/json'`,
+                response: `{
+  "success": true,
+  "message": "Customer deleted successfully"
+}`
+            },
+            'listar-saques': {
+                category: 'Saldo e Transferências',
+                title: 'Listar saques',
+                method: 'GET',
+                url: 'https://playpayments.com/api/v1/withdrawals',
+                description: 'Lista todos os saques realizados pelo usuário autenticado. Suporta filtros por status e data.',
+                queryParams: [
+                    { field: 'per_page', type: 'integer', required: false, desc: 'Itens por página (padrão: 15)' },
+                    { field: 'status', type: 'string', required: false, desc: 'Filtrar por status (pending, completed, failed, etc)' },
+                    { field: 'start_date', type: 'string', required: false, desc: 'Data inicial (YYYY-MM-DD)' },
+                    { field: 'end_date', type: 'string', required: false, desc: 'Data final (YYYY-MM-DD)' }
+                ],
+                curl: `curl --request GET \\
+  --url 'https://playpayments.com/api/v1/withdrawals?per_page=15&status=pending' \\
+  --header 'X-Public-Key: PB-playpayments-8901-5484-5014' \\
+  --header 'Content-Type: application/json'`,
+                response: `{
+  "success": true,
+  "data": [
+    {
+      "withdrawal_id": "WD_6915258E28A96",
+      "amount": 100.00,
+      "fee": 2.50,
+      "net_amount": 97.50,
+      "status": "pending",
+      "pix_key": "12345678900",
+      "pix_key_type": "cpf",
+      "created_at": "2025-11-13T00:25:00.000Z"
+    }
+  ],
+  "pagination": {
+    "total": 25,
+    "per_page": 15,
+    "current_page": 1,
+    "last_page": 2
+  }
+}`
+            },
+            'detalhar-saque': {
+                category: 'Saldo e Transferências',
+                title: 'Detalhar saque',
+                method: 'GET',
+                url: 'https://playpayments.com/api/v1/withdrawals/{id}',
+                description: 'Retorna os detalhes completos de um saque específico pelo seu ID.',
+                pathParams: [
+                    { field: 'id', type: 'string', required: true, desc: 'ID do saque (withdrawal_id)' }
+                ],
+                curl: `curl --request GET \\
+  --url https://playpayments.com/api/v1/withdrawals/WD_6915258E28A96 \\
+  --header 'X-Public-Key: PB-playpayments-8901-5484-5014' \\
+  --header 'Content-Type: application/json'`,
+                response: `{
+  "success": true,
+  "data": {
+    "withdrawal_id": "WD_6915258E28A96",
+    "amount": 100.00,
+    "fee": 2.50,
+    "net_amount": 97.50,
+    "status": "completed",
+    "pix_key": "12345678900",
+    "pix_key_type": "cpf",
+    "created_at": "2025-11-13T00:25:00.000Z",
+    "completed_at": "2025-11-13T00:30:00.000Z",
+    "transaction_id": "PIX_OUT_123456"
+  }
+}`
+            },
+            'solicitar-saque': {
+                category: 'Saldo e Transferências',
+                title: 'Solicitar saque',
+                method: 'POST',
+                url: 'https://playpayments.com/api/v1/withdrawals',
+                description: 'Solicita um novo saque PIX. O valor será debitado do saldo disponível da conta.',
+                bodyParams: [
+                    { field: 'amount', type: 'number', required: true, desc: 'Valor do saque (mínimo: 10.00)' },
+                    { field: 'pix_key', type: 'string', required: true, desc: 'Chave PIX (CPF, CNPJ, email, telefone ou chave aleatória)' },
+                    { field: 'pix_key_type', type: 'string', required: true, desc: 'Tipo da chave PIX (cpf, cnpj, email, phone, random)' },
+                    { field: 'description', type: 'string', required: false, desc: 'Descrição do saque' }
+                ],
+                curl: `curl --request POST \\
+  --url https://playpayments.com/api/v1/withdrawals \\
+  --header 'X-Public-Key: PB-playpayments-8901-5484-5014' \\
+  --header 'Content-Type: application/json' \\
+  --data '{
+  "amount": 100.00,
+  "pix_key": "12345678900",
+  "pix_key_type": "cpf",
+  "description": "Saque para conta pessoal"
+}'`,
+                response: `{
+  "success": true,
+  "data": {
+    "withdrawal_id": "WD_6915258E28A96",
+    "amount": 100.00,
+    "fee": 2.50,
+    "net_amount": 97.50,
+    "status": "pending",
+    "pix_key": "12345678900",
+    "pix_key_type": "cpf",
+    "created_at": "2025-11-13T00:25:00.000Z"
+  }
+}`
+            },
+            'consultar-saldos': {
+                category: 'Saldo e Transferências',
+                title: 'Consultar saldos',
+                method: 'GET',
+                url: 'https://playpayments.com/api/v1/balance',
+                description: 'Retorna o saldo completo da conta do usuário autenticado, incluindo saldo disponível, pendente, reservado e bloqueado.',
+                curl: `curl --request GET \\
+  --url https://playpayments.com/api/v1/balance \\
+  --header 'X-Public-Key: PB-playpayments-8901-5484-5014' \\
+  --header 'Content-Type: application/json'`,
+                response: `{
+  "success": true,
+  "data": {
+    "balance": 1000.00,
+    "pending_balance": 150.00,
+    "reserved_balance": 50.00,
+    "blocked_balance": 0.00,
+    "available_balance": 950.00,
+    "total_balance": 1200.00,
+    "total_received": 5000.00,
+    "total_withdrawn": 3800.00,
+    "currency": "BRL",
+    "last_transaction_at": "2025-11-13T00:25:00.000Z"
+  }
+}`
+            }
+        };
+
+        // Render endpoint content
+        function renderEndpoint(section) {
+            const endpoint = endpoints[section];
+            if (!endpoint) return;
+
+            const content = document.getElementById('endpoint-content');
+            let html = `
+                <header id="header" class="relative mb-8">
+                    <div class="mt-0.5 space-y-2.5">
+                        <div class="h-5 text-[#D4AF37] text-sm font-semibold">${endpoint.category}</div>
+                        <div class="flex flex-col sm:flex-row items-start sm:items-center relative gap-2">
+                            <h1 id="page-title" class="inline-block text-2xl sm:text-3xl font-bold text-white tracking-tight break-all">${endpoint.title}</h1>
+                        </div>
+                        <div class="mt-2 text-lg prose prose-invert max-w-none">
+                            <p>${endpoint.description}</p>
+                            ${endpoint.warning ? `<p class="mt-4"><strong>${endpoint.warning}</strong></p>` : ''}
+                        </div>
+                    </div>
+                </header>
+
+                <div class="mb-6 flex items-center gap-3">
+                    <span class="method-badge method-${endpoint.method.toLowerCase()}">${endpoint.method}</span>
+                    <span class="font-mono text-gray-300">${endpoint.url}</span>
+                    <button class="px-4 py-1.5 bg-[#D4AF37] hover:bg-[#8B0000] text-white rounded-lg text-sm font-medium transition-colors">Try it</button>
+                </div>
+
+                <div class="mdx-content relative mt-8 mb-14 prose prose-invert max-w-none">
+                    <div class="grid grid-cols-1 xl:grid-cols-2 gap-8">
+                        <div>
+                            <h3 class="text-white font-semibold text-lg mb-4">Descrição</h3>
+                            <p class="text-gray-300 mb-4">${endpoint.description}</p>
+                            
+                            ${endpoint.headers ? `
+                            <h4 class="text-white font-semibold mb-3 mt-6">Headers Obrigatórios</h4>
+                            <div class="overflow-x-auto my-4">
+                                <table class="w-full border-collapse text-sm">
+                                    <thead>
+                                        <tr class="bg-[#1a1a1a]">
+                                            <th class="p-3 text-left border-b border-gray-800 text-[#D4AF37] font-bold">Header</th>
+                                            <th class="p-3 text-left border-b border-gray-800 text-[#D4AF37] font-bold">Descrição</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${endpoint.headers.map(h => `
+                                        <tr class="border-b border-gray-800">
+                                            <td class="p-3"><code class="text-[#D4AF37]">${h.name}</code></td>
+                                            <td class="p-3 text-gray-300">${h.desc}</td>
+                                        </tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>
+                            </div>
+                            ` : ''}
+                            
+                            ${endpoint.pathParams ? `
+                            <h4 class="text-white font-semibold mb-3 mt-6">Path Parameters</h4>
+                            <div class="overflow-x-auto my-4">
+                                <table class="w-full border-collapse text-sm">
+                                    <thead>
+                                        <tr class="bg-[#1a1a1a]">
+                                            <th class="p-3 text-left border-b border-gray-800 text-[#D4AF37] font-bold">Parâmetro</th>
+                                            <th class="p-3 text-left border-b border-gray-800 text-[#D4AF37] font-bold">Tipo</th>
+                                            <th class="p-3 text-left border-b border-gray-800 text-[#D4AF37] font-bold">Obrigatório</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${endpoint.pathParams.map(p => `
+                                        <tr class="border-b border-gray-800">
+                                            <td class="p-3"><code class="text-[#D4AF37]">${p.field}</code></td>
+                                            <td class="p-3 text-gray-300">${p.type}</td>
+                                            <td class="p-3"><span class="text-red-400 font-bold">Sim</span></td>
+                                        </tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>
+                            </div>
+                            ` : ''}
+                            
+                            ${endpoint.queryParams ? `
+                            <h4 class="text-white font-semibold mb-3 mt-6">Query Parameters</h4>
+                            <div class="overflow-x-auto my-4">
+                                <table class="w-full border-collapse text-sm">
+                                    <thead>
+                                        <tr class="bg-[#1a1a1a]">
+                                            <th class="p-3 text-left border-b border-gray-800 text-[#D4AF37] font-bold">Parâmetro</th>
+                                            <th class="p-3 text-left border-b border-gray-800 text-[#D4AF37] font-bold">Tipo</th>
+                                            <th class="p-3 text-left border-b border-gray-800 text-[#D4AF37] font-bold">Obrigatório</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${endpoint.queryParams.map(p => `
+                                        <tr class="border-b border-gray-800">
+                                            <td class="p-3"><code class="text-[#D4AF37]">${p.field}</code></td>
+                                            <td class="p-3 text-gray-300">${p.type}</td>
+                                            <td class="p-3">${p.required ? '<span class="text-red-400 font-bold">Sim</span>' : '<span class="text-gray-500">Não</span>'}</td>
+                                        </tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>
+                            </div>
+                            ` : ''}
+                            
+                            ${endpoint.bodyParams ? `
+                            <h4 class="text-white font-semibold mb-3 mt-6">Body Parameters</h4>
+                            <div class="overflow-x-auto my-4">
+                                <table class="w-full border-collapse text-sm">
+                                    <thead>
+                                        <tr class="bg-[#1a1a1a]">
+                                            <th class="p-3 text-left border-b border-gray-800 text-[#D4AF37] font-bold">Campo</th>
+                                            <th class="p-3 text-left border-b border-gray-800 text-[#D4AF37] font-bold">Tipo</th>
+                                            <th class="p-3 text-left border-b border-gray-800 text-[#D4AF37] font-bold">Obrigatório</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${endpoint.bodyParams.map(p => `
+                                        <tr class="border-b border-gray-800">
+                                            <td class="p-3"><code class="text-[#D4AF37]">${p.field}</code></td>
+                                            <td class="p-3 text-gray-300">${p.type}</td>
+                                            <td class="p-3">${p.required ? '<span class="text-red-400 font-bold">Sim</span>' : '<span class="text-gray-500">Não</span>'}</td>
+                                        </tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>
+                            </div>
+                            ` : ''}
+                        </div>
+                        
+                        <div class="xl:sticky xl:top-24 xl:h-[calc(100vh-9.5rem)]">
+                            <div class="space-y-4">
+                                <div>
+                                    <div class="flex items-center justify-between mb-2">
+                                        <div class="flex items-center gap-2">
+                                            <h4 class="text-white font-semibold">cURL</h4>
+                                        </div>
+                                        <button class="copy-btn text-gray-400 hover:text-white" aria-label="Copy code">
+                                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor">
+                                                <rect x="5" y="5" width="7" height="7" rx="1" stroke-width="1.5"/>
+                                                <path d="M3 3v7h7" stroke-width="1.5" stroke-linecap="round"/>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    <div class="code-block rounded-lg p-4 overflow-x-auto scrollbar-thin">
+                                        <pre class="text-gray-300 font-mono text-sm"><code>${endpoint.curl}</code></pre>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <div class="flex items-center justify-between mb-2">
+                                        <div class="flex items-center gap-2">
+                                            <h4 class="text-white font-semibold">200</h4>
+                                            <span class="text-gray-500 text-sm">example</span>
+                                        </div>
+                                        <button class="copy-btn text-gray-400 hover:text-white" aria-label="Copy code">
+                                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor">
+                                                <rect x="5" y="5" width="7" height="7" rx="1" stroke-width="1.5"/>
+                                                <path d="M3 3v7h7" stroke-width="1.5" stroke-linecap="round"/>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    <div class="code-block rounded-lg p-4 overflow-x-auto scrollbar-thin max-h-[500px] overflow-y-auto">
+                                        <pre class="text-gray-300 font-mono text-sm"><code>${endpoint.response}</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            content.innerHTML = html;
+            
+            // Re-attach copy buttons
+            document.querySelectorAll('.copy-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const code = this.closest('div').querySelector('code');
+                    if (code) {
+                        navigator.clipboard.writeText(code.textContent).then(() => {
+                            const originalHTML = this.innerHTML;
+                            this.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" class="text-green-500"><path d="M13.5 2L6 9.5 2.5 6"/></svg>';
+                            setTimeout(() => { this.innerHTML = originalHTML; }, 2000);
+                        });
+                    }
+                });
+            });
+        }
+
+        // Navigation
+        document.querySelectorAll('.sidebar-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const section = this.getAttribute('data-section');
+                
+                // Update active state
+                document.querySelectorAll('.sidebar-link').forEach(l => {
+                    l.classList.remove('active', 'bg-[#D4AF37]/10', 'text-[#D4AF37]', 'border-l-3', 'border-[#D4AF37]');
+                    l.classList.add('text-gray-400');
+                });
+                this.classList.add('active', 'bg-[#D4AF37]/10', 'text-[#D4AF37]', 'border-l-3', 'border-[#D4AF37]');
+                this.classList.remove('text-gray-400');
+                
+                // Render content
+                renderEndpoint(section);
+                
+                // Scroll to top
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+
+        // Navbar opacity on scroll
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar-transition');
+            if (window.scrollY > 50) {
+                navbar.setAttribute('data-is-opaque', 'true');
+            } else {
+                navbar.setAttribute('data-is-opaque', 'false');
+            }
+        });
+
+        // Load initial content
+        renderEndpoint('autenticacao');
+    </script>
+</body>
+</html>
+

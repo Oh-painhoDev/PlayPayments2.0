@@ -1,0 +1,469 @@
+@extends('layouts.admin')
+
+@section('title', 'Detalhes da Transação')
+@section('page-title', 'Detalhes da Transação')
+@section('page-description', 'Informações completas sobre a transação')
+
+@section('content')
+<div class="p-6">
+    <!-- Success/Error Messages -->
+    @if (session('success'))
+        <div class="mb-6 bg-green-500/10 border border-green-500/20 text-green-600 px-4 py-3 rounded-lg">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if ($errors->any())
+        <div class="mb-6 bg-green-500/10 border border-green-500/20 text-green-600 px-4 py-3 rounded-lg">
+            <ul class="list-disc list-inside">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Main Content -->
+        <div class="lg:col-span-2 space-y-6">
+            <!-- Transaction Header -->
+            <div class="bg-white rounded-lg border border-gray-200 p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-lg font-semibold text-gray-900">Transação #{{ substr($transaction->transaction_id, 0, 12) }}</h2>
+                    <div>
+                        @php
+                            $statusConfig = [
+                                'pending' => ['label' => 'Pendente', 'class' => 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30'],
+                                'processing' => ['label' => 'Processando', 'class' => 'bg-blue-500/20 text-blue-600 border-blue-500/30'],
+                                'authorized' => ['label' => 'Autorizado', 'class' => 'bg-blue-500/20 text-blue-600 border-blue-500/30'],
+                                'paid' => ['label' => 'Pago', 'class' => 'bg-green-500/20 text-green-600 border-green-500/30'],
+                                'cancelled' => ['label' => 'Cancelado', 'class' => 'bg-gray-500/20 text-gray-600 border-gray-500/30'],
+                                'expired' => ['label' => 'Expirado', 'class' => 'bg-green-500/20 text-green-600 border-green-500/30'],
+                                'failed' => ['label' => 'Falhou', 'class' => 'bg-green-500/20 text-green-600 border-green-500/30'],
+                                'refunded' => ['label' => 'Estornado', 'class' => 'bg-purple-500/20 text-purple-400 border-purple-500/30'],
+                                'partially_refunded' => ['label' => 'Estornado Parcial', 'class' => 'bg-purple-500/20 text-purple-400 border-purple-500/30'],
+                                'chargeback' => ['label' => 'Chargeback', 'class' => 'bg-green-500/20 text-green-600 border-green-500/30'],
+                            ];
+                            $config = $statusConfig[$transaction->status] ?? ['label' => ucfirst($transaction->status), 'class' => 'bg-gray-500/20 text-gray-600 border-gray-500/30'];
+                        @endphp
+                        <span class="px-3 py-1 text-sm font-medium rounded-full border {{ $config['class'] }}">
+                            {{ $config['label'] }}
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                    <div>
+                        <span class="text-gray-600">ID da Transação:</span>
+                        <span class="text-gray-900 ml-2 font-mono">{{ $transaction->transaction_id }}</span>
+                    </div>
+                    
+                    @if($transaction->external_id)
+                    <div>
+                        <span class="text-gray-600">ID Externo:</span>
+                        <span class="text-gray-900 ml-2 font-mono">{{ $transaction->external_id }}</span>
+                    </div>
+                    @endif
+                    
+                    <div>
+                        <span class="text-gray-600">Criado em:</span>
+                        <span class="text-gray-900 ml-2">{{ $transaction->created_at->format('d/m/Y \à\s H:i') }}</span>
+                    </div>
+                    
+                    @if($transaction->paid_at)
+                    <div>
+                        <span class="text-gray-600">Pago em:</span>
+                        <span class="text-gray-900 ml-2">{{ $transaction->paid_at->format('d/m/Y \à\s H:i') }}</span>
+                    </div>
+                    @endif
+                    
+                    @if($transaction->refunded_at)
+                    <div>
+                        <span class="text-gray-600">Estornado em:</span>
+                        <span class="text-gray-900 ml-2">{{ $transaction->refunded_at->format('d/m/Y \à\s H:i') }}</span>
+                    </div>
+                    @endif
+                </div>
+            </div>
+
+            <!-- Financial Details -->
+            <div class="bg-white rounded-lg border border-gray-200 p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Detalhes Financeiros</h3>
+                
+                <div class="space-y-4">
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Valor Bruto:</span>
+                        <span class="text-gray-900 font-medium">{{ $transaction->formatted_amount }}</span>
+                    </div>
+                    
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Taxa:</span>
+                        <span class="text-green-600">{{ $transaction->formatted_fee_amount }}</span>
+                    </div>
+                    
+                    <div class="flex justify-between border-t border-gray-200 pt-3">
+                        <span class="text-gray-600">Valor Líquido:</span>
+                        <span class="text-green-600 font-medium">{{ $transaction->formatted_net_amount }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payment Details -->
+            <div class="bg-white rounded-lg border border-gray-200 p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Detalhes do Pagamento</h3>
+                
+                <div class="space-y-4">
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Método de Pagamento:</span>
+                        <span class="text-gray-900">{{ strtoupper(str_replace('_', ' ', $transaction->payment_method)) }}</span>
+                    </div>
+                    
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Gateway:</span>
+                        <span class="text-gray-900">{{ $transaction->gateway->name }}</span>
+                    </div>
+                    
+                    @if($transaction->payment_method === 'credit_card' && isset($transaction->payment_data['installments']))
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Parcelas:</span>
+                        <span class="text-gray-900">{{ $transaction->payment_data['installments'] }}x</span>
+                    </div>
+                    @endif
+                    
+                    @if($transaction->expires_at)
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Expira em:</span>
+                        <span class="text-gray-900">{{ $transaction->expires_at->format('d/m/Y \à\s H:i') }}</span>
+                    </div>
+                    @endif
+                </div>
+                
+                <!-- PIX Code (if applicable) -->
+                @if($transaction->payment_method === 'pix' && isset($transaction->payment_data['pix']['payload']))
+                <div class="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-300">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-sm font-medium text-gray-900">Código PIX</span>
+                        <button 
+                            onclick="copyToClipboard('{{ $transaction->payment_data['pix']['payload'] }}')"
+                            class="bg-blue-600 hover:bg-blue-700 text-gray-900 px-3 py-1 rounded text-xs transition-colors"
+                        >
+                            Copiar
+                        </button>
+                    </div>
+                    <div class="text-xs text-gray-600 font-mono break-all">
+                        {{ $transaction->payment_data['pix']['payload'] }}
+                    </div>
+                </div>
+                @endif
+            </div>
+
+            <!-- Customer Information -->
+            <div class="bg-white rounded-lg border border-gray-200 p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Informações do Cliente</h3>
+                
+                <div class="space-y-4">
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Nome:</span>
+                        <span class="text-gray-900">{{ $transaction->customer_data['name'] ?? 'N/A' }}</span>
+                    </div>
+                    
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">E-mail:</span>
+                        <span class="text-gray-900">{{ $transaction->customer_data['email'] ?? 'N/A' }}</span>
+                    </div>
+                    
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Documento:</span>
+                        <span class="text-gray-900">{{ $transaction->customer_data['document'] ?? 'N/A' }}</span>
+                    </div>
+                    
+                    @if(isset($transaction->customer_data['phone']) && $transaction->customer_data['phone'])
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Telefone:</span>
+                        <span class="text-gray-900">{{ $transaction->customer_data['phone'] }}</span>
+                    </div>
+                    @endif
+                </div>
+            </div>
+
+            <!-- Metadata -->
+            @if($transaction->metadata && count((array)$transaction->metadata) > 0)
+            <div class="bg-white rounded-lg border border-gray-200 p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Metadados</h3>
+                
+                <div class="space-y-4">
+                    @foreach((array)$transaction->metadata as $key => $value)
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">{{ ucfirst(str_replace('_', ' ', $key)) }}:</span>
+                        <span class="text-gray-900">{{ is_array($value) || is_object($value) ? json_encode($value) : $value }}</span>
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+            @endif
+
+            <!-- Payment Data -->
+            @if($transaction->payment_data && count((array)$transaction->payment_data) > 0)
+            <div class="bg-white rounded-lg border border-gray-200 p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Dados do Pagamento</h3>
+                
+                <div class="bg-gray-50 rounded-lg p-4 border border-gray-300">
+                    <pre class="text-xs text-gray-700 font-mono overflow-x-auto">{{ json_encode($transaction->payment_data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</pre>
+                </div>
+            </div>
+            @endif
+        </div>
+
+        <!-- Sidebar -->
+        <div class="space-y-6">
+            <!-- User Information -->
+            <div class="bg-white rounded-lg border border-gray-200 p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Informações do Usuário</h3>
+                
+                <div class="space-y-3">
+                    <div>
+                        <span class="text-sm text-gray-600">Nome:</span>
+                        <p class="text-gray-900 font-medium">{{ $transaction->user->name }}</p>
+                    </div>
+                    
+                    <div>
+                        <span class="text-sm text-gray-600">Email:</span>
+                        <p class="text-gray-900 font-medium">{{ $transaction->user->email }}</p>
+                    </div>
+                    
+                    <div>
+                        <span class="text-sm text-gray-600">Documento:</span>
+                        <p class="text-gray-900 font-medium">{{ $transaction->user->formatted_document }}</p>
+                    </div>
+                    
+                    <div>
+                        <span class="text-sm text-gray-600">Saldo Atual:</span>
+                        <p class="text-gray-900 font-medium">{{ $transaction->user->formatted_wallet_balance }}</p>
+                    </div>
+                </div>
+                
+                <div class="mt-4">
+                    <a href="{{ route('admin.users.show', $transaction->user) }}" class="text-blue-600 hover:text-blue-700 text-sm">
+                        Ver perfil completo
+                    </a>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="bg-white rounded-lg border border-gray-200 p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Ações</h3>
+                
+                <div class="space-y-3">
+                    <a href="{{ route('admin.transactions.index') }}" class="block w-full bg-gray-700 hover:bg-gray-600 text-gray-900 px-4 py-2 rounded-lg text-sm text-center transition-colors">
+                        Voltar para Lista
+                    </a>
+                    
+                    @if($transaction->isPaid())
+                        <button 
+                            onclick="openRefundModal()"
+                            class="w-full bg-green-600 hover:bg-green-700 text-gray-900 px-4 py-2 rounded-lg text-sm transition-colors"
+                        >
+                            Estornar / Chargeback
+                        </button>
+                    @endif
+                </div>
+            </div>
+
+            <!-- Transaction Status -->
+            <div class="bg-white rounded-lg border border-gray-200 p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Status da Transação</h3>
+                
+                <div class="flex items-center justify-center mb-4">
+                    <div class="w-16 h-16 rounded-full flex items-center justify-center
+                        @if($transaction->isPaid())
+                            bg-green-500/10 text-green-500
+                        @elseif($transaction->isProcessing() || $transaction->isAuthorized())
+                            bg-blue-500/10 text-blue-500
+                        @elseif($transaction->isPending())
+                            bg-yellow-500/10 text-yellow-500
+                        @elseif($transaction->isRefunded() || $transaction->isPartiallyRefunded() || $transaction->isChargeback())
+                            bg-purple-500/10 text-purple-500
+                        @elseif($transaction->isFailed() || $transaction->isExpired() || $transaction->isCancelled())
+                            bg-green-500/10 text-green-500
+                        @else
+                            bg-gray-500/10 text-gray-500
+                        @endif
+                    ">
+                        @if($transaction->isPaid())
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                        @elseif($transaction->isProcessing() || $transaction->isAuthorized())
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        @elseif($transaction->isPending())
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        @elseif($transaction->isRefunded() || $transaction->isPartiallyRefunded() || $transaction->isChargeback())
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
+                            </svg>
+                        @elseif($transaction->isFailed() || $transaction->isExpired() || $transaction->isCancelled())
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        @else
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        @endif
+                    </div>
+                </div>
+                
+                <div class="text-center">
+                    <p class="text-lg font-semibold 
+                        @if($transaction->isPaid())
+                            text-green-600
+                        @elseif($transaction->isProcessing() || $transaction->isAuthorized())
+                            text-blue-600
+                        @elseif($transaction->isPending())
+                            text-yellow-400
+                        @elseif($transaction->isRefunded() || $transaction->isPartiallyRefunded() || $transaction->isChargeback())
+                            text-purple-400
+                        @elseif($transaction->isFailed() || $transaction->isExpired() || $transaction->isCancelled())
+                            text-green-600
+                        @else
+                            text-gray-600
+                        @endif
+                    ">
+                        {{ $transaction->status_label }}
+                    </p>
+                    
+                    <p class="text-gray-600 text-sm mt-2">
+                        @if($transaction->isPaid())
+                            Transação paga e confirmada.
+                        @elseif($transaction->isProcessing())
+                            Transação em processamento.
+                        @elseif($transaction->isAuthorized())
+                            Transação autorizada, aguardando captura.
+                        @elseif($transaction->isPending())
+                            Transação pendente de pagamento.
+                        @elseif($transaction->isRefunded())
+                            Transação estornada completamente.
+                        @elseif($transaction->isPartiallyRefunded())
+                            Transação estornada parcialmente.
+                        @elseif($transaction->isChargeback())
+                            Transação com chargeback.
+                        @elseif($transaction->isFailed())
+                            Transação falhou.
+                        @elseif($transaction->isExpired())
+                            Transação expirada.
+                        @elseif($transaction->isCancelled())
+                            Transação cancelada.
+                        @else
+                            Status desconhecido.
+                        @endif
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Refund Modal -->
+<div id="refundModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-gray-50 rounded-lg max-w-md w-full">
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-lg font-semibold text-gray-900">Confirmar Estorno / Chargeback</h3>
+                    <button onclick="closeRefundModal()" class="text-gray-600 hover:text-gray-900">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="bg-green-500/10 border border-green-500/20 rounded-lg p-4 mb-4">
+                    <div class="flex items-start">
+                        <svg class="w-5 h-5 text-green-500 mr-3 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                        </svg>
+                        <div>
+                            <h3 class="text-green-600 font-medium text-sm">ATENÇÃO!</h3>
+                            <p class="text-green-700 text-sm mt-1">
+                                Esta ação irá estornar o valor de <strong>{{ $transaction->formatted_net_amount }}</strong> e descontar do saldo do usuário. Esta ação não pode ser desfeita.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <form action="{{ route('admin.transactions.refund', $transaction->transaction_id) }}" method="POST" class="space-y-4">
+                    @csrf
+                    
+                    <div>
+                        <label for="reason" class="block text-sm font-medium text-gray-700 mb-2">
+                            Motivo do Estorno *
+                        </label>
+                        <textarea 
+                            id="reason" 
+                            name="reason" 
+                            rows="3" 
+                            required
+                            class="w-full px-4 py-3 bg-gray-800 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                            placeholder="Informe o motivo do estorno"
+                        ></textarea>
+                    </div>
+                    
+                    <div class="flex justify-end space-x-3">
+                        <button 
+                            type="button" 
+                            onclick="closeRefundModal()"
+                            class="bg-gray-700 hover:bg-gray-600 text-gray-900 px-4 py-2 rounded-lg text-sm transition-colors"
+                        >
+                            Cancelar
+                        </button>
+                        <button 
+                            type="submit" 
+                            class="bg-green-600 hover:bg-green-700 text-gray-900 px-6 py-2 rounded-lg text-sm transition-colors"
+                        >
+                            Confirmar Estorno
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@push('scripts')
+<script>
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(function() {
+        // Show success message
+        const btn = event.target.closest('button');
+        const originalText = btn.textContent;
+        btn.textContent = 'Copiado!';
+        btn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+        btn.classList.add('bg-green-500');
+        
+        setTimeout(() => {
+            btn.textContent = originalText;
+            btn.classList.remove('bg-green-500');
+            btn.classList.add('bg-blue-600', 'hover:bg-blue-700');
+        }, 2000);
+    }).catch(function(err) {
+        console.error('Erro ao copiar: ', err);
+        alert('Erro ao copiar código');
+    });
+}
+
+function openRefundModal() {
+    document.getElementById('refundModal').classList.remove('hidden');
+    document.body.classList.add('modal-open');
+}
+
+function closeRefundModal() {
+    document.getElementById('refundModal').classList.add('hidden');
+    document.body.classList.remove('modal-open');
+}
+</script>
+@endpush
+@endsection

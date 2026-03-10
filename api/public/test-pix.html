@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste API PIX v2</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 800px;
+            width: 100%;
+            padding: 40px;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .input-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .response {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .response.success {
+            background: #d4edda;
+            border: 2px solid #c3e6cb;
+            color: #155724;
+        }
+
+        .response.error {
+            background: #f8d7da;
+            border: 2px solid #f5c6cb;
+            color: #721c24;
+        }
+
+        .response h3 {
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .response pre {
+            background: rgba(0, 0, 0, 0.05);
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: 12px;
+            line-height: 1.5;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .qrcode-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .qrcode-container img {
+            max-width: 300px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 10px;
+            background: white;
+        }
+
+        .qrcode-text {
+            margin-top: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            word-break: break-all;
+            font-size: 12px;
+            font-family: monospace;
+        }
+
+        .copy-btn {
+            margin-top: 10px;
+            padding: 8px 15px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .copy-btn:hover {
+            background: #5568d3;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .info-box {
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: #0d47a1;
+        }
+
+        .info-box strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Teste API PIX v2</h1>
+        <p class="subtitle">Interface para testar a criação de PIX usando o gateway configurado</p>
+
+        <div class="info-box">
+            <strong>ℹ️ Informações:</strong>
+            <ul style="margin-left: 20px; margin-top: 5px;">
+                <li>Esta interface usa o gateway configurado do usuário no banco de dados</li>
+                <li>É necessário informar Public Key e Private Key</li>
+                <li>O PIX será criado usando a adquirente configurada para o usuário</li>
+            </ul>
+        </div>
+
+        <form id="testForm">
+            <div class="form-group">
+                <label for="apiUrl">URL da API *</label>
+                <input type="text" id="apiUrl" value="http://localhost:8000/v2/transactions/test-pix" required>
+            </div>
+
+            <div class="input-group">
+                <div class="form-group">
+                    <label for="publicKey">Public Key (PB-playpayments-...) *</label>
+                    <input type="text" id="publicKey" placeholder="PB-playpayments-..." required>
+                </div>
+
+                <div class="form-group">
+                    <label for="privateKey">Private Key (SK-playpayments-...) *</label>
+                    <input type="text" id="privateKey" placeholder="SK-playpayments-..." required>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <div class="form-group">
+                    <label for="amount">Valor (R$) *</label>
+                    <input type="number" id="amount" step="0.01" min="0.01" value="10.00" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="expiresIn">Expiração (minutos)</label>
+                    <input type="number" id="expiresIn" min="1" value="15">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Descrição</label>
+                <input type="text" id="description" placeholder="PIX de Teste - API v2" value="PIX de Teste - API v2">
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="customCustomer">
+                <label for="customCustomer" style="margin: 0;">Usar dados customizados do cliente</label>
+            </div>
+
+            <div id="customerFields" style="display: none; margin-top: 20px; padding-top: 20px; border-top: 2px solid #e0e0e0;">
+                <div class="input-group">
+                    <div class="form-group">
+                        <label for="customerName">Nome do Cliente</label>
+                        <input type="text" id="customerName" placeholder="João Silva">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="customerEmail">E-mail do Cliente</label>
+                        <input type="email" id="customerEmail" placeholder="joao@example.com">
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <div class="form-group">
+                        <label for="customerDocument">CPF/CNPJ (apenas números)</label>
+                        <input type="text" id="customerDocument" placeholder="12345678900">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="customerPhone">Telefone (apenas números)</label>
+                        <input type="text" id="customerPhone" placeholder="11999999999">
+                    </div>
+                </div>
+            </div>
+
+            <div class="checkbox-group" style="margin-top: 20px;">
+                <input type="checkbox" id="customProduct">
+                <label for="customProduct" style="margin: 0;">Adicionar nome e descrição do produto</label>
+            </div>
+
+            <div id="productFields" style="display: none; margin-top: 20px; padding-top: 20px; border-top: 2px solid #e0e0e0;">
+                <div class="form-group">
+                    <label for="productName">Nome do Produto (para adquirente)</label>
+                    <input type="text" id="productName" placeholder="Nome do Produto para Adquirente">
+                </div>
+
+                <div class="form-group">
+                    <label for="productDescription">Descrição do Produto (para adquirente)</label>
+                    <textarea id="productDescription" rows="3" placeholder="Descrição detalhada do produto que será enviada para a adquirente"></textarea>
+                </div>
+            </div>
+
+            <div class="checkbox-group" style="margin-top: 20px;">
+                <input type="checkbox" id="addShipping">
+                <label for="addShipping" style="margin: 0;">Adicionar endereço de entrega</label>
+            </div>
+
+            <div id="shippingFields" style="display: none; margin-top: 20px; padding-top: 20px; border-top: 2px solid #e0e0e0;">
+                <div class="form-group">
+                    <label for="shippingFee">Taxa de Entrega (R$)</label>
+                    <input type="number" id="shippingFee" step="0.01" min="0" placeholder="0.00">
+                </div>
+
+                <div class="input-group">
+                    <div class="form-group">
+                        <label for="shippingStreet">Rua *</label>
+                        <input type="text" id="shippingStreet" placeholder="Rua das Flores">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="shippingStreetNumber">Número *</label>
+                        <input type="text" id="shippingStreetNumber" placeholder="123">
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <div class="form-group">
+                        <label for="shippingNeighborhood">Bairro *</label>
+                        <input type="text" id="shippingNeighborhood" placeholder="Centro">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="shippingCity">Cidade *</label>
+                        <input type="text" id="shippingCity" placeholder="São Paulo">
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <div class="form-group">
+                        <label for="shippingState">Estado (UF) *</label>
+                        <input type="text" id="shippingState" maxlength="2" placeholder="SP" style="text-transform: uppercase;">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="shippingZipCode">CEP *</label>
+                        <input type="text" id="shippingZipCode" placeholder="01234567" maxlength="8">
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <div class="form-group">
+                        <label for="shippingCountry">País (2 letras) *</label>
+                        <input type="text" id="shippingCountry" maxlength="2" value="BR" placeholder="BR" style="text-transform: uppercase;">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="shippingComplement">Complemento</label>
+                        <input type="text" id="shippingComplement" placeholder="Apto 45">
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn" id="submitBtn">
+                🚀 Criar PIX de Teste
+            </button>
+        </form>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p style="margin-top: 10px; color: #666;">Criando PIX...</p>
+        </div>
+
+        <div class="response" id="response"></div>
+    </div>
+
+    <script>
+        const form = document.getElementById('testForm');
+        const responseDiv = document.getElementById('response');
+        const loadingDiv = document.getElementById('loading');
+        const submitBtn = document.getElementById('submitBtn');
+        const customCustomerCheck = document.getElementById('customCustomer');
+        const customerFields = document.getElementById('customerFields');
+        const customProductCheck = document.getElementById('customProduct');
+        const productFields = document.getElementById('productFields');
+        const addShippingCheck = document.getElementById('addShipping');
+        const shippingFields = document.getElementById('shippingFields');
+
+        // Toggle campos do cliente
+        customCustomerCheck.addEventListener('change', function() {
+            customerFields.style.display = this.checked ? 'block' : 'none';
+        });
+
+        // Toggle campos do produto
+        customProductCheck.addEventListener('change', function() {
+            productFields.style.display = this.checked ? 'block' : 'none';
+        });
+
+        // Toggle campos de endereço
+        addShippingCheck.addEventListener('change', function() {
+            shippingFields.style.display = this.checked ? 'block' : 'none';
+        });
+
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            // Reset
+            responseDiv.style.display = 'none';
+            responseDiv.className = 'response';
+            loadingDiv.style.display = 'block';
+            submitBtn.disabled = true;
+
+            // Coletar dados
+            const apiUrl = document.getElementById('apiUrl').value;
+            const publicKey = document.getElementById('publicKey').value;
+            const privateKey = document.getElementById('privateKey').value;
+            const amount = parseFloat(document.getElementById('amount').value);
+            const expiresIn = parseInt(document.getElementById('expiresIn').value) || 15;
+            const description = document.getElementById('description').value;
+
+            const data = {
+                amount: amount,
+                pix_expires_in_minutes: expiresIn,
+                description: description || 'PIX de Teste - API v2'
+            };
+
+            // Adicionar items com nome e descrição do produto se customizado
+            if (customProductCheck.checked) {
+                const productName = document.getElementById('productName').value;
+                const productDescription = document.getElementById('productDescription').value;
+
+                if (productName || productDescription) {
+                    data.items = [{
+                        title: description || 'PIX de Teste - API v2',
+                        quantity: 1,
+                        unitPrice: Math.round(amount * 100),
+                        tangible: false
+                    }];
+
+                    if (productName) {
+                        data.items[0].name = productName;
+                    }
+                    if (productDescription) {
+                        data.items[0].description = productDescription;
+                    }
+                }
+            }
+
+            // Adicionar dados do cliente se customizado
+            if (customCustomerCheck.checked) {
+                const customerName = document.getElementById('customerName').value;
+                const customerEmail = document.getElementById('customerEmail').value;
+                const customerDocument = document.getElementById('customerDocument').value;
+                const customerPhone = document.getElementById('customerPhone').value;
+
+                if (customerName || customerEmail || customerDocument || customerPhone) {
+                    data.customer = {};
+                    if (customerName) data.customer.name = customerName;
+                    if (customerEmail) data.customer.email = customerEmail;
+                    if (customerDocument) data.customer.document = customerDocument.replace(/\D/g, '');
+                    if (customerPhone) data.customer.phone = customerPhone.replace(/\D/g, '');
+                }
+            }
+
+            // Adicionar endereço de entrega se fornecido
+            if (addShippingCheck.checked) {
+                const shippingFee = parseFloat(document.getElementById('shippingFee').value) || 0;
+                const shippingStreet = document.getElementById('shippingStreet').value;
+                const shippingStreetNumber = document.getElementById('shippingStreetNumber').value;
+                const shippingNeighborhood = document.getElementById('shippingNeighborhood').value;
+                const shippingCity = document.getElementById('shippingCity').value;
+                const shippingState = document.getElementById('shippingState').value;
+                const shippingZipCode = document.getElementById('shippingZipCode').value;
+                const shippingCountry = document.getElementById('shippingCountry').value || 'BR';
+                const shippingComplement = document.getElementById('shippingComplement').value;
+
+                if (shippingStreet && shippingStreetNumber && shippingNeighborhood && shippingCity && shippingState && shippingZipCode) {
+                    data.shipping = {
+                        fee: shippingFee,
+                        address: {
+                            street: shippingStreet,
+                            streetNumber: shippingStreetNumber,
+                            neighborhood: shippingNeighborhood,
+                            city: shippingCity,
+                            state: shippingState.toUpperCase(),
+                            zipCode: shippingZipCode.replace(/\D/g, ''),
+                            country: shippingCountry.toUpperCase(),
+                        }
+                    };
+
+                    if (shippingComplement) {
+                        data.shipping.address.complement = shippingComplement;
+                    }
+                }
+            }
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Public-Key': publicKey,
+                        'X-Private-Key': privateKey
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+                loadingDiv.style.display = 'none';
+
+                if (response.ok) {
+                    showSuccess(result);
+                } else {
+                    showError(result, response.status);
+                }
+            } catch (error) {
+                loadingDiv.style.display = 'none';
+                showError({
+                    error: 'Erro na requisição',
+                    message: error.message
+                }, 0);
+            } finally {
+                submitBtn.disabled = false;
+            }
+        });
+
+        function showSuccess(result) {
+            responseDiv.className = 'response success';
+            responseDiv.style.display = 'block';
+
+            let html = '<h3>✅ PIX Criado com Sucesso!</h3>';
+
+            // A resposta pode vir direto ou dentro de result.data
+            const data = result.data || result;
+            
+            if (data) {
+                html += `<p><strong>ID da Transação:</strong> ${data.id}</p>`;
+                html += `<p><strong>Status:</strong> ${data.status}</p>`;
+                html += `<p><strong>Valor:</strong> R$ ${(data.amount / 100).toFixed(2)}</p>`;
+                html += `<p><strong>External Ref:</strong> ${data.externalRef}</p>`;
+
+                if (data.pix && data.pix.qrcode) {
+                    html += '<div class="qrcode-container">';
+                    html += '<h4>QR Code PIX:</h4>';
+                    
+                    // Gerar QR Code usando API externa
+                    const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(data.pix.qrcode)}`;
+                    html += `<img src="${qrCodeUrl}" alt="QR Code PIX">`;
+                    
+                    html += '<div class="qrcode-text">';
+                    html += `<strong>Código PIX (EMV):</strong><br>`;
+                    html += `<span id="pixCode">${data.pix.qrcode}</span>`;
+                    html += '<br><button class="copy-btn" onclick="copyPixCode()">📋 Copiar Código</button>';
+                    html += '</div>';
+
+                    if (data.pix.expirationDate) {
+                        html += `<p style="margin-top: 10px;"><strong>Expira em:</strong> ${data.pix.expirationDate}</p>`;
+                    }
+
+                    html += '</div>';
+                }
+
+                html += '<details style="margin-top: 20px;">';
+                html += '<summary style="cursor: pointer; font-weight: bold; margin-bottom: 10px;">📄 Ver Resposta Completa</summary>';
+                html += '<pre>' + JSON.stringify(result, null, 2) + '</pre>';
+                html += '</details>';
+            } else {
+                html += '<pre>' + JSON.stringify(result, null, 2) + '</pre>';
+            }
+
+            responseDiv.innerHTML = html;
+            responseDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function showError(result, status) {
+            responseDiv.className = 'response error';
+            responseDiv.style.display = 'block';
+
+            let html = '<h3>❌ Erro ao Criar PIX</h3>';
+            
+            if (status) {
+                html += `<p><strong>Status HTTP:</strong> ${status}</p>`;
+            }
+
+            if (result.message) {
+                html += `<p><strong>Mensagem:</strong> ${result.message}</p>`;
+            }
+
+            if (result.error) {
+                html += `<p><strong>Erro:</strong> ${result.error}</p>`;
+            }
+
+            html += '<details style="margin-top: 20px;">';
+            html += '<summary style="cursor: pointer; font-weight: bold; margin-bottom: 10px;">📄 Ver Detalhes do Erro</summary>';
+            html += '<pre>' + JSON.stringify(result, null, 2) + '</pre>';
+            html += '</details>';
+
+            responseDiv.innerHTML = html;
+            responseDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function copyPixCode() {
+            const pixCode = document.getElementById('pixCode');
+            if (pixCode) {
+                navigator.clipboard.writeText(pixCode.textContent).then(() => {
+                    const btn = event.target;
+                    const originalText = btn.textContent;
+                    btn.textContent = '✅ Copiado!';
+                    setTimeout(() => {
+                        btn.textContent = originalText;
+                    }, 2000);
+                });
+            }
+        }
+
+        // Salvar chaves no localStorage
+        form.addEventListener('submit', function() {
+            localStorage.setItem('apiUrl', document.getElementById('apiUrl').value);
+            localStorage.setItem('publicKey', document.getElementById('publicKey').value);
+            localStorage.setItem('privateKey', document.getElementById('privateKey').value);
+        });
+
+        // Carregar chaves salvas
+        window.addEventListener('load', function() {
+            const savedUrl = localStorage.getItem('apiUrl');
+            const savedPublicKey = localStorage.getItem('publicKey');
+            const savedPrivateKey = localStorage.getItem('privateKey');
+
+            if (savedUrl) document.getElementById('apiUrl').value = savedUrl;
+            if (savedPublicKey) document.getElementById('publicKey').value = savedPublicKey;
+            if (savedPrivateKey) document.getElementById('privateKey').value = savedPrivateKey;
+        });
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,11 @@
+# Forçar processamento pelo PHP
+DirectoryIndex index.php
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    # Redirecionar tudo para index.php
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^(.*)$ index.php?file=$1 [L,QSA]
+    # Mesmo se arquivo existir, processar pelo index.php
+    RewriteCond %{REQUEST_FILENAME} -f
+    RewriteRule ^(.*)$ index.php?file=$1 [L,QSA]
+</IfModule>

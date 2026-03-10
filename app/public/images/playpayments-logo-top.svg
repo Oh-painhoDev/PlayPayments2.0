@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <!-- Fundo gradiente -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f0f0f;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1a1a2e;stop-opacity:1" />
+    </linearGradient>
+    <radialGradient id="orbGradient" cx="40%" cy="40%">
+      <stop offset="0%" style="stop-color:#21b3dd;stop-opacity:0.4" />
+      <stop offset="100%" style="stop-color:#21b3dd;stop-opacity:0" />
+    </radialGradient>
+  </defs>
+  
+  <!-- Fundo -->
+  <rect width="400" height="400" fill="url(#bgGradient)"/>
+  
+  <!-- Orbes decorativos -->
+  <circle cx="320" cy="80" r="100" fill="url(#orbGradient)" filter="blur(40px)"/>
+  <circle cx="80" cy="320" r="80" fill="url(#orbGradient)" filter="blur(30px)"/>
+  
+  <!-- Círculo central decorativo -->
+  <circle cx="200" cy="200" r="120" fill="none" stroke="#21b3dd" stroke-width="2" opacity="0.2"/>
+  <circle cx="200" cy="200" r="100" fill="none" stroke="#21b3dd" stroke-width="1" opacity="0.1"/>
+  
+  <!-- Símbolo $ com play button -->
+  <g transform="translate(200, 200)">
+    <!-- $ em cyan -->
+    <text x="0" y="-15" font-size="80" font-weight="bold" fill="#21b3dd" text-anchor="middle" font-family="Arial, sans-serif">$</text>
+    
+    <!-- Play button (triângulo) -->
+    <polygon points="35,-8 35,8 50,0" fill="#21b3dd" opacity="0.8"/>
+  </g>
+  
+  <!-- Texto "$playpayments" -->
+  <text x="200" y="340" font-size="32" font-weight="700" fill="#ffffff" text-anchor="middle" font-family="Arial, sans-serif" letter-spacing="2">$playpayments</text>
+  
+  <!-- Linha decorativa sob o texto -->
+  <line x1="100" y1="360" x2="300" y2="360" stroke="#21b3dd" stroke-width="2" opacity="0.6"/>
+</svg>

@@ -1,0 +1,91 @@
+# ============================================
+# COMANDOS CURL PARA TESTAR WEBHOOK PLUGGOU
+# ============================================
+
+# ============================================
+# Windows CMD (Prompt de Comando)
+# ============================================
+
+# Comando básico (uma linha):
+curl -X POST "https://playpayments.com/webhook/pluggou" -H "Content-Type: application/json" -H "Accept: application/json" -d "{\"id\":\"test-123\",\"event_type\":\"transaction\",\"data\":{\"id\":\"f5ef6662-b893-4080-8xxx\",\"payment_method\":\"pix\",\"amount\":300,\"status\":\"paid\",\"paid_at\":\"2025-11-12 10:30:00\",\"created_at\":\"2025-11-12 10:27:00\"}}"
+
+# ============================================
+# Windows PowerShell
+# ============================================
+
+# Comando básico:
+curl.exe -X POST "https://playpayments.com/webhook/pluggou" -H "Content-Type: application/json" -H "Accept: application/json" -d '{\"id\":\"test-123\",\"event_type\":\"transaction\",\"data\":{\"id\":\"f5ef6662-b893-4080-8xxx\",\"payment_method\":\"pix\",\"amount\":300,\"status\":\"paid\",\"paid_at\":\"2025-11-12 10:30:00\",\"created_at\":\"2025-11-12 10:27:00\"}}'
+
+# ============================================
+# Linux/Mac/Git Bash
+# ============================================
+
+curl -X POST "https://playpayments.com/webhook/pluggou" \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json" \
+  -d '{
+    "id": "test-123",
+    "event_type": "transaction",
+    "data": {
+      "id": "f5ef6662-b893-4080-8xxx",
+      "payment_method": "pix",
+      "e2e_id": "E60701190202507071554DY5IQBAOH2C",
+      "amount": 300,
+      "platform_tax": 206,
+      "liquid_amount": 95,
+      "status": "paid",
+      "paid_at": "2025-11-12 10:30:00",
+      "created_at": "2025-11-12 10:27:00"
+    }
+  }'
+
+# ============================================
+# Usando arquivo JSON (mais fácil)
+# ============================================
+
+# 1. Crie um arquivo webhook_data.json com:
+{
+  "id": "test-webhook-123",
+  "event_type": "transaction",
+  "data": {
+    "id": "f5ef6662-b893-4080-8xxx",
+    "payment_method": "pix",
+    "e2e_id": "E60701190202507071554DY5IQBAOH2C",
+    "amount": 300,
+    "platform_tax": 206,
+    "liquid_amount": 95,
+    "status": "paid",
+    "paid_at": "2025-11-12 10:30:00",
+    "created_at": "2025-11-12 10:27:00"
+  }
+}
+
+# 2. Execute:
+curl -X POST "https://playpayments.com/webhook/pluggou" -H "Content-Type: application/json" -d @webhook_data.json
+
+# ============================================
+# Testar diferentes status
+# ============================================
+
+# Status: pending
+curl -X POST "https://playpayments.com/webhook/pluggou" -H "Content-Type: application/json" -d "{\"id\":\"test-pending\",\"event_type\":\"transaction\",\"data\":{\"id\":\"test-123\",\"payment_method\":\"pix\",\"amount\":300,\"status\":\"pending\",\"created_at\":\"2025-11-12 10:27:00\"}}"
+
+# Status: paid
+curl -X POST "https://playpayments.com/webhook/pluggou" -H "Content-Type: application/json" -d "{\"id\":\"test-paid\",\"event_type\":\"transaction\",\"data\":{\"id\":\"test-123\",\"payment_method\":\"pix\",\"amount\":300,\"status\":\"paid\",\"paid_at\":\"2025-11-12 10:30:00\",\"created_at\":\"2025-11-12 10:27:00\"}}"
+
+# Status: expired
+curl -X POST "https://playpayments.com/webhook/pluggou" -H "Content-Type: application/json" -d "{\"id\":\"test-expired\",\"event_type\":\"transaction\",\"data\":{\"id\":\"test-123\",\"payment_method\":\"pix\",\"amount\":300,\"status\":\"expired\",\"created_at\":\"2025-11-12 10:27:00\"}}"
+
+# ============================================
+# Ver resposta completa (verbose)
+# ============================================
+
+curl -v -X POST "https://playpayments.com/webhook/pluggou" -H "Content-Type: application/json" -d "{\"id\":\"test-123\",\"event_type\":\"transaction\",\"data\":{\"id\":\"test-123\",\"payment_method\":\"pix\",\"amount\":300,\"status\":\"paid\",\"paid_at\":\"2025-11-12 10:30:00\",\"created_at\":\"2025-11-12 10:27:00\"}}"
+
+
+
+
+
+
+
+

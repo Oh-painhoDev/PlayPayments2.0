@@ -1,0 +1,176 @@
+/* Admin-specific styles */
+
+/* Improved scrolling for modals */
+.max-h-\[90vh\] {
+    max-height: 90vh !important;
+}
+
+.max-h-\[70vh\] {
+    max-height: 70vh !important;
+}
+
+.overflow-y-auto {
+    overflow-y: auto !important;
+}
+
+/* Smooth scrolling */
+* {
+    scroll-behavior: smooth;
+}
+
+/* Custom scrollbar for better visibility */
+.overflow-y-auto::-webkit-scrollbar {
+    width: 8px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-track {
+    background: var(--theme-scrollbar-track, rgba(0, 0, 0, 0.3));
+    border-radius: 4px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-thumb {
+    background: var(--theme-scrollbar-thumb, rgba(75, 85, 99, 0.6));
+    border-radius: 4px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-thumb:hover {
+    background: var(--theme-scrollbar-thumb-hover, rgba(75, 85, 99, 0.8));
+}
+
+/* Document images */
+.aspect-w-16 {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+}
+
+.aspect-w-16 img {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    object-fit: contain;
+}
+
+/* Modal animations */
+#companyModal, #companyActionsModal, #feesModal, #permissionsModal, #approvalModal {
+    transition: opacity 0.3s ease;
+}
+
+/* Ensure modals are properly centered */
+.flex.items-center.justify-center {
+    min-height: 100vh;
+    padding: 1rem;
+}
+
+/* Ensure modal content has proper spacing */
+.p-6 {
+    padding: 1.5rem;
+}
+
+/* Ensure buttons are properly sized */
+button {
+    white-space: nowrap;
+}
+
+/* Fix for modal scrolling issues */
+body.modal-open {
+    overflow: hidden;
+}
+
+/* Fix for z-index issues */
+.z-50 {
+    z-index: 50 !important;
+}
+
+/* Fix for modal backdrop */
+.bg-opacity-50 {
+    --tw-bg-opacity: 0.5 !important;
+}
+
+/* Fix for modal content */
+.bg-gray-900 {
+    --tw-bg-opacity: 1 !important;
+    background-color: var(--theme-card-bg, #0a0a0a) !important;
+}
+
+/* Fix for modal buttons */
+.bg-green-600 {
+    --tw-bg-opacity: 1 !important;
+    background-color: var(--theme-success, rgba(5, 150, 105, var(--tw-bg-opacity))) !important;
+}
+
+.bg-blue-600 {
+    --tw-bg-opacity: 1 !important;
+    background-color: var(--theme-primary, rgba(93 104 130, var(--tw-bg-opacity))) !important;
+}
+
+.bg-purple-600 {
+    --tw-bg-opacity: 1 !important;
+    background-color: var(--theme-info, rgba(124, 58, 237, var(--tw-bg-opacity))) !important;
+}
+
+.bg-purple-700 {
+    --tw-bg-opacity: 1 !important;
+    background-color: rgba(109, 40, 217, var(--tw-bg-opacity)) !important;
+}
+
+.bg-gray-700 {
+    --tw-bg-opacity: 1 !important;
+    background-color: rgba(55, 65, 81, var(--tw-bg-opacity)) !important;
+}
+
+/* Fix for form inputs */
+input, select, textarea {
+    background-color: var(--theme-card-bg, rgba(0, 0, 0, var(--tw-bg-opacity))) !important;
+    border-color: var(--theme-border, rgba(55, 65, 81, var(--tw-border-opacity))) !important;
+    color: var(--theme-text, white) !important;
+}
+
+/* Fix for aspect ratio */
+.aspect-h-9 {
+    position: relative;
+    height: 0;
+    padding-bottom: 56.25%;
+}
+
+.aspect-h-9 > * {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+/* Theme-specific overrides */
+.bg-gray-950 {
+    background-color: var(--theme-background, #000000) !important;
+}
+
+.bg-gray-900 {
+    background-color: var(--theme-card-bg, #0a0a0a) !important;
+}
+
+.bg-gray-800 {
+    background-color: var(--theme-card-bg-hover, #111111) !important;
+}
+
+.border-gray-800 {
+    border-color: var(--theme-border, #222222) !important;
+}
+
+.text-white {
+    color: var(--theme-text, #ffffff) !important;
+}
+
+.text-gray-400 {
+    color: var(--theme-text-secondary, #9ca3af) !important;
+}
+
+.text-gray-300 {
+    color: var(--theme-text-secondary, #d1d5db) !important;
+}

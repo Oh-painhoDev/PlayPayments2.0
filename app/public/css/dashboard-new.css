@@ -1,0 +1,1283 @@
+/* Dashboard Novo */
+
+
+/* Container Principal */
+.bg-view {
+    padding: 24px;
+    background-color: #000000;
+    min-height: 100vh;
+    font-family: 'Inter', sans-serif;
+    color: #FFFFFF;
+}
+
+
+/* Dashboard Header */
+.dashboard-header {
+    margin-bottom: 32px;
+}
+
+
+.dashboard-header-content {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+@media (min-width: 1024px) {
+    .dashboard-header-content {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+    }
+}
+
+.dashboard-header-left {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex-shrink: 0;
+}
+
+.dashboard-header-right {
+    display: flex;
+    gap: 8px;
+    width: auto;
+    margin-left: auto;
+    flex-shrink: 0;
+}
+
+.dashboard-title {
+    font-size: 28px;
+    font-weight: 500;
+    font-family: 'Manrope', sans-serif;
+    letter-spacing: -0.56px;
+    line-height: 1.2;
+    color: #FFFFFF;
+    margin: 0;
+}
+
+
+.dashboard-date {
+    font-size: 12px;
+    font-weight: 600;
+    font-family: 'Manrope', sans-serif;
+    letter-spacing: -0.24px;
+    line-height: 1.3;
+    color: #707070;
+    margin: 0;
+    text-transform: capitalize;
+}
+
+.dashboard-header-right {
+    display: flex;
+    gap: 8px;
+    width: auto;
+}
+
+.date-selector-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+    font-size: 14px;
+    height: 40px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 300px;
+    justify-content: flex-start;
+    text-align: left;
+    font-weight: 400;
+    border: 1px solid #2D2D2D;
+    background-color: #161616;
+    color: #FFFFFF;
+    transition: all 0.2s;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+@media (min-width: 768px) {
+    .date-selector-btn {
+        width: auto;
+        min-width: 300px;
+    }
+}
+
+.date-selector-btn:hover {
+    background-color: #1f1f1f;
+    border-color: #21b3dd;
+}
+
+.date-selector-btn:focus-visible {
+    outline: 2px solid #21b3dd;
+    outline-offset: 2px;
+}
+
+.date-selector-btn:disabled {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+.date-selector-btn svg {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    pointer-events: none;
+    color: #FFFFFF;
+}
+
+.date-selector-text {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+@media (min-width: 768px) {
+    .date-selector-btn {
+        width: 300px;
+    }
+}
+
+/* Date Picker Modal */
+.date-picker-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.date-picker-modal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.date-picker-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+}
+
+.date-picker-content {
+    position: relative;
+    background-color: #161616;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 900px;
+    max-height: 90vh;
+    display: flex;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}
+
+.date-picker-sidebar {
+    width: 200px;
+    background-color: #1f1f1f;
+    padding: 24px 0;
+    border-right: 1px solid #2D2D2D;
+    display: flex;
+    flex-direction: column;
+}
+
+.date-option-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 24px;
+    color: #FFFFFF;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    position: relative;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.date-option-item:hover {
+    background-color: #2D2D2D;
+}
+
+.date-option-item.active {
+    background-color: #2D2D2D;
+}
+
+.date-option-indicator {
+    width: 4px;
+    height: 100%;
+    background-color: #21b3dd;
+    position: absolute;
+    left: 0;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.date-option-item.active .date-option-indicator {
+    opacity: 1;
+}
+
+.date-picker-divider {
+    height: 1px;
+    background-color: #2D2D2D;
+    margin: 8px 0;
+}
+
+.date-picker-calendar {
+    flex: 1;
+    padding: 24px;
+    overflow-y: auto;
+}
+
+.calendar-container {
+    display: flex;
+    gap: 32px;
+}
+
+.calendar-wrapper {
+    flex: 1;
+}
+
+.calendar-month {
+    min-width: 300px;
+}
+
+.calendar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.calendar-header h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #FFFFFF;
+    margin: 0;
+    text-transform: capitalize;
+}
+
+.calendar-nav-btn {
+    background: none;
+    border: none;
+    color: #FFFFFF;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.calendar-nav-btn:hover {
+    background-color: #2D2D2D;
+}
+
+.calendar-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+    margin-bottom: 8px;
+}
+
+.calendar-weekday {
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+    color: #707070;
+    padding: 8px 0;
+}
+
+.calendar-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+}
+
+.calendar-day {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #FFFFFF;
+    transition: all 0.2s;
+    position: relative;
+}
+
+.calendar-day:hover:not(.other-month) {
+    background-color: #2D2D2D;
+}
+
+.calendar-day.other-month {
+    color: #707070;
+    cursor: default;
+}
+
+.calendar-day.today {
+    background-color: #2D2D2D;
+    font-weight: 600;
+}
+
+.calendar-day.selected {
+    background-color: #21b3dd;
+    color: #FFFFFF;
+    font-weight: 600;
+}
+
+.calendar-day.in-range {
+    background-color: rgba(33, 179, 221, 0.2);
+}
+
+.calendar-day.in-range:not(.selected) {
+    color: #FFFFFF;
+}
+
+.date-picker-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 24px;
+    padding-top: 24px;
+    border-top: 1px solid #2D2D2D;
+}
+
+.date-picker-cancel-btn,
+.date-picker-apply-btn {
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+    font-family: 'Manrope', sans-serif;
+}
+
+.date-picker-cancel-btn {
+    background-color: transparent;
+    color: #707070;
+    border: 1px solid #2D2D2D;
+}
+
+.date-picker-cancel-btn:hover {
+    background-color: #2D2D2D;
+    color: #FFFFFF;
+}
+
+.date-picker-apply-btn {
+    background-color: #21b3dd;
+    color: #FFFFFF;
+}
+
+.date-picker-apply-btn:hover {
+    background-color: #21b3dd;
+}
+
+.date-picker-apply-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+    .date-picker-content {
+        flex-direction: column;
+        max-height: 95vh;
+    }
+    
+    .date-picker-sidebar {
+        width: 100%;
+        flex-direction: row;
+        overflow-x: auto;
+        padding: 16px;
+        border-right: none;
+        border-bottom: 1px solid #2D2D2D;
+    }
+    
+    .date-option-item {
+        white-space: nowrap;
+        padding: 8px 16px;
+    }
+    
+    .date-option-indicator {
+        width: 100%;
+        height: 4px;
+        bottom: 0;
+        top: auto;
+        left: 0;
+    }
+    
+    .calendar-container {
+        flex-direction: column;
+        gap: 24px;
+    }
+}
+
+/* Header com Seletor de Período */
+.bg-header {
+    margin-bottom: 24px;
+}
+
+.select-period {
+    display: inline-block;
+}
+
+.bg-select {
+    background-color: #161616;
+    border: 1px solid #1f1f1f;
+    border-radius: 12px;
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.bg-select:hover {
+    border-color: #21b3dd;
+}
+
+.contents {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.left-data {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.left-data p {
+    margin: 0;
+    color: #FFFFFF;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.bg-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.bg-icon svg path {
+    stroke: #707070;
+}
+
+/* Cards de Métricas */
+.bg-billing-chart {
+    margin-bottom: 24px;
+}
+
+.billing-cards {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+
+.card {
+    background-color: #161616;
+    border: 1px solid #1f1f1f;
+    border-radius: 12px;
+    padding: 20px;
+    transition: all 0.2s;
+}
+
+.card:hover {
+    border-color: #21b3dd;
+    transform: translateY(-2px);
+}
+
+.title-with-tooltip {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    position: relative;
+}
+
+.title-with-tooltip h2 {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 500;
+    color: #FFFFFF;
+}
+
+.tooltip-container {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip-icon {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background-color: #1f1f1f;
+    color: #707070;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: help;
+    transition: all 0.2s;
+}
+
+.tooltip-icon:hover {
+    background-color: #21b3dd;
+    color: white;
+}
+
+.tooltip-content {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-bottom: 8px;
+    background-color: #FFFFFF;
+    color: #2A2E33;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    width: 250px;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s;
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+.tooltip-content::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: #FFFFFF;
+}
+
+.tooltip-container:hover .tooltip-content {
+    opacity: 1;
+    visibility: visible;
+}
+
+.card h2 {
+    margin: 0 0 16px 0;
+    font-size: 14px;
+    font-weight: 500;
+    color: #FFFFFF;
+}
+
+.data {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.data svg {
+    flex-shrink: 0;
+}
+
+.data p {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 700;
+    color: #FFFFFF;
+}
+
+
+/* Cards Secundários (4 cards) - Ações Rápidas */
+.billing-cards-secondary {
+    margin-bottom: 24px;
+    padding: 0;
+    background-color: #000000;
+    width: 100%;
+}
+
+.billing-cards-secondary .grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+}
+
+
+@media (max-width: 1023px) {
+    .billing-cards-secondary .grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 639px) {
+    .billing-cards-secondary .grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Estilo dos Cards de Ação Rápida */
+.billing-cards-secondary a {
+    background-color: #161616 !important;
+    border: 1px solid #1f1f1f !important;
+    border-radius: 12px !important;
+    padding: 16px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    text-decoration: none !important;
+    transition: all 0.3s ease !important;
+    position: relative !important;
+    min-height: 72px;
+}
+
+
+.billing-cards-secondary a:hover {
+    background-color: #1f1f1f !important;
+    border-color: #2D2D2D !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+}
+
+
+.billing-cards-secondary a:active {
+    transform: translateY(0) scale(0.98) !important;
+}
+
+/* Container do Ícone */
+.billing-cards-secondary a > div:first-child {
+    padding: 10px !important;
+    background-color: rgba(59, 130, 246, 0.1) !important;
+    border-radius: 10px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-shrink: 0 !important;
+    width: 44px !important;
+    height: 44px !important;
+}
+
+/* Ícones dentro do container */
+.billing-cards-secondary a > div:first-child svg {
+    width: 24px !important;
+    height: 24px !important;
+    flex-shrink: 0 !important;
+    color: #21b3dd !important;
+}
+
+/* Aplicar cor primária em todos os elementos dos ícones */
+.billing-cards-secondary a > div:first-child svg path,
+.billing-cards-secondary a > div:first-child svg rect,
+.billing-cards-secondary a > div:first-child svg circle {
+    stroke: #21b3dd !important;
+    fill: #21b3dd !important;
+}
+
+/* Para SVGs que usam apenas stroke (QR Code) - manter fill como none */
+.billing-cards-secondary a > div:first-child svg[fill="none"] path,
+.billing-cards-secondary a > div:first-child svg[fill="none"] rect {
+    stroke: #21b3dd !important;
+    fill: none !important;
+}
+
+@media (min-width: 768px) {
+    .billing-cards-secondary a > div:first-child svg {
+        width: 32px !important;
+        height: 32px !important;
+    }
+}
+
+/* Container de Texto */
+.billing-cards-secondary a > div:nth-child(2) {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    justify-content: center !important;
+    flex: 1 !important;
+    min-width: 0 !important;
+    gap: 4px !important;
+    margin-right: 8px !important;
+}
+
+/* Título do Card */
+.billing-cards-secondary a h1 {
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    color: #FFFFFF !important;
+}
+
+    margin: 0 !important;
+    font-family: 'Manrope', sans-serif !important;
+    letter-spacing: -0.28px !important;
+    line-height: 1.3 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    width: 100% !important;
+}
+
+@media (min-width: 640px) {
+    .billing-cards-secondary a h1 {
+        font-size: 15px !important;
+    }
+}
+
+/* Subtítulo do Card */
+.billing-cards-secondary a span {
+    font-size: 12px !important;
+    color: #707070 !important;
+    opacity: 1 !important;
+    margin: 0 !important;
+    font-family: 'Manrope', sans-serif !important;
+    letter-spacing: -0.24px !important;
+    line-height: 1.3 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    width: 100% !important;
+}
+
+/* Seta à direita */
+.billing-cards-secondary a > svg:last-child {
+    width: 18px !important;
+    height: 18px !important;
+    color: #707070 !important;
+    flex-shrink: 0 !important;
+    position: absolute !important;
+    right: 16px !important;
+    opacity: 0.7 !important;
+    transition: all 0.3s ease !important;
+}
+
+.billing-cards-secondary a:hover > svg:last-child {
+    opacity: 1 !important;
+    transform: translateX(2px) !important;
+    color: #AAAAAA !important;
+}
+
+.card-secondary {
+    background-color: #161616;
+    border: none;
+    border-radius: 16px;
+    padding: 20px;
+    transition: all 0.3s;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-secondary.add-balance-card-secondary {
+    background-color: transparent;
+    border: 1px solid #1f1f1f;
+    padding: 20px;
+}
+
+.add-balance-card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.add-balance-card-header {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.add-balance-card-title-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.add-balance-icon-small {
+    width: 20px;
+    height: 20px;
+    color: #707070;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.add-balance-icon-small svg {
+    width: 20px;
+    height: 20px;
+}
+
+.add-balance-card-title {
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Manrope', sans-serif;
+    letter-spacing: -0.28px;
+    color: #FFFFFF;
+    margin: 0;
+}
+
+.add-balance-card-value {
+    font-size: 28px;
+    font-weight: 500;
+    font-family: 'Manrope', sans-serif;
+    letter-spacing: -0.56px;
+    color: #FFFFFF;
+}
+
+
+.add-balance-card-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.add-balance-card-label {
+    font-size: 12px;
+    font-weight: 600;
+    font-family: 'Manrope', sans-serif;
+    letter-spacing: -0.24px;
+    color: #707070;
+}
+
+.card-secondary:hover {
+    transform: translateY(-2px);
+}
+
+.card-icon-secondary {
+    width: 20px;
+    height: 20px;
+    border-radius: 0;
+    background: transparent;
+    color: #707070;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-bottom: 8px;
+}
+
+.card-icon-secondary svg {
+    width: 20px;
+    height: 20px;
+}
+
+.card-secondary h2 {
+    margin: 0 0 8px 0;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Manrope', sans-serif;
+    letter-spacing: -0.28px;
+    color: #FFFFFF;
+}
+
+.card-value-secondary {
+    margin: 0 0 10px 0;
+    font-size: 28px;
+    font-weight: 500;
+    font-family: 'Manrope', sans-serif;
+    letter-spacing: -0.56px;
+    color: #FFFFFF;
+}
+
+
+.card-details {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #1f1f1f;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+}
+
+.detail-row span:first-child {
+    color: #707070;
+}
+
+.detail-row span:last-child {
+    color: #FFFFFF;
+    font-weight: 600;
+}
+
+.approval-bars {
+    display: flex;
+    gap: 16px;
+    margin-top: 16px;
+}
+
+.approval-bar-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #21b3dd;
+}
+
+.approval-bar-item span {
+    font-size: 14px;
+    font-weight: 600;
+    color: #FFFFFF;
+}
+
+.card-update-time {
+    font-size: 12px;
+    color: #707070;
+    margin: 0 0 16px 0;
+}
+
+.withdrawal-btn-secondary {
+    width: 100%;
+    padding: 12px 24px;
+    background-color: #21b3dd;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.withdrawal-btn-secondary:hover {
+    background-color: #21b3dd;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.add-balance-btn-secondary {
+    width: 100%;
+    padding: 10px 16px;
+    background-color: #21b3dd;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    font-family: 'Manrope', sans-serif;
+    letter-spacing: -0.28px;
+    cursor: pointer;
+    transition: all 0.2s;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: auto;
+}
+
+.add-balance-btn-secondary:hover {
+    background-color: #21b3dd;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.add-balance-btn-secondary span {
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Manrope', sans-serif;
+    letter-spacing: -0.28px;
+}
+
+/* Gráfico */
+.graphic {
+    background-color: #161616;
+    border: 1px solid #1f1f1f;
+    border-radius: 12px;
+    padding: 24px;
+}
+
+
+.graphic-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.graphic-header h3 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 700;
+    color: #FFFFFF;
+}
+
+.graphic-legend {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: #707070;
+}
+
+.legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #21b3dd;
+}
+
+.vue-apexcharts {
+    position: relative;
+    width: 100%;
+}
+
+#salesChart {
+    width: 100% !important;
+    height: 400px !important;
+}
+
+/* Cards de Dados de Faturamento */
+.bg-billing-data {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+
+.billing-data-card {
+    background-color: #161616;
+    border: 1px solid #1f1f1f;
+    border-radius: 12px;
+    padding: 20px;
+    position: relative;
+    transition: all 0.2s;
+}
+
+.billing-data-card:hover {
+    border-color: #21b3dd;
+    transform: translateY(-2px);
+}
+
+.percent-icon {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: #1f1f1f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.percent-icon p {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: #707070;
+}
+
+.top {
+    margin-bottom: 16px;
+}
+
+
+.title h3 {
+    margin: 0 0 8px 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: #FFFFFF;
+}
+
+.top h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 700;
+    color: #FFFFFF;
+}
+
+
+.divider-line {
+    height: 1px;
+    background-color: #1f1f1f;
+    margin: 16px 0;
+}
+
+.bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.bottom p {
+    margin: 0;
+    font-size: 12px;
+    color: #707070;
+}
+
+.bottom .percents {
+    font-weight: 600;
+    color: #FFFFFF;
+}
+
+/* Card de Adicionar Saldo */
+.add-balance-card {
+    background: linear-gradient(135deg, #161616 0%, #1f1f1f 100%);
+    border: 2px solid #21b3dd;
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+
+.add-balance-content {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.add-balance-icon {
+    width: 64px;
+    height: 64px;
+    background: rgba(59, 130, 246, 0.15);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #21b3dd;
+}
+
+.add-balance-text {
+    flex: 1;
+}
+
+.add-balance-text h3 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #FFFFFF;
+    margin-bottom: 4px;
+}
+
+.add-balance-text p {
+    font-size: 14px;
+    color: #707070;
+    margin: 0;
+}
+
+.add-balance-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 28px;
+    background-color: #21b3dd;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.add-balance-btn:hover {
+    background-color: #21b3dd;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+}
+
+/* Ícone Flutuante WhatsApp */
+.whatsapp-float {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 56px;
+    height: 56px;
+    background-color: #25D366;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    box-shadow: 0 4px 16px rgba(37, 211, 102, 0.4);
+    z-index: 1000;
+    transition: all 0.3s;
+    text-decoration: none;
+}
+
+.whatsapp-float:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 24px rgba(37, 211, 102, 0.6);
+}
+
+.whatsapp-float svg {
+    width: 28px;
+    height: 28px;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .billing-cards {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .billing-cards-secondary {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .bg-billing-data {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .bg-view {
+        padding: 16px;
+    }
+    
+    .billing-cards {
+        grid-template-columns: 1fr;
+    }
+    
+    .billing-cards-secondary {
+        grid-template-columns: 1fr;
+    }
+    
+    .bg-billing-data {
+        grid-template-columns: 1fr;
+    }
+    
+    .add-balance-content {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .add-balance-btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .vue-apexcharts {
+        min-height: 300px !important;
+    }
+    
+    #salesChart {
+        height: 300px !important;
+    }
+    
+    .whatsapp-float {
+        bottom: 16px;
+        right: 16px;
+        width: 48px;
+        height: 48px;
+    }
+    
+    .whatsapp-float svg {
+        width: 24px;
+        height: 24px;
+    }
+}

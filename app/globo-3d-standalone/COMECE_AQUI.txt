@@ -1,0 +1,89 @@
+# 🚀 COMECE AQUI - Globo 3D Standalone
+
+## ⚡ 3 passos para começar
+
+### 1. Baixe as dependências
+
+**Windows:**
+Duplo clique em `download-deps.bat`
+
+**Mac/Linux:**
+```bash
+chmod +x download-deps.sh
+./download-deps.sh
+```
+
+### 2. Inicie um servidor
+
+**Com PHP (seu Laragon):**
+```bash
+php -S localhost:8000
+```
+
+**Com Python:**
+```bash
+python -m http.server 8000
+```
+
+### 3. Abra no navegador
+
+```
+http://localhost:8000
+```
+
+---
+
+## 📂 Depois do download, você terá
+
+```
+globo-3d-standalone/
+├── index.html ................. Abra isto
+├── css/style.css .............. Estilos
+├── js/app.js .................. Lógica
+├── lib/              ........... ⬇️ SERÁ BAIXADO
+│   ├── three.min.js
+│   └── globe.gl.min.js
+├── img/              ........... ⬇️ SERÁ BAIXADO
+│   ├── earth-dark.jpg
+│   ├── earth-topology.png
+│   └── night-sky.png
+├── download-deps.bat ........... Execute em Windows
+├── download-deps.sh ............ Execute em Mac/Linux
+├── README.md ................... Documentação completa
+└── DEPLOYMENT.md .............. Como fazer deploy
+```
+
+---
+
+## 📋 Próximos passos
+
+- [ ] Executar script de download
+- [ ] Abrir em navegador
+- [ ] Ver globo girando?
+- [ ] Ler `README.md` para customizar
+- [ ] Ler `DEPLOYMENT.md` para fazer deploy
+
+---
+
+## 🎯 O que você pode fazer
+
+✅ Usar em servidor local  
+✅ Fazer upload para hosting  
+✅ Criar subdomínio  
+✅ Colocar em Docker  
+✅ Integrar com seu site  
+✅ Vender como template  
+
+---
+
+## ❓ Dúvidas?
+
+1. Verifique `README.md` - Documentação completa
+2. Abra Console (F12) - Verá erros específicos
+3. `DEPLOYMENT.md` - Para deploy em produção
+
+---
+
+**Versão:** 1.0.0  
+**Status:** ✅ Pronto para usar  
+**Data:** 7 de março de 2026

@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>MazorPay · Checkout de Teste</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        :root {
+            color-scheme: dark;
+            font-family: "Plus Jakarta Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: radial-gradient(circle at top, #151515, #050505);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 15px;
+            color: #f5f5f5;
+        }
+        .card {
+            width: min(980px, 100%);
+            background: rgba(11, 11, 11, 0.88);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 28px;
+            padding: 32px;
+            box-shadow: 0 40px 90px rgba(0,0,0,0.6);
+            backdrop-filter: blur(12px);
+        }
+        h1 {
+            margin: 0;
+            font-size: clamp(24px, 4vw, 32px);
+        }
+        .subtitle {
+            margin: 4px 0 28px;
+            color: #a3a7af;
+        }
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #d7dbe3;
+        }
+        input, select, textarea, button {
+            width: 100%;
+            padding: 13px 14px;
+            border-radius: 14px;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(8,8,8,0.9);
+            color: #fff;
+            font-size: 14px;
+        }
+        textarea {
+            min-height: 140px;
+            resize: vertical;
+        }
+        button {
+            background: linear-gradient(135deg, #21b3dd, #7c5dff);
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+        button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 12px 30px rgba(124,93,255,0.35);
+        }
+        .grid {
+            display: grid;
+            gap: 18px;
+        }
+        @media (min-width: 720px) {
+            .grid.two {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+            .grid.three {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+        }
+        .result {
+            margin-top: 28px;
+            padding: 18px;
+            border-radius: 18px;
+            border: 1px solid rgba(33,179,221,0.4);
+            background: rgba(33,179,221,0.08);
+            font-size: 13px;
+            line-height: 1.5;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        .result strong {
+            color: #21b3dd;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div>
+            <div style="background: rgba(33,179,221,0.14); color:#21b3dd; padding:4px 12px; border-radius:999px; display:inline-flex; font-size:11px; font-weight:600; letter-spacing:0.08em;">MazorPay · Checkout de Teste</div>
+            <h1>Gerar PIX manualmente</h1>
+            <p class="subtitle">Preencha os dados abaixo, informe suas API Keys e clique em “Gerar PIX”. Ideal para validar rapidamente sua conta local <code>(http://localhost:8000)</code>.</p>
+        </div>
+
+        <div class="grid two">
+            <div>
+                <label for="baseUrl">Base URL</label>
+                <input id="baseUrl" type="url" value="http://localhost:8000" placeholder="http://localhost:8000">
+            </div>
+            <div>
+                <label for="apiVersion">Versão da API</label>
+                <select id="apiVersion">
+                    <option value="v2" selected>v2 (recomendada)</option>
+                    <option value="v1">v1</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="grid two" style="margin-top:20px;">
+            <div>
+                <label for="publicKey">X-Public-Key (GET)</label>
+                <input id="publicKey" type="text" placeholder="pk_..." autocomplete="off">
+            </div>
+            <div>
+                <label for="privateKey">X-Private-Key (POST)</label>
+                <input id="privateKey" type="text" placeholder="sk_..." autocomplete="off">
+            </div>
+        </div>
+
+        <div class="grid two" style="margin-top:20px;">
+            <div>
+                <label for="amount">Valor (em centavos)</label>
+                <input id="amount" type="number" value="15000" min="100" step="50">
+            </div>
+            <div>
+                <label for="expires">Expiração do PIX (minutos)</label>
+                <input id="expires" type="number" value="30" min="1" max="129600">
+            </div>
+        </div>
+
+        <div class="grid two" style="margin-top:20px;">
+            <div>
+                <label for="saleName">Nome da venda</label>
+                <input id="saleName" type="text" value="Teste MazorPay">
+            </div>
+            <div>
+                <label for="description">Descrição</label>
+                <input id="description" type="text" value="PIX criado via checkout de teste">
+            </div>
+        </div>
+
+        <div class="grid two" style="margin-top:24px;">
+            <div>
+                <label for="customerName">Nome do cliente</label>
+                <input id="customerName" type="text" value="João API da Silva">
+            </div>
+            <div>
+                <label for="customerEmail">Email do cliente</label>
+                <input id="customerEmail" type="email" value="joao@example.com">
+            </div>
+        </div>
+
+        <div class="grid two" style="margin-top:18px;">
+            <div>
+                <label for="customerDocument">CPF/CNPJ</label>
+                <input id="customerDocument" type="text" value="09115751031">
+            </div>
+            <div>
+                <label for="customerPhone">WhatsApp (somente números)</label>
+                <input id="customerPhone" type="text" value="21999999999">
+            </div>
+        </div>
+
+        <div class="grid three" style="margin-top:18px;">
+            <div>
+                <label for="street">Rua</label>
+                <input id="street" type="text" value="Rua das Flores">
+            </div>
+            <div>
+                <label for="number">Número</label>
+                <input id="number" type="text" value="123">
+            </div>
+            <div>
+                <label for="complement">Complemento</label>
+                <input id="complement" type="text" placeholder="Apto 45">
+            </div>
+        </div>
+
+        <div class="grid three" style="margin-top:18px;">
+            <div>
+                <label for="neighborhood">Bairro</label>
+                <input id="neighborhood" type="text" value="Centro">
+            </div>
+            <div>
+                <label for="city">Cidade</label>
+                <input id="city" type="text" value="Rio de Janeiro">
+            </div>
+            <div>
+                <label for="state">UF</label>
+                <input id="state" type="text" maxlength="2" value="RJ">
+            </div>
+        </div>
+
+        <div style="margin-top:18px;">
+            <label for="zip">CEP</label>
+            <input id="zip" type="text" value="20040020">
+        </div>
+
+        <button id="submitButton" style="margin-top:28px;">Gerar PIX agora</button>
+
+        <div id="result" class="result" style="display:none;"></div>
+    </div>
+
+    <script>
+        const $ = (id) => document.getElementById(id);
+        const resultBox = $('result');
+        const button = $('submitButton');
+
+        const buildPayload = () => {
+            return {
+                amount: Number($('amount').value || 0),
+                payment_method: 'pix',
+                sale_name: $('saleName').value || 'Checkout Teste',
+                description: $('description').value || 'PIX gerado via checkout de teste',
+                pix_expires_in_minutes: Number($('expires').value || 15),
+                customer: {
+                    name: $('customerName').value || 'Cliente API',
+                    email: $('customerEmail').value || 'cliente@example.com',
+                    document: $('customerDocument').value || '',
+                    phone: $('customerPhone').value || '',
+                    address: {
+                        street: $('street').value || '',
+                        number: $('number').value || '',
+                        complement: $('complement').value || '',
+                        neighborhood: $('neighborhood').value || '',
+                        city: $('city').value || '',
+                        state: $('state').value || '',
+                        zip_code: $('zip').value || ''
+                    }
+                },
+                items: [
+                    {
+                        title: $('saleName').value || 'Produto',
+                        price: Number($('amount').value || 0),
+                        quantity: 1
+                    }
+                ]
+            };
+        };
+
+        button.addEventListener('click', async () => {
+            const baseUrl = $('baseUrl').value.replace(/\/$/, '');
+            const version = $('apiVersion').value;
+            const publicKey = $('publicKey').value.trim();
+            const privateKey = $('privateKey').value.trim();
+
+            if (!privateKey) {
+                alert('Informe a Secret Key (sk_...) para criar transações.');
+                return;
+            }
+
+            const endpoint = `${baseUrl}/api/${version}/transactions`;
+            const payload = buildPayload();
+
+            resultBox.style.display = 'block';
+            resultBox.innerText = `⏳ Chamando ${endpoint} ...`;
+
+            try {
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'Authorization': `Bearer ${privateKey}`,
+                        'X-Public-Key': publicKey,
+                        'X-Private-Key': privateKey,
+                    },
+                    body: JSON.stringify(payload),
+                });
+
+                let data;
+                try {
+                    data = await response.clone().json();
+                } catch (error) {
+                    data = await response.text();
+                }
+
+                if (!response.ok) {
+                    resultBox.innerHTML = `<strong>Erro ${response.status}</strong>\n${typeof data === 'string' ? data : JSON.stringify(data, null, 2)}`;
+                    return;
+                }
+
+                const pixData = data?.pix ?? {};
+                const qr = pixData.qrcode || pixData.payload || pixData.emv || '—';
+                const end2End = pixData.end2EndId || pixData.end2endId || data?.endToEndId || '—';
+
+                resultBox.innerHTML = `
+<strong>PIX GERADO ✔</strong>
+Valor: R$ ${(payload.amount / 100).toFixed(2)}
+TXID: ${data?.secureId || data?.id || '—'}
+End2EndId: ${end2End}
+
+Payload / Copy & Paste:
+${qr}
+
+Resposta completa:
+${JSON.stringify(data, null, 2)}
+                `;
+            } catch (error) {
+                resultBox.innerHTML = `❌ Falha ao chamar API\n${error.message}`;
+            }
+        });
+    </script>
+</body>
+</html>
+

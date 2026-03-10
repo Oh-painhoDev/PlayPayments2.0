@@ -1,0 +1,80 @@
+<IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews -Indexes
+    </IfModule>
+
+    RewriteEngine On
+
+    # 🔒 PROTEÇÃO DE ARQUIVOS SENSÍVEIS - BLOQUEAR ACESSO DIRETO
+    # Bloquear acesso a arquivos .env e variações
+    <FilesMatch "^(\.env|\.env\.|\.env\.local|\.env\.production|\.env\.staging|\.env\.development)">
+        Require all denied
+    </FilesMatch>
+    
+    # Bloquear acesso a arquivos de configuração sensíveis
+    <FilesMatch "^(composer\.(json|lock)|package(-lock)?\.json|yarn\.lock|\.git|\.gitignore|\.gitattributes|artisan|bootstrap|config|database|routes|storage|vendor)">
+        Require all denied
+    </FilesMatch>
+    
+    # Bloquear acesso a diretórios sensíveis
+    RewriteRule ^(\.env|\.env\.|\.env\.local|\.env\.production|\.env\.staging|\.env\.development|composer\.(json|lock)|package(-lock)?\.json|yarn\.lock|\.git|artisan|bootstrap|config|database|routes|storage|vendor)(/.*)?$ - [F,L]
+
+    # Handle Authorization Header
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+    # Se o arquivo não existe na raiz, verificar se existe em public/
+    # Isso permite que arquivos estáticos sejam servidos da pasta public
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{DOCUMENT_ROOT}/public%{REQUEST_URI} -f
+    RewriteRule ^(.*)$ public/$1 [L]
+
+    # Se for um diretório que não existe na raiz, verificar se existe em public/
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{DOCUMENT_ROOT}/public%{REQUEST_URI} -d
+    RewriteRule ^(.*)$ public/$1 [L]
+
+    # Redirect Trailing Slashes If Not A Folder...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} (.+)/$
+    RewriteRule ^ %1 [L,R=301]
+
+    # Send Requests To Front Controller (public/index.php)...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ public/index.php [L]
+</IfModule>
+
+# 🔒 PROTEÇÃO ADICIONAL - BLOQUEAR ARQUIVOS SENSÍVEIS
+<Files ".env*">
+    Require all denied
+</Files>
+
+<Files "composer.json">
+    Require all denied
+</Files>
+
+<Files "composer.lock">
+    Require all denied
+</Files>
+
+<Files "package.json">
+    Require all denied
+</Files>
+
+<Files "package-lock.json">
+    Require all denied
+</Files>
+
+<Files "yarn.lock">
+    Require all denied
+</Files>
+
+<Files "artisan">
+    Require all denied
+</Files>
+
+# Bloquear listagem de diretórios
+Options -Indexes

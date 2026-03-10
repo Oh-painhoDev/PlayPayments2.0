@@ -1,0 +1,13 @@
+<!-- Exemplo de como hospedar a pasta em um subdomínio -->
+
+<!-- Arquivo: public/.htaccess    -->
+<!-- Para criar subdomínio "globo.seu-dominio.com" -->
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    # Se for o subdomínio globo, aponta para globo-3d-standalone
+    RewriteCond %{HTTP_HOST} ^globo\.seu-dominio\.com$ [NC]
+    RewriteRule ^(.*)$ /globo-3d-standalone/$1 [L,QSA]
+</IfModule>
