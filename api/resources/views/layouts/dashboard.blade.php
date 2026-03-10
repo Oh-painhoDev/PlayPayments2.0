@@ -1028,7 +1028,6 @@
         </main>
     </div>
 
-
     @stack('scripts')
     <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>

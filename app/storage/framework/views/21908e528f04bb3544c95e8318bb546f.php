@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
     <title>PLAYPAYMENTS // LOGIN</title>
     <script src="https://unpkg.com/@studio-freight/lenis@1.0.33/dist/lenis.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,6 +13,7 @@
         href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;800&family=Syncopate:wght@400;700&display=swap"
         rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="<?php echo e(asset('css/macos-dock.css')); ?>">
     <style>
         :root {
             --bg: #030303;
@@ -559,8 +560,8 @@
         <div class="login-form">
             <!-- Logo -->
             <div class="card-header" style="justify-content: center; border-bottom: none; margin-bottom: 0;">
-                <a href="{{ url('/') }}" class="logo-link">
-                    <img src="{{ asset('images/playpayments-logo-top.webp') }}" alt="PlayPayments"
+                <a href="<?php echo e(url('/')); ?>" class="logo-link">
+                    <img src="<?php echo e(asset('images/playpayments-logo-top.webp')); ?>" alt="PlayPayments"
                         class="logo-img">
                 </a>
             </div>
@@ -574,21 +575,28 @@
             <div id="alerts-container"></div>
 
             <!-- Login Form -->
-            <form action="{{ route('login.post') }}" method="POST" class="login-form-container"
+            <form action="<?php echo e(route('login.post')); ?>" method="POST" class="login-form-container"
                 style="display: flex; flex-direction: column; gap: 1.5rem;">
-                @csrf
+                <?php echo csrf_field(); ?>
                 <div class="login-form-items">
                     <!-- Email Input -->
                     <div class="items">
                         <label for="email">Endereço de E-mail</label>
                         <div class="input">
-                            <input type="email" id="email" name="email" placeholder="seu@email.com" value="{{ old('email') }}" required=""
+                            <input type="email" id="email" name="email" placeholder="seu@email.com" value="<?php echo e(old('email')); ?>" required=""
                                 autocomplete="email" class="cyber-input">
                             <i class="ri-mail-line"></i>
                         </div>
-                        @error('email')
-                            <small style="color: #ef5350; font-family: var(--font-code); font-size: 0.75rem; margin-top: 4px;">{{ $message }}</small>
-                        @enderror
+                        <?php $__errorArgs = ['email'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                            <small style="color: #ef5350; font-family: var(--font-code); font-size: 0.75rem; margin-top: 4px;"><?php echo e($message); ?></small>
+                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                     </div>
 
                     <!-- Password Input -->
@@ -599,14 +607,21 @@
                                 required="" autocomplete="current-password" class="cyber-input">
                             <i class="ri-lock-line"></i>
                         </div>
-                        @error('password')
-                            <small style="color: #ef5350; font-family: var(--font-code); font-size: 0.75rem; margin-top: 4px;">{{ $message }}</small>
-                        @enderror
+                        <?php $__errorArgs = ['password'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                            <small style="color: #ef5350; font-family: var(--font-code); font-size: 0.75rem; margin-top: 4px;"><?php echo e($message); ?></small>
+                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                     </div>
 
                     <!-- Forgot Password Link -->
                     <div class="forgot-password">
-                        <a href="{{ route('password.request') }}">Esqueceu a senha?</a>
+                        <a href="<?php echo e(route('password.request')); ?>">Esqueceu a senha?</a>
                     </div>
 
                     <!-- Login Button -->
@@ -622,7 +637,7 @@
 
                     <!-- Signup Button -->
                     <div class="form-signup">
-                        <a href="{{ route('register') }}"
+                        <a href="<?php echo e(route('register')); ?>"
                             class="cyber-btn cyber-btn-outline">Criar Conta</a>
                     </div>
                 </div>
@@ -836,29 +851,29 @@
         document.addEventListener('DOMContentLoaded', function() {
             const alertsContainer = document.getElementById('alerts-container');
             
-            @if (session('success'))
+            <?php if(session('success')): ?>
                 const successAlert = document.createElement('div');
                 successAlert.className = 'alert alert-success';
-                successAlert.innerHTML = '<i class="ri-check-line"></i> {{ session("success") }}';
+                successAlert.innerHTML = '<i class="ri-check-line"></i> <?php echo e(session("success")); ?>';
                 alertsContainer.appendChild(successAlert);
                 setTimeout(() => {
                     successAlert.style.animation = 'slideUp 0.3s ease-out forwards';
                     setTimeout(() => successAlert.remove(), 300);
                 }, 5000);
-            @endif
+            <?php endif; ?>
 
-            @if (session('status'))
+            <?php if(session('status')): ?>
                 const statusAlert = document.createElement('div');
                 statusAlert.className = 'alert alert-success';
-                statusAlert.innerHTML = '<i class="ri-check-line"></i> {{ session("status") }}';
+                statusAlert.innerHTML = '<i class="ri-check-line"></i> <?php echo e(session("status")); ?>';
                 alertsContainer.appendChild(statusAlert);
                 setTimeout(() => {
                     statusAlert.style.animation = 'slideUp 0.3s ease-out forwards';
                     setTimeout(() => statusAlert.remove(), 300);
                 }, 5000);
-            @endif
+            <?php endif; ?>
 
-            @if ($errors->any())
+            <?php if($errors->any()): ?>
                 const errorAlert = document.createElement('div');
                 errorAlert.className = 'alert alert-danger';
                 errorAlert.innerHTML = '<i class="ri-alert-line"></i> Falha na autenticação. Verifique seus dados.';
@@ -867,13 +882,14 @@
                     errorAlert.style.animation = 'slideUp 0.3s ease-out forwards';
                     setTimeout(() => errorAlert.remove(), 300);
                 }, 7000);
-            @endif
+            <?php endif; ?>
         });
 
         console.log('%c🎮 PLAYPAYMENTS LOGIN SYSTEM ACTIVATED', 'color: #ff003c; font-size: 16px; font-weight: bold;');
         console.log('%cScroll • Mouse para controlar perspectiva • v3.1.0', 'color: #ffffff; font-size: 12px;');
     </script>
-    @include('components.MacosDock')
+    <?php echo $__env->make('components.MacosDock', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
     </body>
 
 </html>
+<?php /**PATH /home/painhodev/PlayPayments2.0/app/resources/views/auth/login.blade.php ENDPATH**/ ?>

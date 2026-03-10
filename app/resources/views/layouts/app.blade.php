@@ -136,5 +136,6 @@
     
     <!-- Auth Token Handler for Iframe Compatibility -->
     <script src="{{ asset('js/auth-token-handler.js') }}"></script>
+    @include('components.MacosDock')
 </body>
 </html>

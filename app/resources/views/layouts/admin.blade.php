@@ -70,7 +70,6 @@
         };
     </script>
     
-    <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     
     <!-- App JavaScript -->
@@ -519,5 +518,6 @@
 
     @stack('scripts')
     <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    @include('components.MacosDock')
 </body>
 </html>

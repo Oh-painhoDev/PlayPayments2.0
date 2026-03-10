@@ -1,52 +1,52 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="<?php echo e(str_replace('_', '-', app()->getLocale())); ?>">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
 
-    <title>{{ $seoMeta['title'] ?? config('app.name', '$playpayments') }} - @yield('title', 'Dashboard')</title>
+    <title><?php echo e($seoMeta['title'] ?? config('app.name', '$playpayments')); ?> - <?php echo $__env->yieldContent('title', 'Dashboard'); ?></title>
 
     <!-- SEO Meta Tags -->
-    <meta name="description" content="{{ $seoMeta['description'] ?? '$playpayments - Gateway de Pagamento PIX' }}">
-    <meta name="keywords" content="{{ $seoMeta['keywords'] ?? 'playpayments, gateway pagamento, pix' }}">
-    <meta name="author" content="{{ $seoMeta['author'] ?? '$playpayments' }}">
+    <meta name="description" content="<?php echo e($seoMeta['description'] ?? '$playpayments - Gateway de Pagamento PIX'); ?>">
+    <meta name="keywords" content="<?php echo e($seoMeta['keywords'] ?? 'playpayments, gateway pagamento, pix'); ?>">
+    <meta name="author" content="<?php echo e($seoMeta['author'] ?? '$playpayments'); ?>">
     <meta name="robots" content="index, follow">
     
     <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="{{ $seoMeta['og_type'] ?? 'website' }}">
-    <meta property="og:url" content="{{ $seoMeta['og_url'] ?? url()->current() }}">
-    <meta property="og:title" content="{{ $seoMeta['og_title'] ?? '$playpayments - Gateway de Pagamento PIX' }}">
-    <meta property="og:description" content="{{ $seoMeta['og_description'] ?? 'Plataforma completa de gateway de pagamento PIX' }}">
-    <meta property="og:image" content="{{ $seoMeta['og_image'] ?? asset('images/playpayments-logo-top.webp') }}">
+    <meta property="og:type" content="<?php echo e($seoMeta['og_type'] ?? 'website'); ?>">
+    <meta property="og:url" content="<?php echo e($seoMeta['og_url'] ?? url()->current()); ?>">
+    <meta property="og:title" content="<?php echo e($seoMeta['og_title'] ?? '$playpayments - Gateway de Pagamento PIX'); ?>">
+    <meta property="og:description" content="<?php echo e($seoMeta['og_description'] ?? 'Plataforma completa de gateway de pagamento PIX'); ?>">
+    <meta property="og:image" content="<?php echo e($seoMeta['og_image'] ?? asset('images/playpayments-logo-top.webp')); ?>">
     
     <!-- Twitter -->
-    <meta name="twitter:card" content="{{ $seoMeta['twitter_card'] ?? 'summary_large_image' }}">
-    <meta name="twitter:title" content="{{ $seoMeta['og_title'] ?? '$playpayments - Gateway de Pagamento PIX' }}">
-    <meta name="twitter:description" content="{{ $seoMeta['og_description'] ?? 'Plataforma completa de gateway de pagamento PIX' }}">
-    <meta name="twitter:image" content="{{ $seoMeta['og_image'] ?? asset('images/playpayments-logo-top.webp') }}">
+    <meta name="twitter:card" content="<?php echo e($seoMeta['twitter_card'] ?? 'summary_large_image'); ?>">
+    <meta name="twitter:title" content="<?php echo e($seoMeta['og_title'] ?? '$playpayments - Gateway de Pagamento PIX'); ?>">
+    <meta name="twitter:description" content="<?php echo e($seoMeta['og_description'] ?? 'Plataforma completa de gateway de pagamento PIX'); ?>">
+    <meta name="twitter:image" content="<?php echo e($seoMeta['og_image'] ?? asset('images/playpayments-logo-top.webp')); ?>">
 
     <!-- Favicon -->
-    <link rel="icon" href="{{ $whiteLabelFavicon ?? asset('favicon.svg') }}" type="image/svg+xml">
-    <link rel="alternate icon" href="{{ $whiteLabelFaviconIco ?? asset('favicon.ico') }}" type="image/x-icon">
+    <link rel="icon" href="<?php echo e($whiteLabelFavicon ?? asset('favicon.svg')); ?>" type="image/svg+xml">
+    <link rel="alternate icon" href="<?php echo e($whiteLabelFaviconIco ?? asset('favicon.ico')); ?>" type="image/x-icon">
 
     <!-- Theme Configuration -->
-    <meta name="theme-background" content="{{ $themeVars['theme_background'] ?? '#0d0d0d' }}">
-    <meta name="theme-card-bg" content="{{ $themeVars['theme_card_bg'] ?? '#1a1a1a' }}">
-    <meta name="theme-sidebar-bg" content="{{ $themeVars['theme_sidebar_bg'] ?? '#0f0f0f' }}">
-    <meta name="theme-header-bg" content="{{ $themeVars['theme_sidebar_bg'] ?? '#0f0f0f' }}">
-    <meta name="theme-border" content="{{ $themeVars['theme_border'] ?? '#2c2c2e' }}">
-    <meta name="theme-text" content="{{ env('THEME_TEXT', '#ffffff') }}">
-    <meta name="theme-text-secondary" content="{{ $themeVars['theme_text_secondary'] ?? '#a1a1aa' }}">
-    <meta name="theme-primary" content="{{ env('THEME_PRIMARY', '#3b82f6') }}">
-    <meta name="theme-success" content="{{ env('THEME_SUCCESS', '#10b981') }}">
-    <meta name="theme-warning" content="{{ env('THEME_WARNING', '#f59e0b') }}">
-    <meta name="theme-danger" content="{{ env('THEME_DANGER', '#10b981') }}">
-    <meta name="theme-info" content="{{ env('THEME_INFO', '#6366f1') }}">
+    <meta name="theme-background" content="<?php echo e($themeVars['theme_background'] ?? '#0d0d0d'); ?>">
+    <meta name="theme-card-bg" content="<?php echo e($themeVars['theme_card_bg'] ?? '#1a1a1a'); ?>">
+    <meta name="theme-sidebar-bg" content="<?php echo e($themeVars['theme_sidebar_bg'] ?? '#0f0f0f'); ?>">
+    <meta name="theme-header-bg" content="<?php echo e($themeVars['theme_sidebar_bg'] ?? '#0f0f0f'); ?>">
+    <meta name="theme-border" content="<?php echo e($themeVars['theme_border'] ?? '#2c2c2e'); ?>">
+    <meta name="theme-text" content="<?php echo e(env('THEME_TEXT', '#ffffff')); ?>">
+    <meta name="theme-text-secondary" content="<?php echo e($themeVars['theme_text_secondary'] ?? '#a1a1aa'); ?>">
+    <meta name="theme-primary" content="<?php echo e(env('THEME_PRIMARY', '#3b82f6')); ?>">
+    <meta name="theme-success" content="<?php echo e(env('THEME_SUCCESS', '#10b981')); ?>">
+    <meta name="theme-warning" content="<?php echo e(env('THEME_WARNING', '#f59e0b')); ?>">
+    <meta name="theme-danger" content="<?php echo e(env('THEME_DANGER', '#10b981')); ?>">
+    <meta name="theme-info" content="<?php echo e(env('THEME_INFO', '#6366f1')); ?>">
 
     <!-- Preload Critical Resources -->
     <link rel="preload" href="/images/playpayments-logo-top.webp" as="image" fetchpriority="high">
-    <link rel="preload" href="{{ asset('css/dashboard.css') }}" as="style">
+    <link rel="preload" href="<?php echo e(asset('css/dashboard.css')); ?>" as="style">
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -59,8 +59,8 @@
     <!-- Logo Size Configuration -->
     <style>
         :root {
-            --logo-auth-height: {{ env('LOGO_AUTH_SIZE', 64) }}px;
-            --logo-dashboard-height: {{ env('LOGO_DASHBOARD_SIZE', 40) }}px;
+            --logo-auth-height: <?php echo e(env('LOGO_AUTH_SIZE', 64)); ?>px;
+            --logo-dashboard-height: <?php echo e(env('LOGO_DASHBOARD_SIZE', 40)); ?>px;
         }
         
         /* Scrollbar Customizada Verde */
@@ -210,17 +210,17 @@
     </script>
     
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/dashboard-new.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/instant-transitions.css') }}">
+    <link rel="stylesheet" href="<?php echo e(asset('css/dashboard.css')); ?>">
+    <link rel="stylesheet" href="<?php echo e(asset('css/dashboard-new.css')); ?>">
+    <link rel="stylesheet" href="<?php echo e(asset('css/instant-transitions.css')); ?>">
     
-    @stack('styles')
+    <?php echo $__env->yieldPushContent('styles'); ?>
     
     <!-- App JavaScript -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
+    <script src="<?php echo e(asset('js/app.js')); ?>" defer></script>
     
     <!-- Instant Navigation -->
-    <script src="{{ asset('js/instant-navigation.js') }}" defer></script>
+    <script src="<?php echo e(asset('js/instant-navigation.js')); ?>" defer></script>
     
     <!-- Garantir fundo visível mesmo sem CSS -->
     <style>
@@ -634,7 +634,7 @@
 </head>
 <body class="font-sans antialiased" style="background-color: #000000; color: #FFFFFF;" x-data="{ sidebarOpen: false, sidebarCollapsed: false }">
     <div class="dashboard-wrapper flex h-screen w-full overflow-hidden">
-        @php
+        <?php
             $user = auth()->user();
             $verification = $user->documentVerification;
             // Mostrar documentos apenas se NÃO foram enviados
@@ -643,7 +643,7 @@
             if ($verification && $verification->submitted_at) {
                 $showDocuments = false;
             }
-        @endphp
+        ?>
         
         <!-- Sidebar Overlay (Mobile) -->
     
@@ -653,7 +653,7 @@
             <div class="flex flex-col h-full pt-10 pb-5">
                 <div class="px-5 mb-6 relative flex-shrink-0">
                     <div class="flex items-center justify-center mb-4 relative">
-                        <img alt="{{ config('app.name') }}" loading="lazy" width="280" height="68" decoding="async" data-nimg="1" class="h-[68px] w-[280px]" src="{{ $whiteLabelLogo ?? '/images/playpayments-logo-top.webp' }}" style="color: transparent;">
+                        <img alt="<?php echo e(config('app.name')); ?>" loading="lazy" width="280" height="68" decoding="async" data-nimg="1" class="h-[68px] w-[280px]" src="<?php echo e($whiteLabelLogo ?? '/images/playpayments-logo-top.webp'); ?>" style="color: transparent;">
                         <button @click="sidebarOpen = false" class="lg:hidden absolute flex items-center justify-center rounded-full transition-all duration-300 ease-in-out h-8 w-8 right-0 bg-[#1E1E1E] hover:bg-[#2a2a2a]">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x h-5 w-5 text-white">
                                 <path d="M18 6L6 18M6 6l12 12"></path>
@@ -670,16 +670,16 @@
                         <div class="space-y-1">
                             <div>
                                 <div class="px-5">
-                                    <a class="relative flex items-center w-full transition-all duration-200 py-2 {{ request()->routeIs('dashboard') ? 'text-white' : 'text-[#6B7280]' }}" href="{{ route('dashboard') }}">
-                                        @if(request()->routeIs('dashboard'))
+                                    <a class="relative flex items-center w-full transition-all duration-200 py-2 <?php echo e(request()->routeIs('dashboard') ? 'text-white' : 'text-[#6B7280]'); ?>" href="<?php echo e(route('dashboard')); ?>">
+                                        <?php if(request()->routeIs('dashboard')): ?>
                                         <div class="absolute top-1/2 transform -translate-y-1/2 bg-[#D4AF37] w-1.5 h-[26px] rounded-br-[4px] rounded-tr-[4px]" style="left: -20px;"></div>
-                                        @endif
+                                        <?php endif; ?>
                                         <div class="flex items-center gap-2.5">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" class="h-5 w-5 flex-shrink-0 {{ request()->routeIs('dashboard') ? 'text-[#D4AF37]' : 'text-[#6B7280]' }}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" class="h-5 w-5 flex-shrink-0 <?php echo e(request()->routeIs('dashboard') ? 'text-[#D4AF37]' : 'text-[#6B7280]'); ?>">
                                                 <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8.557 2.75H4.682A1.93 1.93 0 0 0 2.75 4.682v3.875a1.94 1.94 0 0 0 1.932 1.942h3.875a1.94 1.94 0 0 0 1.942-1.942V4.682A1.94 1.94 0 0 0 8.557 2.75m10.761 0h-3.875a1.94 1.94 0 0 0-1.942 1.932v3.875a1.943 1.943 0 0 0 1.942 1.942h3.875a1.94 1.94 0 0 0 1.932-1.942V4.682a1.93 1.93 0 0 0-1.932-1.932m0 10.75h-3.875a1.94 1.94 0 0 0-1.942 1.933v3.875a1.94 1.94 0 0 0 1.942 1.942h3.875a1.94 1.94 0 0 0 1.932-1.942v-3.875a1.93 1.93 0 0 0-1.932-1.932M8.557 13.5H4.682a1.943 1.943 0 0 0-1.932 1.943v3.875a1.93 1.93 0 0 0 1.932 1.932h3.875a1.94 1.94 0 0 0 1.942-1.932v-3.875a1.94 1.94 0 0 0-1.942-1.942"></path>
                                             </svg>
                                             <div class="flex items-center gap-2 whitespace-nowrap min-w-0">
-                                                <span class="text-sm font-semibold tracking-[-0.28px] {{ request()->routeIs('dashboard') ? 'text-white' : 'text-[#6B7280]' }}" style="font-family: Manrope, sans-serif;">Dashboard</span>
+                                                <span class="text-sm font-semibold tracking-[-0.28px] <?php echo e(request()->routeIs('dashboard') ? 'text-white' : 'text-[#6B7280]'); ?>" style="font-family: Manrope, sans-serif;">Dashboard</span>
                                             </div>
                                         </div>
                                     </a>
@@ -689,22 +689,22 @@
                     </div>
 
                     <!-- Financeiro -->
-                    @documentsApproved
+                    <?php if (\Illuminate\Support\Facades\Blade::check('documentsApproved')): ?>
                     <div id="section-financeiro" class="space-y-2">
                         <h3 class="px-5 text-sm font-semibold tracking-[-0.28px] text-[#6B7280]">Financeiro</h3>
                         <div class="space-y-1">
                             <div>
                                 <div class="px-5">
-                                    <a class="relative flex items-center w-full transition-all duration-200 py-2 {{ request()->routeIs('wallet.*') ? 'text-white' : 'text-[#6B7280]' }}" href="{{ route('wallet.index') }}">
-                                        @if(request()->routeIs('wallet.*'))
+                                    <a class="relative flex items-center w-full transition-all duration-200 py-2 <?php echo e(request()->routeIs('wallet.*') ? 'text-white' : 'text-[#6B7280]'); ?>" href="<?php echo e(route('wallet.index')); ?>">
+                                        <?php if(request()->routeIs('wallet.*')): ?>
                                         <div class="absolute -left-5 top-1/2 transform -translate-y-1/2 bg-[#D4AF37] w-1.5 h-[26px] rounded-br-[4px] rounded-tr-[4px]"></div>
-                                        @endif
+                                        <?php endif; ?>
                                         <div class="flex items-center gap-2.5">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 48 48" class="h-5 w-5 flex-shrink-0 {{ request()->routeIs('wallet.*') ? 'text-[#D4AF37]' : 'text-[#6B7280]' }}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 48 48" class="h-5 w-5 flex-shrink-0 <?php echo e(request()->routeIs('wallet.*') ? 'text-[#D4AF37]' : 'text-[#6B7280]'); ?>">
                                                 <path fill="currentColor" fill-rule="evenodd" d="M24 4.5C13.23 4.5 4.5 13.23 4.5 24S13.23 43.5 24 43.5S43.5 34.77 43.5 24S34.77 4.5 24 4.5M.5 24C.5 11.021 11.021.5 24 .5S47.5 11.021 47.5 24S36.98 47.5 24 47.5S.5 36.98.5 24M24 8.974c8.299 0 15.026 6.728 15.026 15.026S32.3 39.026 24 39.026S8.975 32.299 8.975 24S15.702 8.974 24 8.974M26 15a2 2 0 1 0-4 0v.834c-.8.214-1.56.553-2.219 1.001c-1.179.802-2.281 2.148-2.281 3.95c0 .92.232 1.77.717 2.507c.474.72 1.11 1.206 1.733 1.545c1.112.605 2.493.886 3.517 1.094l.133.028c1.215.248 2.011.429 2.538.715c.22.12.288.207.306.234v.001c.01.013.056.083.056.304c0 .036-.023.297-.531.642c-.494.337-1.223.573-1.969.573c-2.25 0-3.003-.708-3.068-.775a2 2 0 1 0-2.864 2.793c.717.735 1.969 1.507 3.932 1.828V33a2 2 0 1 0 4 0v-.838c.8-.213 1.56-.552 2.219-1c1.179-.802 2.281-2.149 2.281-3.95c0-.92-.232-1.771-.717-2.507c-.474-.72-1.11-1.207-1.733-1.545c-1.112-.606-2.493-.886-3.517-1.095l-.133-.027c-1.215-.248-2.011-.429-2.538-.715c-.22-.12-.288-.207-.306-.234v-.001c-.01-.013-.056-.083-.056-.304c0-.036.023-.297.531-.643c.483-.328 1.188-.56 1.915-.571h.112a6.2 6.2 0 0 1 3.074.867q.108.067.148.096l.02.013a2 2 0 0 0 2.415-3.187l-1.18 1.541l1.18-1.542l-.002-.001l-.002-.002l-.006-.004l-.013-.01l-.035-.026l-.102-.073a7 7 0 0 0-.334-.216a10 10 0 0 0-1.157-.6A10.3 10.3 0 0 0 26 15.773z" clip-rule="evenodd"></path>
                                             </svg>
                                             <div class="flex items-center gap-2 whitespace-nowrap min-w-0">
-                                                <span class="text-sm font-semibold tracking-[-0.28px] {{ request()->routeIs('wallet.*') ? 'text-white' : 'text-[#6B7280]' }}" style="font-family: Manrope, sans-serif;">Carteira</span>
+                                                <span class="text-sm font-semibold tracking-[-0.28px] <?php echo e(request()->routeIs('wallet.*') ? 'text-white' : 'text-[#6B7280]'); ?>" style="font-family: Manrope, sans-serif;">Carteira</span>
                                             </div>
                                         </div>
                                     </a>
@@ -712,16 +712,16 @@
                             </div>
                             <div>
                                 <div class="px-5">
-                                    <a class="relative flex items-center w-full transition-all duration-200 py-2 {{ request()->routeIs('transactions.*') ? 'text-white' : 'text-[#6B7280]' }}" href="{{ route('transactions.index') }}">
-                                        @if(request()->routeIs('transactions.*'))
+                                    <a class="relative flex items-center w-full transition-all duration-200 py-2 <?php echo e(request()->routeIs('transactions.*') ? 'text-white' : 'text-[#6B7280]'); ?>" href="<?php echo e(route('transactions.index')); ?>">
+                                        <?php if(request()->routeIs('transactions.*')): ?>
                                         <div class="absolute -left-5 top-1/2 transform -translate-y-1/2 bg-[#D4AF37] w-1.5 h-[26px] rounded-br-[4px] rounded-tr-[4px]"></div>
-                                        @endif
+                                        <?php endif; ?>
                                         <div class="flex items-center gap-2.5">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 20 20" class="h-5 w-5 flex-shrink-0 {{ request()->routeIs('transactions.*') ? 'text-[#D4AF37]' : 'text-[#6B7280]' }}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 20 20" class="h-5 w-5 flex-shrink-0 <?php echo e(request()->routeIs('transactions.*') ? 'text-[#D4AF37]' : 'text-[#6B7280]'); ?>">
                                                 <path fill="currentColor" fill-rule="evenodd" d="M2.24 6.8a.75.75 0 0 0 1.06-.04l1.95-2.1v8.59a.75.75 0 0 0 1.5 0V4.66l1.95 2.1a.75.75 0 1 0 1.1-1.02l-3.25-3.5a.75.75 0 0 0-1.1 0L2.2 5.74a.75.75 0 0 0 .04 1.06m8 6.4a.75.75 0 0 0-.04 1.06l3.25 3.5a.75.75 0 0 0 1.1 0l3.25-3.5a.75.75 0 1 0-1.1-1.02l-1.95 2.1V6.75a.75.75 0 0 0-1.5 0v8.59l-1.95-2.1a.75.75 0 0 0-1.06-.04" clip-rule="evenodd"></path>
                                             </svg>
                                             <div class="flex items-center gap-2 whitespace-nowrap min-w-0">
-                                                <span class="text-sm font-semibold tracking-[-0.28px] {{ request()->routeIs('transactions.*') ? 'text-white' : 'text-[#6B7280]' }}" style="font-family: Manrope, sans-serif;">Transações</span>
+                                                <span class="text-sm font-semibold tracking-[-0.28px] <?php echo e(request()->routeIs('transactions.*') ? 'text-white' : 'text-[#6B7280]'); ?>" style="font-family: Manrope, sans-serif;">Transações</span>
                                             </div>
                                         </div>
                                     </a>
@@ -729,16 +729,16 @@
                             </div>
                             <div>
                                 <div class="px-5">
-                                    <a class="relative flex items-center w-full transition-all duration-200 py-2 {{ request()->routeIs('refunds.*') ? 'text-white' : 'text-[#6B7280]' }}" href="{{ route('refunds.index') }}">
-                                        @if(request()->routeIs('refunds.*'))
+                                    <a class="relative flex items-center w-full transition-all duration-200 py-2 <?php echo e(request()->routeIs('refunds.*') ? 'text-white' : 'text-[#6B7280]'); ?>" href="<?php echo e(route('refunds.index')); ?>">
+                                        <?php if(request()->routeIs('refunds.*')): ?>
                                         <div class="absolute -left-5 top-1/2 transform -translate-y-1/2 bg-[#D4AF37] w-1.5 h-[26px] rounded-br-[4px] rounded-tr-[4px]"></div>
-                                        @endif
+                                        <?php endif; ?>
                                         <div class="flex items-center gap-2.5">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" class="h-5 w-5 flex-shrink-0 {{ request()->routeIs('refunds.*') ? 'text-[#D4AF37]' : 'text-[#6B7280]' }}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" class="h-5 w-5 flex-shrink-0 <?php echo e(request()->routeIs('refunds.*') ? 'text-[#D4AF37]' : 'text-[#6B7280]'); ?>">
                                                 <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10s10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" fill-rule="evenodd"></path>
                                             </svg>
                                             <div class="flex items-center gap-2 whitespace-nowrap min-w-0">
-                                                <span class="text-sm font-semibold tracking-[-0.28px] {{ request()->routeIs('refunds.*') ? 'text-white' : 'text-[#6B7280]' }}" style="font-family: Manrope, sans-serif;">Infrações</span>
+                                                <span class="text-sm font-semibold tracking-[-0.28px] <?php echo e(request()->routeIs('refunds.*') ? 'text-white' : 'text-[#6B7280]'); ?>" style="font-family: Manrope, sans-serif;">Infrações</span>
                                             </div>
                                         </div>
                                     </a>
@@ -746,25 +746,25 @@
                             </div>
                         </div>
                     </div>
-                    @enddocumentsApproved
+                    <?php endif; ?>
 
                     <!-- Gestão -->
-                    @documentsApproved
+                    <?php if (\Illuminate\Support\Facades\Blade::check('documentsApproved')): ?>
                     <div id="section-gestao" class="space-y-2">
                         <h3 class="px-5 text-sm font-semibold tracking-[-0.28px] text-[#6B7280]">Gestão</h3>
                         <div class="space-y-1">
                             <div>
                                 <div class="px-5">
-                                    <a class="relative flex items-center w-full transition-all duration-200 py-2 {{ request()->routeIs('revenues.*') ? 'text-white' : 'text-[#6B7280]' }}" href="{{ route('revenues.index') }}">
-                                        @if(request()->routeIs('revenues.*'))
+                                    <a class="relative flex items-center w-full transition-all duration-200 py-2 <?php echo e(request()->routeIs('revenues.*') ? 'text-white' : 'text-[#6B7280]'); ?>" href="<?php echo e(route('revenues.index')); ?>">
+                                        <?php if(request()->routeIs('revenues.*')): ?>
                                         <div class="absolute -left-5 top-1/2 transform -translate-y-1/2 bg-[#D4AF37] w-1.5 h-[26px] rounded-br-[4px] rounded-tr-[4px]"></div>
-                                        @endif
+                                        <?php endif; ?>
                                         <div class="flex items-center gap-2.5">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" class="h-5 w-5 flex-shrink-0 {{ request()->routeIs('revenues.*') ? 'text-[#D4AF37]' : 'text-[#6B7280]' }}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" class="h-5 w-5 flex-shrink-0 <?php echo e(request()->routeIs('revenues.*') ? 'text-[#D4AF37]' : 'text-[#6B7280]'); ?>">
                                                 <path fill="currentColor" d="M12 4c4.411 0 8 3.589 8 8s-3.589 8-8 8s-8-3.589-8-8s3.589-8 8-8m0-2C6.477 2 2 6.477 2 12s4.477 10 10 10s10-4.477 10-10S17.523 2 12 2m4 8a4 4 0 0 0-8 0h2c0-1.103.897-2 2-2s2 .897 2 2s-.897 2-2 2a1 1 0 0 0-1 1v2h2v-1.141A3.99 3.99 0 0 0 16 10m-3 6h-2v2h2z"></path>
                                             </svg>
                                             <div class="flex items-center gap-2 whitespace-nowrap min-w-0">
-                                                <span class="text-sm font-semibold tracking-[-0.28px] {{ request()->routeIs('revenues.*') ? 'text-white' : 'text-[#6B7280]' }}" style="font-family: Manrope, sans-serif;">Extrato</span>
+                                                <span class="text-sm font-semibold tracking-[-0.28px] <?php echo e(request()->routeIs('revenues.*') ? 'text-white' : 'text-[#6B7280]'); ?>" style="font-family: Manrope, sans-serif;">Extrato</span>
                                             </div>
                                         </div>
                                     </a>
@@ -772,19 +772,19 @@
                             </div>
                             <div>
                                 <div class="px-5">
-                                    <a class="relative flex items-center w-full transition-all duration-200 py-2 {{ request()->routeIs('customers.*') ? 'text-white' : 'text-[#6B7280]' }}" href="{{ route('customers.index') }}">
-                                        @if(request()->routeIs('customers.*'))
+                                    <a class="relative flex items-center w-full transition-all duration-200 py-2 <?php echo e(request()->routeIs('customers.*') ? 'text-white' : 'text-[#6B7280]'); ?>" href="<?php echo e(route('customers.index')); ?>">
+                                        <?php if(request()->routeIs('customers.*')): ?>
                                         <div class="absolute -left-5 top-1/2 transform -translate-y-1/2 bg-[#D4AF37] w-1.5 h-[26px] rounded-br-[4px] rounded-tr-[4px]"></div>
-                                        @endif
+                                        <?php endif; ?>
                                         <div class="flex items-center gap-2.5">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" class="h-5 w-5 flex-shrink-0 {{ request()->routeIs('customers.*') ? 'text-[#D4AF37]' : 'text-[#6B7280]' }}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" class="h-5 w-5 flex-shrink-0 <?php echo e(request()->routeIs('customers.*') ? 'text-[#D4AF37]' : 'text-[#6B7280]'); ?>">
                                                 <g fill="none" fill-rule="evenodd">
                                                     <path d="m12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035q-.016-.005-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093q.019.005.029-.008l.004-.014l-.034-.614q-.005-.018-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z"></path>
                                                     <path fill="currentColor" d="M13 13a4 4 0 0 1 4 4v2a1 1 0 1 1-2 0v-2a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v2a1 1 0 1 1-2 0v-2a4 4 0 0 1 4-4zm6 0a3 3 0 0 1 3 3v2a1 1 0 1 1-2 0v-2a1 1 0 0 0-1-1h-1.416a5 5 0 0 0-1.583-2zM9.5 3a4.5 4.5 0 1 1 0 9a4.5 4.5 0 0 1 0-9M18 6a3 3 0 1 1 0 6a3 3 0 0 1 0-6M9.5 5a2.5 2.5 0 1 0 0 5a2.5 2.5 0 0 0 0-5M18 8a1 1 0 1 0 0 2a1 1 0 0 0 0-2"></path>
                                                 </g>
                                             </svg>
                                             <div class="flex items-center gap-2 whitespace-nowrap min-w-0">
-                                                <span class="text-sm font-semibold tracking-[-0.28px] {{ request()->routeIs('customers.*') ? 'text-white' : 'text-[#6B7280]' }}" style="font-family: Manrope, sans-serif;">Clientes</span>
+                                                <span class="text-sm font-semibold tracking-[-0.28px] <?php echo e(request()->routeIs('customers.*') ? 'text-white' : 'text-[#6B7280]'); ?>" style="font-family: Manrope, sans-serif;">Clientes</span>
                                             </div>
                                         </div>
                                     </a>
@@ -792,16 +792,16 @@
                             </div>
                             <div>
                                 <div class="px-5">
-                                    <a class="relative flex items-center w-full transition-all duration-200 py-2 {{ request()->routeIs('payment-links.*') ? 'text-white' : 'text-[#6B7280]' }}" href="{{ route('payment-links.index') }}">
-                                        @if(request()->routeIs('payment-links.*'))
+                                    <a class="relative flex items-center w-full transition-all duration-200 py-2 <?php echo e(request()->routeIs('payment-links.*') ? 'text-white' : 'text-[#6B7280]'); ?>" href="<?php echo e(route('payment-links.index')); ?>">
+                                        <?php if(request()->routeIs('payment-links.*')): ?>
                                         <div class="absolute -left-5 top-1/2 transform -translate-y-1/2 bg-[#D4AF37] w-1.5 h-[26px] rounded-br-[4px] rounded-tr-[4px]"></div>
-                                        @endif
+                                        <?php endif; ?>
                                         <div class="flex items-center gap-2.5">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" class="h-5 w-5 flex-shrink-0 {{ request()->routeIs('payment-links.*') ? 'text-[#D4AF37]' : 'text-[#6B7280]' }}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" class="h-5 w-5 flex-shrink-0 <?php echo e(request()->routeIs('payment-links.*') ? 'text-[#D4AF37]' : 'text-[#6B7280]'); ?>">
                                                 <path fill="currentColor" d="M13.828 10.172a4 4 0 0 0-5.656 0l-4 4a4 4 0 1 0 5.656 5.656l1.102-1.101m-.758-4.899a4 4 0 0 0 5.656 0l4-4a4 4 0 0 0-5.656-5.656l-1.1 1.1"></path>
                                             </svg>
                                             <div class="flex items-center gap-2 whitespace-nowrap min-w-0">
-                                                <span class="text-sm font-semibold tracking-[-0.28px] {{ request()->routeIs('payment-links.*') ? 'text-white' : 'text-[#6B7280]' }}" style="font-family: Manrope, sans-serif;">Links de Pagamento</span>
+                                                <span class="text-sm font-semibold tracking-[-0.28px] <?php echo e(request()->routeIs('payment-links.*') ? 'text-white' : 'text-[#6B7280]'); ?>" style="font-family: Manrope, sans-serif;">Links de Pagamento</span>
                                             </div>
                                         </div>
                                     </a>
@@ -809,16 +809,16 @@
                             </div>
                             <div>
                                 <div class="px-5">
-                                    <a class="relative flex items-center w-full transition-all duration-200 py-2 {{ request()->routeIs('referrals.*') ? 'text-white' : 'text-[#6B7280]' }}" href="{{ route('referrals.index') }}">
-                                        @if(request()->routeIs('referrals.*'))
+                                    <a class="relative flex items-center w-full transition-all duration-200 py-2 <?php echo e(request()->routeIs('referrals.*') ? 'text-white' : 'text-[#6B7280]'); ?>" href="<?php echo e(route('referrals.index')); ?>">
+                                        <?php if(request()->routeIs('referrals.*')): ?>
                                         <div class="absolute -left-5 top-1/2 transform -translate-y-1/2 bg-[#D4AF37] w-1.5 h-[26px] rounded-br-[4px] rounded-tr-[4px]"></div>
-                                        @endif
+                                        <?php endif; ?>
                                         <div class="flex items-center gap-2.5">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" class="h-5 w-5 flex-shrink-0 {{ request()->routeIs('referrals.*') ? 'text-[#D4AF37]' : 'text-[#6B7280]' }}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" class="h-5 w-5 flex-shrink-0 <?php echo e(request()->routeIs('referrals.*') ? 'text-[#D4AF37]' : 'text-[#6B7280]'); ?>">
                                                 <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10s10-4.48 10-10S17.52 2 12 2m-2 15l-5-5l1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9"></path>
                                             </svg>
                                             <div class="flex items-center gap-2 whitespace-nowrap min-w-0">
-                                                <span class="text-sm font-semibold tracking-[-0.28px] {{ request()->routeIs('referrals.*') ? 'text-white' : 'text-[#6B7280]' }}" style="font-family: Manrope, sans-serif;">Comissões</span>
+                                                <span class="text-sm font-semibold tracking-[-0.28px] <?php echo e(request()->routeIs('referrals.*') ? 'text-white' : 'text-[#6B7280]'); ?>" style="font-family: Manrope, sans-serif;">Comissões</span>
                                             </div>
                                         </div>
                                     </a>
@@ -826,25 +826,25 @@
                             </div>
                         </div>
                     </div>
-                    @enddocumentsApproved
+                    <?php endif; ?>
 
                     <!-- Integrações -->
-                    @documentsApproved
+                    <?php if (\Illuminate\Support\Facades\Blade::check('documentsApproved')): ?>
                     <div id="section-integracoes" class="space-y-2">
                         <h3 class="px-5 text-sm font-semibold tracking-[-0.28px] text-[#6B7280]">Integrações</h3>
                         <div class="space-y-1">
                             <div>
                                 <div class="px-5">
-                                    <a class="relative flex items-center w-full transition-all duration-200 py-2 {{ request()->routeIs('integracoes') ? 'text-white' : 'text-[#6B7280]' }}" href="{{ route('integracoes') }}">
-                                        @if(request()->routeIs('integracoes'))
+                                    <a class="relative flex items-center w-full transition-all duration-200 py-2 <?php echo e(request()->routeIs('integracoes') ? 'text-white' : 'text-[#6B7280]'); ?>" href="<?php echo e(route('integracoes')); ?>">
+                                        <?php if(request()->routeIs('integracoes')): ?>
                                         <div class="absolute -left-5 top-1/2 transform -translate-y-1/2 bg-[#D4AF37] w-1.5 h-[26px] rounded-br-[4px] rounded-tr-[4px]"></div>
-                                        @endif
+                                        <?php endif; ?>
                                         <div class="flex items-center gap-2.5">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" class="h-5 w-5 flex-shrink-0 {{ request()->routeIs('integracoes') ? 'text-[#D4AF37]' : 'text-[#6B7280]' }}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" class="h-5 w-5 flex-shrink-0 <?php echo e(request()->routeIs('integracoes') ? 'text-[#D4AF37]' : 'text-[#6B7280]'); ?>">
                                                 <path fill="currentColor" d="M19 2a3 3 0 1 1 0 6a3 3 0 0 1-1.523-.419l-2.896 2.896a2.98 2.98 0 0 1 0 3.044l2.896 2.897A3 3 0 0 1 19 16a3 3 0 1 1-2.583 1.479l-2.897-2.897a2.98 2.98 0 0 1-3.043 0L7.58 17.476c.264.447.419.966.419 1.523a3 3 0 1 1-3-3c.556 0 1.074.154 1.52.417l2.897-2.898a2.98 2.98 0 0 1 0-3.04L6.521 7.582A3 3 0 0 1 5 8a3 3 0 1 1 3-3a3 3 0 0 1-.419 1.521l2.896 2.897a2.98 2.98 0 0 1 3.043-.001l2.897-2.896A3 3 0 0 1 16 5a3 3 0 0 1 3-3M5 17.5a1.5 1.5 0 1 0 0 3a1.5 1.5 0 0 0 0-3m14 0a1.5 1.5 0 1 0 0 3a1.5 1.5 0 0 0 0-3m-7-7a1.5 1.5 0 1 0 0 3a1.5 1.5 0 0 0 0-3m-7-7a1.5 1.5 0 1 0 0 3a1.5 1.5 0 0 0 0-3m14 0a1.5 1.5 0 1 0 0 3a1.5 1.5 0 0 0 0-3"></path>
                                             </svg>
                                             <div class="flex items-center gap-2 whitespace-nowrap min-w-0">
-                                                <span class="text-sm font-semibold tracking-[-0.28px] {{ request()->routeIs('integracoes') ? 'text-white' : 'text-[#6B7280]' }}" style="font-family: Manrope, sans-serif;">Integrações</span>
+                                                <span class="text-sm font-semibold tracking-[-0.28px] <?php echo e(request()->routeIs('integracoes') ? 'text-white' : 'text-[#6B7280]'); ?>" style="font-family: Manrope, sans-serif;">Integrações</span>
                                             </div>
                                         </div>
                                     </a>
@@ -852,16 +852,16 @@
                             </div>
                             <div>
                                 <div class="px-5">
-                                    <a class="relative flex items-center w-full transition-all duration-200 py-2 {{ request()->routeIs('api-key') ? 'text-white' : 'text-[#6B7280]' }}" href="{{ route('api-key') }}">
-                                        @if(request()->routeIs('api-key'))
+                                    <a class="relative flex items-center w-full transition-all duration-200 py-2 <?php echo e(request()->routeIs('api-key') ? 'text-white' : 'text-[#6B7280]'); ?>" href="<?php echo e(route('api-key')); ?>">
+                                        <?php if(request()->routeIs('api-key')): ?>
                                         <div class="absolute -left-5 top-1/2 transform -translate-y-1/2 bg-[#D4AF37] w-1.5 h-[26px] rounded-br-[4px] rounded-tr-[4px]"></div>
-                                        @endif
+                                        <?php endif; ?>
                                         <div class="flex items-center gap-2.5">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" class="h-5 w-5 flex-shrink-0 {{ request()->routeIs('api-key') ? 'text-[#D4AF37]' : 'text-[#6B7280]' }}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" class="h-5 w-5 flex-shrink-0 <?php echo e(request()->routeIs('api-key') ? 'text-[#D4AF37]' : 'text-[#6B7280]'); ?>">
                                                 <path fill="currentColor" d="M7 14q-.825 0-1.412-.587T5 12t.588-1.412T7 10t1.413.588T9 12t-.587 1.413T7 14m0 4q-2.5 0-4.25-1.75T1 12t1.75-4.25T7 6q1.675 0 3.038.825T12.2 9H21l3 3l-4.5 4.5l-2-1.5l-2 1.5l-2.125-1.5H12.2q-.8 1.35-2.162 2.175T7 18m0-2q1.4 0 2.463-.85T10.875 13H14l1.45 1.025L17.5 12.5l1.775 1.375L21.15 12l-1-1h-9.275q-.35-1.3-1.412-2.15T7 8Q5.35 8 4.175 9.175T3 12t1.175 2.825T7 16"></path>
                                             </svg>
                                             <div class="flex items-center gap-2 whitespace-nowrap min-w-0">
-                                                <span class="text-sm font-semibold tracking-[-0.28px] {{ request()->routeIs('api-key') ? 'text-white' : 'text-[#6B7280]' }}" style="font-family: Manrope, sans-serif;">Chave de API</span>
+                                                <span class="text-sm font-semibold tracking-[-0.28px] <?php echo e(request()->routeIs('api-key') ? 'text-white' : 'text-[#6B7280]'); ?>" style="font-family: Manrope, sans-serif;">Chave de API</span>
                                             </div>
                                         </div>
                                     </a>
@@ -869,16 +869,16 @@
                             </div>
                             <div>
                                 <div class="px-5">
-                                    <a class="relative flex items-center w-full transition-all duration-200 py-2 {{ request()->routeIs('webhooks.*') ? 'text-white' : 'text-[#6B7280]' }}" href="{{ route('webhooks.index') }}">
-                                        @if(request()->routeIs('webhooks.*'))
+                                    <a class="relative flex items-center w-full transition-all duration-200 py-2 <?php echo e(request()->routeIs('webhooks.*') ? 'text-white' : 'text-[#6B7280]'); ?>" href="<?php echo e(route('webhooks.index')); ?>">
+                                        <?php if(request()->routeIs('webhooks.*')): ?>
                                         <div class="absolute -left-5 top-1/2 transform -translate-y-1/2 bg-[#D4AF37] w-1.5 h-[26px] rounded-br-[4px] rounded-tr-[4px]"></div>
-                                        @endif
+                                        <?php endif; ?>
                                         <div class="flex items-center gap-2.5">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" class="h-5 w-5 flex-shrink-0 {{ request()->routeIs('webhooks.*') ? 'text-[#D4AF37]' : 'text-[#6B7280]' }}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" class="h-5 w-5 flex-shrink-0 <?php echo e(request()->routeIs('webhooks.*') ? 'text-[#D4AF37]' : 'text-[#6B7280]'); ?>">
                                                 <path fill="currentColor" d="M7 21q-2.075 0-3.537-1.463T2 16q0-1.4.675-2.537t1.8-1.788q.525-.3 1.025.013t.5.862q0 .275-.112.5t-.313.325q-.7.375-1.137 1.075T4 16q0 1.25.875 2.125T7 19t2.125-.875T10 16q0-.425.238-.712T10.9 15h4.975q.2-.225.488-.363T17 14.5q.625 0 1.063.438T18.5 16t-.437 1.063T17 17.5q-.35 0-.638-.137T15.876 17H11.9q-.35 1.725-1.713 2.863T7 21m0-3.5q-.625 0-1.062-.437T5.5 16q0-.55.35-.95t.85-.525l2.35-3.9q-.725-.675-1.138-1.612T7.5 7q0-2.075 1.463-3.537T12.5 2q1.75 0 3.088 1.063T17.35 5.75q.125.475-.175.863t-.8.387q-.325 0-.612-.238t-.388-.587q-.275-.95-1.05-1.562T12.5 4q-1.25 0-2.125.875T9.5 7q0 .825.413 1.513T10.974 9.6q.35.2.438.5t-.088.6l-2.9 4.85q.05.125.063.225T8.5 16q0 .625-.437 1.063T7 17.5M17 21q-.65 0-1.263-.162T14.6 20.4q-.675-.375-.537-1.137t1.012-.763q.125 0 .275.05t.275.125q.325.175.663.25T17 19q1.25 0 2.125-.875T20 16t-.875-2.125T17 13q-.25 0-.475.038t-.45.112q-.4.125-.75.013t-.525-.388l-2.575-4.3q-.525-.1-.875-.5T11 7q0-.625.438-1.062T12.5 5.5t1.063.438T14 7v.213q0 .087-.05.212l2.175 3.65q.2-.05.425-.062T17 11q2.075 0 3.538 1.463T22 16t-1.463 3.538T17 21"></path>
                                             </svg>
                                             <div class="flex items-center gap-2 whitespace-nowrap min-w-0">
-                                                <span class="text-sm font-semibold tracking-[-0.28px] {{ request()->routeIs('webhooks.*') ? 'text-white' : 'text-[#6B7280]' }}" style="font-family: Manrope, sans-serif;">Webhooks</span>
+                                                <span class="text-sm font-semibold tracking-[-0.28px] <?php echo e(request()->routeIs('webhooks.*') ? 'text-white' : 'text-[#6B7280]'); ?>" style="font-family: Manrope, sans-serif;">Webhooks</span>
                                             </div>
                                         </div>
                                     </a>
@@ -886,7 +886,7 @@
                             </div>
                         </div>
                     </div>
-                    @enddocumentsApproved
+                    <?php endif; ?>
                             
                     <!-- Sistema -->
                     <div id="section-sistema" class="space-y-2">
@@ -894,43 +894,43 @@
                         <div class="space-y-1">
                             <div>
                                 <div class="px-5">
-                                    @php
+                                    <?php
                                         $isSettingsActive = request()->routeIs('settings.index') || request()->routeIs('settings.*');
-                                    @endphp
-                                    <a class="relative flex items-center w-full transition-all duration-200 py-2 {{ $isSettingsActive ? 'text-white' : 'text-[#6B7280]' }}" href="{{ route('settings.index') }}">
-                                        @if($isSettingsActive)
+                                    ?>
+                                    <a class="relative flex items-center w-full transition-all duration-200 py-2 <?php echo e($isSettingsActive ? 'text-white' : 'text-[#6B7280]'); ?>" href="<?php echo e(route('settings.index')); ?>">
+                                        <?php if($isSettingsActive): ?>
                                         <div class="absolute -left-5 top-1/2 transform -translate-y-1/2 bg-[#D4AF37] w-1.5 h-[26px] rounded-br-[4px] rounded-tr-[4px]"></div>
-                                        @endif
+                                        <?php endif; ?>
                                         <div class="flex items-center gap-2.5">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" class="h-5 w-5 flex-shrink-0 {{ $isSettingsActive ? 'text-[#D4AF37]' : 'text-[#6B7280]' }}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" class="h-5 w-5 flex-shrink-0 <?php echo e($isSettingsActive ? 'text-[#D4AF37]' : 'text-[#6B7280]'); ?>">
                                                 <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 5h-3m-4.25-2v4M13 5H3m4 7H3m7.75-2v4M21 12H11m10 7h-3m-4.25-2v4M13 19H3"></path>
                                             </svg>
                                             <div class="flex items-center gap-2 whitespace-nowrap min-w-0">
-                                                <span class="text-sm font-semibold tracking-[-0.28px] {{ $isSettingsActive ? 'text-white' : 'text-[#6B7280]' }}" style="font-family: Manrope, sans-serif;">Configurações</span>
+                                                <span class="text-sm font-semibold tracking-[-0.28px] <?php echo e($isSettingsActive ? 'text-white' : 'text-[#6B7280]'); ?>" style="font-family: Manrope, sans-serif;">Configurações</span>
                                             </div>
                                         </div>
                                     </a>
                                 </div>
                             </div>
-                            @if($showDocuments)
+                            <?php if($showDocuments): ?>
                             <div>
                                 <div class="px-5">
-                                    <a class="relative flex items-center w-full transition-all duration-200 py-2 {{ request()->routeIs('documents.*') ? 'text-white' : 'text-[#6B7280]' }}" href="{{ route('documents.index') }}">
-                                        @if(request()->routeIs('documents.*'))
+                                    <a class="relative flex items-center w-full transition-all duration-200 py-2 <?php echo e(request()->routeIs('documents.*') ? 'text-white' : 'text-[#6B7280]'); ?>" href="<?php echo e(route('documents.index')); ?>">
+                                        <?php if(request()->routeIs('documents.*')): ?>
                                         <div class="absolute -left-5 top-1/2 transform -translate-y-1/2 bg-[#D4AF37] w-1.5 h-[26px] rounded-br-[4px] rounded-tr-[4px]"></div>
-                                        @endif
+                                        <?php endif; ?>
                                         <div class="flex items-center gap-2.5">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" class="h-5 w-5 flex-shrink-0 {{ request()->routeIs('documents.*') ? 'text-[#D4AF37]' : 'text-[#6B7280]' }}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" class="h-5 w-5 flex-shrink-0 <?php echo e(request()->routeIs('documents.*') ? 'text-[#D4AF37]' : 'text-[#6B7280]'); ?>">
                                                 <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                                             </svg>
                                             <div class="flex items-center gap-2 whitespace-nowrap min-w-0">
-                                                <span class="text-sm font-semibold tracking-[-0.28px] {{ request()->routeIs('documents.*') ? 'text-white' : 'text-[#6B7280]' }}" style="font-family: Manrope, sans-serif;">Documentos</span>
+                                                <span class="text-sm font-semibold tracking-[-0.28px] <?php echo e(request()->routeIs('documents.*') ? 'text-white' : 'text-[#6B7280]'); ?>" style="font-family: Manrope, sans-serif;">Documentos</span>
                                             </div>
                                         </div>
                                     </a>
                                 </div>
                             </div>
-                            @endif
+                            <?php endif; ?>
                             <div>
                                 <div class="px-5">
                                     <a class="relative flex items-center w-full transition-all duration-200 py-2 text-[#6B7280] cursor-not-allowed" href="#" onclick="return false;">
@@ -954,7 +954,7 @@
                     <div class="flex flex-col gap-5 p-4 rounded-[6px] bg-[#1f1f1f]">
                         <div class="flex items-center gap-3">
                             <div class="relative w-9 h-9 rounded-full overflow-hidden flex-shrink-0">
-                                @php
+                                <?php
                                     // Verificar se a foto existe na nova pasta pública
                                     $hasPhoto = $user->photo && file_exists(public_path('images/users/photos/' . $user->photo));
                                     $photoUrl = null;
@@ -962,25 +962,27 @@
                                         $photoUrl = url('/images/users/photos/' . $user->photo);
                                     }
                                     $userInitials = strtoupper(substr($user->name, 0, 2));
-                                @endphp
-                                @if($hasPhoto && $photoUrl)
-                                    <img src="{{ $photoUrl }}" alt="{{ $user->name }}" class="w-full h-full object-cover sidebar-user-photo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                ?>
+                                <?php if($hasPhoto && $photoUrl): ?>
+                                    <img src="<?php echo e($photoUrl); ?>" alt="<?php echo e($user->name); ?>" class="w-full h-full object-cover sidebar-user-photo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                                     <div class="w-full h-full hidden items-center justify-center bg-[#D4AF37] text-white text-xs font-semibold">
-                                        {{ $userInitials }}
+                                        <?php echo e($userInitials); ?>
+
                                     </div>
-                                @else
+                                <?php else: ?>
                                     <div class="w-full h-full flex items-center justify-center bg-[#D4AF37] text-white text-xs font-semibold">
-                                        {{ $userInitials }}
+                                        <?php echo e($userInitials); ?>
+
                                     </div>
-                                @endif
+                                <?php endif; ?>
                             </div>
                             <div class="min-w-0 flex-1">
-                                <h2 class="text-sm font-semibold tracking-[-0.28px] truncate text-white" style="font-family: Manrope, sans-serif;">{{ $user->fantasy_name ?? $user->name }}</h2>
-                                <p class="text-sm tracking-[-0.28px] truncate text-[#6B7280]" style="font-family: Manrope, sans-serif;">{{ $user->email }}</p>
+                                <h2 class="text-sm font-semibold tracking-[-0.28px] truncate text-white" style="font-family: Manrope, sans-serif;"><?php echo e($user->fantasy_name ?? $user->name); ?></h2>
+                                <p class="text-sm tracking-[-0.28px] truncate text-[#6B7280]" style="font-family: Manrope, sans-serif;"><?php echo e($user->email); ?></p>
                             </div>
                         </div>
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
+                        <form method="POST" action="<?php echo e(route('logout')); ?>">
+                            <?php echo csrf_field(); ?>
                             <button type="submit" class="flex items-center gap-2.5 cursor-pointer hover:opacity-80 transition-opacity text-[#6B7280] w-full">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-out h-5 w-5">
                                     <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
@@ -1003,12 +1005,12 @@
                 <div class="hidden lg:flex container mx-auto px-4 md:px-6 items-center justify-between h-[80px] gap-2 sm:gap-4">
                     <!-- Conteúdo do Header (lado direito) - Centralizado Verticalmente -->
                     <div class="flex items-center justify-end gap-2 sm:gap-4 ml-auto">
-                        @if(isset($goals) && $goals->count() > 0)
-                            @php
+                        <?php if(isset($goals) && $goals->count() > 0): ?>
+                            <?php
                                 // Pegar apenas a primeira meta não completada
                                 $currentGoal = $goals->first();
-                            @endphp
-                            @if($currentGoal)
+                            ?>
+                            <?php if($currentGoal): ?>
                                 <!-- Card de Meta - Desktop e Mobile -->
                                 <div class="flex items-center gap-3 px-4 py-3 rounded-lg h-16" style="align-self: center; background: transparent;">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trophy h-5 w-5 text-[#D4AF37] flex-shrink-0">
@@ -1023,25 +1025,25 @@
                                         <!-- Barra de progresso com % ao lado direito -->
                                         <div class="flex items-center gap-2 w-full">
                                             <div class="flex-1 rounded-[40px] p-[2px] bg-[#161616]">
-                                                <div class="bg-[#D4AF37] h-[6px] rounded-[40px] transition-all duration-500" style="width: {{ min(100, $currentGoal['percentage']) }}%;"></div>
+                                                <div class="bg-[#D4AF37] h-[6px] rounded-[40px] transition-all duration-500" style="width: <?php echo e(min(100, $currentGoal['percentage'])); ?>%;"></div>
                                             </div>
-                                            <span class="text-[12px] sm:text-[14px] font-semibold font-['Manrope'] tracking-[-0.26px] sm:tracking-[-0.28px] text-white flex-shrink-0">{{ number_format($currentGoal['percentage'], 0) }}%</span>
+                                            <span class="text-[12px] sm:text-[14px] font-semibold font-['Manrope'] tracking-[-0.26px] sm:tracking-[-0.28px] text-white flex-shrink-0"><?php echo e(number_format($currentGoal['percentage'], 0)); ?>%</span>
                                         </div>
                                         <!-- Valores R$ 0,00 e R$ 100,00 -->
                                         <div class="flex justify-between items-center text-[10px] sm:text-[12px] text-gray-400">
-                                            <span class="truncate">R$ {{ number_format($currentGoal['current_value'], 2, ',', '.') }}</span>
-                                            <span class="ml-1 flex-shrink-0">R$ {{ number_format($currentGoal['target_value'], 2, ',', '.') }}</span>
+                                            <span class="truncate">R$ <?php echo e(number_format($currentGoal['current_value'], 2, ',', '.')); ?></span>
+                                            <span class="ml-1 flex-shrink-0">R$ <?php echo e(number_format($currentGoal['target_value'], 2, ',', '.')); ?></span>
                                         </div>
                                     </div>
                                 </div>
                                 <!-- Divisor (apenas desktop, antes do botão de configurações) -->
                                 <div class="hidden lg:block h-4 w-[1px] bg-[#AAAAAA] opacity-30" style="align-self: center;"></div>
-                            @endif
-                        @endif
+                            <?php endif; ?>
+                        <?php endif; ?>
                         
                         
                         <!-- Botão de Configurações -->
-                        <a class="hidden lg:flex items-center justify-center rounded-lg h-10 w-10 sm:h-12 sm:w-12 bg-[#161616] hover:bg-[#252525] transition-colors duration-200" href="{{ route('settings.index') }}" style="align-self: center;">
+                        <a class="hidden lg:flex items-center justify-center rounded-lg h-10 w-10 sm:h-12 sm:w-12 bg-[#161616] hover:bg-[#252525] transition-colors duration-200" href="<?php echo e(route('settings.index')); ?>" style="align-self: center;">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-settings h-[16px] w-[16px] sm:h-[18px] sm:w-[18px] text-[#AAAAAA]">
                                 <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path>
                                 <circle cx="12" cy="12" r="3"></circle>
@@ -1064,11 +1066,11 @@
                         </button>
                         
                         <!-- Meta no Mobile (Meio) -->
-                        @if(isset($goals) && $goals->count() > 0)
-                            @php
+                        <?php if(isset($goals) && $goals->count() > 0): ?>
+                            <?php
                                 $currentGoal = $goals->first();
-                            @endphp
-                            @if($currentGoal)
+                            ?>
+                            <?php if($currentGoal): ?>
                                 <div class="flex items-center gap-2 px-3 py-2 rounded-lg flex-1" style="background: transparent;">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trophy h-4 w-4 text-[#D4AF37] flex-shrink-0">
                                         <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
@@ -1081,21 +1083,21 @@
                                     <div class="flex flex-col gap-1 justify-center flex-1 min-w-0">
                                         <div class="flex items-center gap-2 w-full">
                                             <div class="flex-1 rounded-[40px] p-[2px] bg-[#161616]">
-                                                <div class="bg-[#D4AF37] h-[4px] rounded-[40px] transition-all duration-500" style="width: {{ min(100, $currentGoal['percentage']) }}%;"></div>
+                                                <div class="bg-[#D4AF37] h-[4px] rounded-[40px] transition-all duration-500" style="width: <?php echo e(min(100, $currentGoal['percentage'])); ?>%;"></div>
                                             </div>
-                                            <span class="text-[10px] font-semibold font-['Manrope'] tracking-[-0.24px] text-white flex-shrink-0">{{ number_format($currentGoal['percentage'], 0) }}%</span>
+                                            <span class="text-[10px] font-semibold font-['Manrope'] tracking-[-0.24px] text-white flex-shrink-0"><?php echo e(number_format($currentGoal['percentage'], 0)); ?>%</span>
                                         </div>
                                         <div class="flex justify-between items-center text-[9px] text-gray-400">
-                                            <span class="truncate">R$ {{ number_format($currentGoal['current_value'], 2, ',', '.') }}</span>
-                                            <span class="ml-1 flex-shrink-0">R$ {{ number_format($currentGoal['target_value'], 2, ',', '.') }}</span>
+                                            <span class="truncate">R$ <?php echo e(number_format($currentGoal['current_value'], 2, ',', '.')); ?></span>
+                                            <span class="ml-1 flex-shrink-0">R$ <?php echo e(number_format($currentGoal['target_value'], 2, ',', '.')); ?></span>
                                         </div>
                                     </div>
                                 </div>
-                            @endif
-                        @endif
+                            <?php endif; ?>
+                        <?php endif; ?>
                         
                         <!-- Botão de Configurações (Lado Direito) -->
-                        <a class="flex items-center justify-center rounded-lg h-10 w-10 sm:h-12 sm:w-12 bg-[#161616] hover:bg-[#252525] transition-colors" href="{{ route('settings.index') }}">
+                        <a class="flex items-center justify-center rounded-lg h-10 w-10 sm:h-12 sm:w-12 bg-[#161616] hover:bg-[#252525] transition-colors" href="<?php echo e(route('settings.index')); ?>">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-settings h-[16px] w-[16px] sm:h-[18px] sm:w-[18px] text-[#AAAAAA]">
                                 <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path>
                                 <circle cx="12" cy="12" r="3"></circle>
@@ -1108,13 +1110,13 @@
 
             <!-- Content Area -->
             <div class="flex-1 overflow-y-auto overflow-x-hidden scrollable-content w-full" style="background-color: #000000;">
-                @yield('content')
+                <?php echo $__env->yieldContent('content'); ?>
             </div>
         </main>
     </div>
 
 
-    @stack('scripts')
+    <?php echo $__env->yieldPushContent('scripts'); ?>
     <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
@@ -1210,6 +1212,6 @@
     }
     </script>
 
-    @include('components.MacosDock')
+    <?php echo $__env->make('components.MacosDock', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 </body>
-</html>
+</html><?php /**PATH /home/painhodev/PlayPayments2.0/app/resources/views/layouts/dashboard.blade.php ENDPATH**/ ?>
