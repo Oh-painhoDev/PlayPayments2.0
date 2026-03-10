@@ -1,15 +1,13 @@
-@extends('layouts.dashboard')
+<?php $__env->startSection('title', 'UTMify - Integrações'); ?>
 
-@section('title', 'UTMify - Integrações')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
 <section class="bg-view">
     <div class="p-5">
         <div class="max-w-[1600px] mx-auto">
             <div class="bg-[#000000] rounded-2xl p-5 space-y-8">
                 <div class="flex flex-col gap-6 mb-8">
                     <div class="flex items-center gap-4">
-                        <a href="{{ route('integracoes') }}">
+                        <a href="<?php echo e(route('integracoes')); ?>">
                             <button class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:text-accent-foreground h-10 px-4 py-2 rounded-[8px] group gap-2 hover:bg-white/5">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left transition-transform group-hover:-translate-x-1">
                                     <path d="m12 19-7-7 7-7"></path>
@@ -70,28 +68,29 @@
                                             </tr>
                                         </thead>
                                         <tbody class="[&_tr:last-child]:border-0 pt-2" id="integrationsTableBody">
-                                            @forelse($integrations as $integration)
+                                            <?php $__empty_1 = true; $__currentLoopData = $integrations; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $integration): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                                                 <tr class="bg-[#1F1F1F] hover:bg-[#252525] transition-colors rounded-lg" 
-                                                    data-integration-id="{{ $integration->id }}"
-                                                    data-integration-name="{{ $integration->name }}"
-                                                    data-integration-token="{{ $integration->api_token }}"
-                                                    data-integration-platform-name="{{ $integration->platform_name ?? '' }}"
-                                                    data-integration-trigger-payment="{{ $integration->trigger_on_payment ? '1' : '0' }}"
-                                                    data-integration-trigger-creation="{{ $integration->trigger_on_creation ? '1' : '0' }}"
-                                                    data-integration-active="{{ $integration->is_active ? '1' : '0' }}">
-                                                    <td class="py-3 px-6 font-['Manrope'] font-semibold text-[14px] tracking-[-0.28px] text-white">{{ $integration->name }}</td>
+                                                    data-integration-id="<?php echo e($integration->id); ?>"
+                                                    data-integration-name="<?php echo e($integration->name); ?>"
+                                                    data-integration-token="<?php echo e($integration->api_token); ?>"
+                                                    data-integration-platform-name="<?php echo e($integration->platform_name ?? ''); ?>"
+                                                    data-integration-trigger-payment="<?php echo e($integration->trigger_on_payment ? '1' : '0'); ?>"
+                                                    data-integration-trigger-creation="<?php echo e($integration->trigger_on_creation ? '1' : '0'); ?>"
+                                                    data-integration-active="<?php echo e($integration->is_active ? '1' : '0'); ?>">
+                                                    <td class="py-3 px-6 font-['Manrope'] font-semibold text-[14px] tracking-[-0.28px] text-white"><?php echo e($integration->name); ?></td>
                                                     <td class="py-3 px-6 font-['Manrope'] font-semibold text-[12px] tracking-[-0.24px] text-[#707070]">
-                                                        {{ substr($integration->api_token, 0, 10) }}...
+                                                        <?php echo e(substr($integration->api_token, 0, 10)); ?>...
                                                     </td>
                                                     <td class="py-3 px-6">
-                                                        @if($integration->is_active)
+                                                        <?php if($integration->is_active): ?>
                                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-500/20 text-green-400">Ativo</span>
-                                                        @else
+                                                        <?php else: ?>
                                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-500/20 text-gray-400">Inativo</span>
-                                                        @endif
+                                                        <?php endif; ?>
                                                     </td>
                                                     <td class="py-3 px-6 font-['Manrope'] font-semibold text-[12px] tracking-[-0.24px] text-[#707070]">
-                                                        {{ $integration->created_at->format('d/m/Y') }}
+                                                        <?php echo e($integration->created_at->format('d/m/Y')); ?>
+
                                                     </td>
                                                     <td class="py-3 px-6">
                                                         <div class="flex items-center gap-2">
@@ -101,9 +100,9 @@
                                                                     <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
                                                                 </svg>
                                                             </button>
-                                                            <form action="{{ route('integracoes.utmfy.destroy', $integration->id) }}" method="POST" onsubmit="return confirm('Tem certeza que deseja remover esta integração?');" class="inline">
-                                                                @csrf
-                                                                @method('DELETE')
+                                                            <form action="<?php echo e(route('integracoes.utmfy.destroy', $integration->id)); ?>" method="POST" onsubmit="return confirm('Tem certeza que deseja remover esta integração?');" class="inline">
+                                                                <?php echo csrf_field(); ?>
+                                                                <?php echo method_field('DELETE'); ?>
                                                                 <button type="submit" class="text-[#707070] hover:text-red-500 transition-colors">
                                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                                                         <path d="M3 6h18"></path>
@@ -115,13 +114,13 @@
                                                         </div>
                                                     </td>
                                                 </tr>
-                                            @empty
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                                                 <tr>
                                                     <td colspan="5" class="py-8 px-6 text-center">
                                                         <p class="font-['Manrope'] font-semibold text-[14px] tracking-[-0.28px] text-[#707070]">Nenhuma integração UTMify encontrada</p>
                                                     </td>
                                                 </tr>
-                                            @endforelse
+                                            <?php endif; ?>
                                         </tbody>
                                     </table>
                                 </div>
@@ -208,7 +207,7 @@
             </button>
         </div>
         <form id="utmifyForm" method="POST" action="" class="mt-6 flex flex-col gap-6">
-            @csrf
+            <?php echo csrf_field(); ?>
             <input type="hidden" name="_method" id="formMethod" value="POST">
             <input type="hidden" name="integration_id" id="integrationId">
             
@@ -271,18 +270,19 @@
     </div>
 </div>
 
-@if(session('success'))
+<?php if(session('success')): ?>
     <div id="successMessage" class="fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50">
-        {{ session('success') }}
+        <?php echo e(session('success')); ?>
+
     </div>
     <script>
         setTimeout(() => {
             document.getElementById('successMessage')?.remove();
         }, 5000);
     </script>
-@endif
+<?php endif; ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
 <script>
     function openModal(integrationData = null) {
         const modal = document.getElementById('utmifyModal');
@@ -301,7 +301,7 @@
             document.getElementById('triggerOnPayment').checked = integrationData.triggerPayment === '1';
             document.getElementById('triggerOnCreation').checked = integrationData.triggerCreation === '1';
             document.getElementById('isActive').checked = integrationData.active === '1';
-            form.action = `{{ url('integracoes/utmfy') }}/${integrationData.id}`;
+            form.action = `<?php echo e(url('integracoes/utmfy')); ?>/${integrationData.id}`;
         } else {
             modalTitle.textContent = 'Nova UTM';
             formMethod.value = 'POST';
@@ -310,7 +310,7 @@
             document.getElementById('triggerOnPayment').checked = true;
             document.getElementById('triggerOnCreation').checked = true;
             document.getElementById('isActive').checked = true;
-            form.action = '{{ route("integracoes.utmfy.store") }}';
+            form.action = '<?php echo e(route("integracoes.utmfy.store")); ?>';
         }
         
         modal.classList.remove('hidden');
@@ -360,6 +360,8 @@
         }
     });
 </script>
-@endpush
-@endsection
+<?php $__env->stopPush(); ?>
+<?php $__env->stopSection(); ?>
 
+
+<?php echo $__env->make('layouts.dashboard', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH /home/painhodev/PlayPayments2.0/app/resources/views/integracoes/utmfy/index.blade.php ENDPATH**/ ?>

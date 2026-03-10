@@ -63,8 +63,27 @@ Criada uma nova experiência imersiva para reconhecimento de parceiros:
 
 ---
 
-## 🚀 Como Utilizar os Novos Filtros
-No topo da tabela de transações, utilize a nova barra de ferramentas. Ao aplicar um filtro, a URL será atualizada, permitindo que você compartilhe visualizações específicas ou salve a página filtrada nos favoritos.
+## 4. Integração Avançada UTMify
+
+O módulo de integração com a UTMify foi aprimorado para atender todas as documentações e exigências da API de tracking (Vendas).
+
+### 📈 Rastreamento e Conversões de Alta Performance
+- **Ampliação de Métodos de Pagamento**: Transações não se restringem mais ao PIX. Agora processamos também **Cartão de Crédito** e **Boleto** enviando o payload padronizado que a API da UTMify aguarda (`pix`, `credit_card`, `bank_slip`).
+- **Estados Dinâmicos e Reversões Exatas**: O status de "Chargeback", "Estorno" e "Reembolsos parciais" agora mapeiam 100% corretamente com o webhook e os envios passivos: 
+  - `created` -> `waiting_payment`
+  - `paid` -> `paid`
+  - `refunded` -> `refunded`
+  - `cancelled` -> `cancelled`
+- **ROI e Comissões Precisas**: Ajustado para espelhar apenas o percentual e valor líquido, calculando a comissão (`userCommissionInCents`) deduzido das taxas de processamento (`gatewayFeeInCents`) sobre o preço base (`totalPriceInCents`).
+- **Sincronia Global e Direto de Afiliados**: Agora ele interpreta a estrutura completa de Metadados rastreando os *queries* de checkout e engolindo todas as UTMs para passar para o sistema.
+
+### ⚙️ UX & FAQ
+- **FAQ Dinâmico**: O painel interno ganha uma aba de *Dúvidas Frequentes* estilizada com Premium Dark mode (`#161616`), ensinando os usuários sobre onde criar seu token de API e os status suportados.
+- **Micro-Animações no FAQ**: Respostas expansíveis controladas puramente em HTML `<details>` que funcionam no padrão Glassmorphism, diminuindo as requisições de ticket de suporte e garantindo clareza pro afiliado/produtor.
+
+---
+🚀 Como Utilizar os Novos Filtros
+No topo da tabela de transações, utilize a nova barra de ferramentas... (existia). Ao aplicar um filtro, a URL será atualizada, permitindo que você compartilhe visualizações específicas ou salve a página filtrada nos favoritos.
 
 ---
 *Documentação gerada automaticamente para o repositório GitHub - PlayPayments 2.0*

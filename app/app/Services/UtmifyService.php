@@ -11,14 +11,18 @@ class UtmifyService
 {
     /**
      * Envia transação para UTMify
-     * APENAS PARA PIX E APENAS STATUS: pending (waiting_payment), paid, refunded
+     * Suporta PIX, Cartão de Crédito e Boleto
      */
     public function sendTransaction(Transaction $transaction, string $event = 'created'): bool
     {
         try {
-            // FILTRO 1: APENAS PIX
-            if (strtolower($transaction->payment_method) !== 'pix') {
-                Log::debug('UTMify: Transação ignorada - não é PIX', [
+            // Extrair método de pagamento padronizado
+            $paymentMethod = strtolower($transaction->payment_method);
+            
+            // FILTRO 1: MÉTODOS DE PAGAMENTO SUPORTADOS PELA UTMIFY
+            $allowedMethods = ['pix', 'credit_card', 'bank_slip', 'boleto'];
+            if (!in_array($paymentMethod, $allowedMethods)) {
+                Log::debug('UTMify: Transação ignorada - método de pagamento não suportado', [
                     'transaction_id' => $transaction->transaction_id,
                     'payment_method' => $transaction->payment_method,
                     'event' => $event,
@@ -27,7 +31,10 @@ class UtmifyService
             }
 
             // FILTRO 2: APENAS STATUS PERMITIDOS
-            $allowedStatuses = ['pending', 'paid', 'refunded', 'partially_refunded'];
+            $allowedStatuses = [
+                'pending', 'paid', 'approved', 'completed', 'success', 'successful', 'confirmed',
+                'refunded', 'partially_refunded', 'chargeback', 'cancelled', 'failed', 'expired'
+            ];
             if (!in_array(strtolower($transaction->status), $allowedStatuses)) {
                 Log::debug('UTMify: Transação ignorada - status não permitido', [
                     'transaction_id' => $transaction->transaction_id,
@@ -38,8 +45,13 @@ class UtmifyService
                 return false;
             }
 
-            // FILTRO 3: APENAS EVENTOS PERMITIDOS
-            $allowedEvents = ['created', 'paid', 'refunded'];
+            // FILTRO 3: EVENTOS
+            // Eventos permitidos:
+            // 'created' -> quando a transação é gerada
+            // 'paid' -> quando é aprovada/paga
+            // 'refunded' -> quando é estornada
+            // 'cancelled' -> quando falha ou expira
+            $allowedEvents = ['created', 'paid', 'refunded', 'cancelled'];
             if (!in_array($event, $allowedEvents)) {
                 Log::debug('UTMify: Evento ignorado - evento não permitido', [
                     'transaction_id' => $transaction->transaction_id,
@@ -99,7 +111,7 @@ class UtmifyService
                 Log::info('🟣 UTMify: Processando integração', [
                     'integration_id' => $integration->id,
                     'integration_name' => $integration->name,
-                    'integration_type' => $integration->isGlobal() ? 'GLOBAL (todos os PIX)' : 'USER_SPECIFIC',
+                    'integration_type' => $integration->isGlobal() ? 'GLOBAL' : 'USER_SPECIFIC',
                     'user_id' => $integration->user_id,
                     'transaction_user_id' => $transaction->user_id,
                     'is_active' => $integration->is_active,
@@ -378,19 +390,22 @@ class UtmifyService
         $paymentData = $transaction->payment_data ?? [];
         $metadata = $transaction->metadata ?? [];
 
-        // Mapear status baseado no evento
-        if ($event === 'created') {
-            $utmifyStatus = 'waiting_payment';
-        } elseif ($event === 'paid') {
-            $utmifyStatus = 'paid';
-        } elseif ($event === 'refunded') {
-            $utmifyStatus = 'refunded';
-        } else {
-            $utmifyStatus = 'waiting_payment';
-        }
+        // Mapear status baseado no evento/status_da_transacao
+        $utmifyStatus = match ($event) {
+            'created' => 'waiting_payment',
+            'paid' => 'paid',
+            'refunded' => 'refunded',
+            'cancelled' => 'cancelled',
+            default => 'waiting_payment'
+        };
 
-        // Método de pagamento sempre será PIX (já filtrado antes)
-        $utmifyPaymentMethod = 'pix';
+        // Mapear método de pagamento para o formato da UTMify
+        $pm = strtolower($transaction->payment_method);
+        $utmifyPaymentMethod = match ($pm) {
+            'credit_card' => 'credit_card',
+            'bank_slip', 'boleto' => 'bank_slip',
+            default => 'pix'
+        };
 
         // Extrair parâmetros de tracking (UTM) do metadata ou payment_data
         $trackingParams = $this->extractTrackingParameters($metadata, $paymentData);
