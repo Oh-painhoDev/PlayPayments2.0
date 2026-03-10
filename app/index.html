@@ -63,9 +63,9 @@
         .loader {
             width: 60px;
             height: 60px;
-            border: 3px solid rgba(16, 185, 129, 0.1);
+            border: 3px solid rgba(175, 138, 42, 0.1);
             border-radius: 50%;
-            border-top-color: #10b981;
+            border-top-color: #af8a2a;
             animation: spin 1s ease-in-out infinite;
         }
 
@@ -101,19 +101,19 @@
             transform: translate(-50%, -50%);
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle at center, rgba(16, 185, 129, 0.8) 0%, transparent 70%);
+            background: radial-gradient(circle at center, rgba(175, 138, 42, 0.8) 0%, transparent 70%);
             filter: blur(40px);
             opacity: 0.6;
             animation: glowPulse 3s ease-in-out infinite;
         }
 
         .main-logo {
-            width: clamp(300px, 45vw, 900px);
+            width: clamp(260px, 45vw, 900px);
             height: auto;
             display: block;
             position: relative;
             z-index: 2;
-            filter: drop-shadow(0 0 40px rgba(16, 185, 129, 0.5));
+            filter: drop-shadow(0 0 40px rgba(175, 138, 42, 0.5));
             animation: logoFloat 4s ease-in-out infinite;
         }
 
@@ -134,12 +134,12 @@
             0%,
             100% {
                 opacity: 0.4;
-                transform: translate(-50%, -50%) scale(0.8);
+                transform: translate(-50%, -50%) scale(0.9);
             }
 
             50% {
-                opacity: 0.8;
-                transform: translate(-50%, -50%) scale(1.2);
+                opacity: 0.7;
+                transform: translate(-50%, -50%) scale(1.1);
             }
         }
 
@@ -150,7 +150,7 @@
             letter-spacing: 0.4em;
             text-transform: uppercase;
             margin-bottom: 3rem;
-            text-shadow: 0 0 30px rgba(16, 185, 129, 0.5);
+            text-shadow: 0 0 30px rgba(175, 138, 42, 0.5);
             animation: fadeInUp 1s ease-out;
         }
 
@@ -165,8 +165,8 @@
 
         .glass-button {
             position: relative;
-            padding: 18px 48px;
-            font-size: 1.1rem;
+            padding: 14px 40px;
+            font-size: 1rem;
             font-weight: 600;
             letter-spacing: 0.1em;
             color: #fff;
@@ -196,9 +196,9 @@
 
         .glass-button:hover {
             transform: translateY(-5px) scale(1.05);
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(33, 179, 221, 0.2) 100%);
-            box-shadow: 0 20px 50px rgba(16, 185, 129, 0.4),
-                0 0 0 2px rgba(16, 185, 129, 0.3),
+            background: linear-gradient(135deg, rgba(175, 138, 42, 0.2) 0%, rgba(255, 255, 255, 0.05) 100%);
+            box-shadow: 0 20px 50px rgba(175, 138, 42, 0.4),
+                0 0 0 2px rgba(175, 138, 42, 0.3),
                 inset 0 1px 2px rgba(255, 255, 255, 0.3);
         }
 
@@ -224,6 +224,7 @@
             border-radius: 50px;
             border: 1px solid rgba(255, 255, 255, 0.1);
             animation: fadeInLeft 1s ease-out 0.6s both;
+            pointer-events: auto;
         }
 
         .stat-item {
@@ -233,8 +234,8 @@
         .stat-value {
             font-size: 1.5rem;
             font-weight: 700;
-            color: #10b981;
-            text-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+            color: #af8a2a;
+            text-shadow: 0 0 20px rgba(175, 138, 42, 0.5);
         }
 
         .stat-label {
@@ -293,21 +294,77 @@
 
         /* Responsive */
         @media (max-width: 768px) {
+            body {
+                overflow-x: hidden;
+            }
+
+            .logo-wrapper {
+                margin-top: -100px;
+                /* Adjusted: moved 40px down from -50px */
+                margin-bottom: 1.5rem;
+            }
+
+            .main-logo {
+                width: 82vw;
+                filter: drop-shadow(0 0 25px rgba(175, 138, 42, 0.4));
+            }
+
+            .tagline {
+                font-size: 0.85rem;
+                letter-spacing: 0.2em;
+                margin-bottom: 2rem;
+                padding: 0 20px;
+                line-height: 1.5;
+            }
+
             .buttons {
                 flex-direction: column;
-                gap: 16px;
+                gap: 12px;
                 padding: 0 40px;
+                width: 100%;
+                max-width: 320px;
+                margin: 0 auto;
+            }
+
+            .glass-button {
+                padding: 14px 30px;
+                font-size: 0.95rem;
+                width: 100%;
+                text-align: center;
+                background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.05) 100%);
+                border: 1px solid rgba(255, 255, 255, 0.1);
             }
 
             .stats {
-                bottom: 20px;
-                left: 50%;
-                transform: translateX(-50%);
-                padding: 10px 20px;
+                position: fixed;
+                bottom: 110px;
+                /* Positioned higher to stay clear of system dock */
+                left: 10px;
+                transform: none;
+                width: calc(100% - 20px);
+                max-width: 380px;
+                margin: 0;
+                gap: 20px;
+                padding: 16px 10px;
+                justify-content: space-around;
+                background: rgba(0, 0, 0, 0.4);
+                backdrop-filter: blur(15px);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                animation: fadeInLeft 1s ease-out 0.6s both;
+                z-index: 100;
             }
 
             .stat-value {
-                font-size: 1.2rem;
+                font-size: 1.1rem;
+            }
+
+            .stat-label {
+                font-size: 0.65rem;
+            }
+
+            .lil-gui.root {
+                display: none;
+                /* Hide GUI on mobile for cleaner look */
             }
         }
     </style>
@@ -338,6 +395,8 @@
                 <span>Cadastre-se</span>
             </a>
         </div>
+
+    </div>
     </div>
 
     <div class="stats">
@@ -377,10 +436,10 @@
             { type: 'cards', w: 450, h: 280, col: '#2a2a38', x: 16, y: 1.5, z: 10, s: 1, op: 1 },
             { type: 'cards', w: 450, h: 280, col: '#2a2a38', x: 16, y: -4.8, z: 10, s: 1, op: 1 },
             { type: 'table', w: 1100, h: 450, col: '#1a1a24', x: -2, y: -9, z: 5, s: 1, op: 1 },
-            { type: 'circle-btn', w: 120, h: 120, col: '#10b981', x: 23, y: -6.5, z: 25, s: 1, op: 1 },
+            { type: 'circle-btn', w: 120, h: 120, col: '#af8a2a', x: 23, y: -6.5, z: 25, s: 1, op: 1 },
             { type: 'chart', w: 700, h: 450, col: '#0f0f15', x: 0, y: 0, z: 35, s: 0.9, op: 0.96 },
             { type: 'notification', w: 320, h: 110, col: '#ef4444', x: 24, y: 8.5, z: 32, s: 0.8, op: 0.97 },
-            { type: 'metric', w: 280, h: 280, col: '#10b981', x: -18, y: -5, z: 15, s: 0.8, op: 0.95 }
+            { type: 'metric', w: 280, h: 280, col: '#af8a2a', x: -18, y: -5, z: 15, s: 0.8, op: 0.95 }
         ];
 
         const shadowConfig = { color: '#000000', blur: 150, opacity: 0.35, x: 8, y: 25 };
@@ -498,7 +557,7 @@
                         break;
 
                     case 'chart':
-                        ctx.strokeStyle = "#10b981";
+                        ctx.strokeStyle = "#af8a2a";
                         ctx.lineWidth = 4;
                         ctx.beginPath();
                         ctx.moveTo(40, realH - 60);
@@ -512,7 +571,7 @@
                         ctx.fillStyle = "#fff";
                         ctx.font = 'bold 70px Inter, Arial';
                         ctx.fillText("84k", 40, 100);
-                        ctx.fillStyle = "#10b981";
+                        ctx.fillStyle = "#af8a2a";
                         ctx.font = '32px Inter, Arial';
                         ctx.fillText("+12%", 40, 160);
                         break;
@@ -611,7 +670,7 @@
         dirLight.position.set(1, 2, 1);
         scene.add(dirLight);
 
-        const pointLight = new THREE.PointLight(0x10b981, 0.5, 200);
+        const pointLight = new THREE.PointLight(0xaf8a2a, 0.5, 200);
         pointLight.position.set(0, 10, 20);
         scene.add(pointLight);
 
@@ -623,7 +682,13 @@
         const stageGroup = new THREE.Group();
         stageGroup.rotation.x = 0.08;
         stageGroup.rotation.y = -0.2;
-        stageGroup.scale.set(2.2, 2.2, 2.2);
+
+        const updateStageScale = () => {
+            const scale = window.innerWidth < 768 ? 1.4 : 2.2;
+            stageGroup.scale.set(scale, scale, scale);
+        };
+        updateStageScale();
+
         scene.add(stageGroup);
 
         // Layers
@@ -770,6 +835,7 @@
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
+            updateStageScale();
         });
 
         // --- FILE UPLOAD ---

@@ -5,178 +5,177 @@
 @section('page-description', 'Gerencie usuários e suas configurações de gateway')
 
 @section('content')
-<div class="p-6">
+<div class="p-6 max-w-[1400px] mx-auto">
+    <div class="mb-8">
+        <h2 class="text-2xl font-bold text-white mb-2 tracking-tight">Painel de Clientes</h2>
+        <p class="text-gray-400 text-sm">Gerencie todos os usuários, limites e configurações de integração vinculadas.</p>
+    </div>
+
     <!-- Filters -->
-    <div class="bg-white rounded-lg border border-gray-200 p-4 mb-6">
-        <form method="GET" class="grid grid-cols-1 md:grid-cols-5 gap-4">
-            <div>
-                <input 
-                    type="text" 
-                    name="search" 
-                    placeholder="Buscar por nome, email ou documento..."
-                    value="{{ request('search') }}"
-                    class="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-400 text-sm"
-                >
+    <div class="bg-[#161616] border border-white/5 rounded-2xl p-5 mb-8 shadow-xl">
+        <form method="GET" class="flex flex-wrap lg:flex-nowrap gap-4 items-end">
+            <div class="flex-1 min-w-[200px]">
+                <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2">Busca Rápida</label>
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    </div>
+                    <input 
+                        type="text" 
+                        name="search" 
+                        placeholder="Nome, e-mail ou CPF/CNPJ..."
+                        value="{{ request('search') }}"
+                        class="w-full pl-10 pr-4 py-2.5 bg-black/50 border border-white/10 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-[#D4AF37]/50 focus:ring-1 focus:ring-[#D4AF37]/50 transition-all text-sm"
+                    >
+                </div>
             </div>
             
-            <div>
-                <select name="gateway" class="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 text-sm">
-                    <option value="">Todos os Gateways</option>
+            <div class="w-full sm:w-auto min-w-[160px]">
+                <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2">Gateway Adquirente</label>
+                <select name="gateway" class="w-full px-4 py-2.5 bg-black/50 border border-white/10 rounded-xl text-white focus:outline-none focus:border-[#D4AF37]/50 focus:ring-1 focus:ring-[#D4AF37]/50 transition-all text-sm appearance-none">
+                    <option value="" class="bg-[#161616]">Todos os Gateways</option>
                     @foreach($gateways as $gateway)
-                        <option value="{{ $gateway->id }}" {{ request('gateway') == $gateway->id ? 'selected' : '' }}>
+                        <option value="{{ $gateway->id }}" {{ request('gateway') == $gateway->id ? 'selected' : '' }} class="bg-[#161616] text-white">
                             {{ $gateway->name }}
                         </option>
                     @endforeach
                 </select>
             </div>
             
-            <div>
-                <select name="account_type" class="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 text-sm">
-                    <option value="">Todos os Tipos</option>
-                    <option value="pessoa_fisica" {{ request('account_type') == 'pessoa_fisica' ? 'selected' : '' }}>Pessoa Física</option>
-                    <option value="pessoa_juridica" {{ request('account_type') == 'pessoa_juridica' ? 'selected' : '' }}>Pessoa Jurídica</option>
+            <div class="w-full sm:w-auto min-w-[140px]">
+                <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2">Conta</label>
+                <select name="account_type" class="w-full px-4 py-2.5 bg-black/50 border border-white/10 rounded-xl text-white focus:outline-none focus:border-[#D4AF37]/50 focus:ring-1 focus:ring-[#D4AF37]/50 transition-all text-sm appearance-none">
+                    <option value="" class="bg-[#161616]">Visualizar Todas</option>
+                    <option value="pessoa_fisica" {{ request('account_type') == 'pessoa_fisica' ? 'selected' : '' }} class="bg-[#161616]">Pessoa Física</option>
+                    <option value="pessoa_juridica" {{ request('account_type') == 'pessoa_juridica' ? 'selected' : '' }} class="bg-[#161616]">Pessoa Jurídica</option>
                 </select>
             </div>
             
-            <div>
-                <select name="status" class="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 text-sm">
-                    <option value="">Todos os Status</option>
-                    <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Ativos</option>
-                    <option value="blocked" {{ request('status') == 'blocked' ? 'selected' : '' }}>Bloqueados</option>
+            <div class="w-full sm:w-auto min-w-[140px]">
+                <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2">Situação</label>
+                <select name="status" class="w-full px-4 py-2.5 bg-black/50 border border-white/10 rounded-xl text-white focus:outline-none focus:border-[#D4AF37]/50 focus:ring-1 focus:ring-[#D4AF37]/50 transition-all text-sm appearance-none">
+                    <option value="" class="bg-[#161616]">Todos os Status</option>
+                    <option value="active" {{ request('status') == 'active' ? 'selected' : '' }} class="bg-[#161616]">Ativos</option>
+                    <option value="blocked" {{ request('status') == 'blocked' ? 'selected' : '' }} class="bg-[#161616]">Bloqueados</option>
                 </select>
             </div>
             
-            <div>
-                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-gray-900 px-4 py-2 rounded-lg text-sm">
+            <div class="w-full sm:w-auto">
+                <button type="submit" class="w-full h-[42px] bg-[#D4AF37] hover:bg-[#c4a133] text-black font-bold px-6 rounded-xl text-sm transition-colors shadow-lg shadow-[#D4AF37]/20 flex items-center justify-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
                     Filtrar
                 </button>
             </div>
         </form>
     </div>
 
-    <!-- Users Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        @forelse($users as $user)
-            <div class="bg-white rounded-lg border {{ $user->isBlocked() ? 'border-red-800' : 'border-gray-200' }} p-6 transition-all duration-300">
-                <div class="flex items-center justify-between mb-4">
-                    <div>
-                        <h3 class="text-lg font-semibold text-gray-900">{{ $user->name }}</h3>
-                        <p class="text-gray-600 text-sm">{{ $user->email }}</p>
-                    </div>
-                    <div class="flex items-center space-x-2">
-                        <span class="px-2 py-1 text-xs rounded {{ $user->isPessoaFisica() ? 'bg-blue-500/10 text-blue-600' : 'bg-purple-500/10 text-purple-400' }}">
-                            {{ $user->isPessoaFisica() ? 'PF' : 'PJ' }}
-                        </span>
-                        @if($user->isBlocked())
-                            <span class="px-2 py-1 text-xs rounded bg-green-500/10 text-green-600 border border-green-500/20">
-                                Bloqueado
-                            </span>
-                        @endif
-                    </div>
-                </div>
-                
-                <div class="space-y-3 text-sm mb-4">
-                    <div class="flex justify-between">
-                        <span class="text-gray-600">Documento:</span>
-                        <span class="text-gray-900">{{ $user->formatted_document }}</span>
-                    </div>
-                    
-                    <div class="flex justify-between">
-                        <span class="text-gray-600">Gateway:</span>
-                        @if($user->assignedGateway)
-                            <span class="px-2 py-1 text-xs bg-green-500/10 text-green-600 rounded">
-                                {{ $user->assignedGateway->name }}
-                            </span>
-                        @else
-                            <span class="px-2 py-1 text-xs bg-gray-500/10 text-gray-600 rounded">
-                                Não atribuído
-                            </span>
-                        @endif
-                    </div>
-                    
-                    <div class="flex justify-between">
-                        <span class="text-gray-600">Documentos:</span>
-                        @if($user->documentVerification)
-                            <span class="px-2 py-1 text-xs rounded {{ $user->documentVerification->isApproved() ? 'bg-green-500/10 text-green-600' : ($user->documentVerification->isRejected() ? 'bg-green-500/10 text-green-600' : 'bg-yellow-500/10 text-yellow-400') }}">
-                                {{ ucfirst($user->documentVerification->status) }}
-                            </span>
-                        @else
-                            <span class="px-2 py-1 text-xs bg-gray-500/10 text-gray-600 rounded">
-                                Pendente
-                            </span>
-                        @endif
-                    </div>
-                    
-                    <div class="flex justify-between">
-                        <span class="text-gray-600">Cadastro:</span>
-                        <span class="text-gray-900">{{ $user->created_at ? $user->created_at->format('d/m/Y') : 'N/A' }}</span>
-                    </div>
-                </div>
-                
-                <!-- Action Buttons -->
-                <div class="grid grid-cols-2 gap-2">
-                    <button 
-                        onclick="loadUserDetails({{ $user->id }})"
-                        class="bg-blue-600 hover:bg-blue-700 text-gray-900 px-3 py-2 rounded-lg text-xs transition-colors"
-                    >
-                        <svg class="w-4 h-4 inline-block mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                        </svg>
-                        Visualizar
-                    </button>
-                    
-                    <button 
-                        onclick="openUserActionsModal({{ $user->id }}, '{{ str_replace("'", "\'", $user->name) }}', {{ $user->isBlocked() ? 'true' : 'false' }})"
-                        class="bg-purple-600 hover:bg-purple-700 text-gray-900 px-3 py-2 rounded-lg text-xs transition-colors"
-                    >
-                        <svg class="w-4 h-4 inline-block mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                        </svg>
-                        Ações
-                    </button>
-                    
-                    <button 
-                        onclick="openFeesModal({{ $user->id }})"
-                        class="bg-green-600 hover:bg-green-700 text-gray-900 px-3 py-2 rounded-lg text-xs transition-colors"
-                    >
-                        <svg class="w-4 h-4 inline-block mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
-                        </svg>
-                        Taxas
-                    </button>
-                    
-                    <button 
-                        onclick="openChangeGatewayModal({{ $user->id }}, '{{ str_replace("'", "\'", $user->name) }}', {{ $user->assignedGateway ? $user->assignedGateway->id : 'null' }})"
-                        class="bg-indigo-600 hover:bg-indigo-700 text-gray-900 px-3 py-2 rounded-lg text-xs transition-colors"
-                    >
-                        <svg class="w-4 h-4 inline-block mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                        </svg>
-                        Trocar Adquirente
-                    </button>
-                </div>
-            </div>
-        @empty
-            <div class="col-span-3 bg-white rounded-lg border border-gray-200 p-8 text-center">
-                <div class="w-16 h-16 bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg class="w-8 h-8 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                    </svg>
-                </div>
-                <p class="text-gray-600 text-lg">Nenhum usuário encontrado</p>
-                <p class="text-gray-500 text-sm mt-1">Tente ajustar os filtros de busca</p>
-            </div>
-        @endforelse
-    </div>
-    
-    <!-- Pagination -->
-    @if($users->hasPages())
-        <div class="mt-6">
-            {{ $users->links() }}
+    <!-- Users Table Modernized -->
+    <div class="bg-[#161616] rounded-2xl border border-white/5 overflow-hidden shadow-xl">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="border-b border-white/5 bg-black/20 text-[10px] uppercase tracking-wider text-gray-500 font-bold">
+                        <th class="px-6 py-4 whitespace-nowrap">ID / Cliente</th>
+                        <th class="px-6 py-4 whitespace-nowrap hidden md:table-cell">Documento</th>
+                        <th class="px-6 py-4 whitespace-nowrap hidden lg:table-cell">Integração</th>
+                        <th class="px-6 py-4 whitespace-nowrap hidden sm:table-cell">Kyc Status</th>
+                        <th class="px-6 py-4 whitespace-nowrap text-right">Ações</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-white/5">
+                    @forelse($users as $user)
+                        <tr class="hover:bg-white/[0.02] transition-colors {{ $user->isBlocked() ? 'opacity-60 bg-red-900/10' : '' }}">
+                            <td class="px-6 py-4">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-[#D4AF37] to-[#806B22] flex flex-shrink-0 items-center justify-center text-black font-bold shadow-lg shadow-[#D4AF37]/20">
+                                        {{ substr(strtoupper($user->name), 0, 1) }}
+                                    </div>
+                                    <div class="min-w-0">
+                                        <div class="flex items-center gap-2 mb-0.5">
+                                            <h4 class="text-white font-medium text-sm truncate">{{ $user->name }}</h4>
+                                            <span class="px-1.5 py-0.5 text-[9px] font-bold rounded-sm {{ $user->isPessoaFisica() ? 'bg-blue-500/20 text-blue-400' : 'bg-purple-500/20 text-purple-400' }} tracking-wider">
+                                                {{ $user->isPessoaFisica() ? 'PF' : 'PJ' }}
+                                            </span>
+                                            @if($user->isBlocked())
+                                                <span class="px-1.5 py-0.5 text-[9px] font-bold rounded-sm bg-red-500/20 text-red-500 tracking-wider">BLOQUEADO</span>
+                                            @endif
+                                        </div>
+                                        <p class="text-gray-500 text-xs truncate">{{ $user->email }}</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 hidden md:table-cell">
+                                <span class="text-gray-300 text-sm font-mono bg-black/30 px-2 py-1 rounded border border-white/5">{{ $user->formatted_document }}</span>
+                                <div class="text-[10px] text-gray-600 mt-1">Desde {{ $user->created_at ? $user->created_at->format('d/m/Y') : 'N/A' }}</div>
+                            </td>
+                            <td class="px-6 py-4 hidden lg:table-cell">
+                                @if($user->assignedGateway)
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-xs font-semibold border border-emerald-500/20">
+                                        <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full shadow-[0_0_5px_#10b981]"></span>
+                                        {{ $user->assignedGateway->name }}
+                                    </span>
+                                @else
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/5 text-gray-400 text-xs border border-white/5">
+                                        <span class="w-1.5 h-1.5 bg-gray-500 rounded-full"></span>
+                                        Não Integrado
+                                    </span>
+                                @endif
+                            </td>
+                            <td class="px-6 py-4 hidden sm:table-cell">
+                                @if($user->documentVerification)
+                                    @php
+                                        $statusClass = $user->documentVerification->isApproved() ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 
+                                                       ($user->documentVerification->isRejected() ? 'bg-red-500/10 text-red-400 border-red-500/20' : 
+                                                       'bg-yellow-500/10 text-yellow-500 border-yellow-500/20');
+                                    @endphp
+                                    <span class="inline-flex px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider border {{ $statusClass }}">
+                                        {{ $user->documentVerification->status }}
+                                    </span>
+                                @else
+                                    <span class="inline-flex px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider border bg-white/5 text-gray-500 border-white/5">
+                                        Pendente
+                                    </span>
+                                @endif
+                            </td>
+                            <td class="px-6 py-4 text-right">
+                                <div class="flex items-center justify-end gap-2">
+                                    <button onclick="loadUserDetails({{ $user->id }})" class="p-2 bg-white/5 hover:bg-white/10 text-gray-300 rounded-lg transition-colors border border-white/5" title="Inspeções/Dashboard">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                                    </button>
+                                    <button onclick="openFeesModal({{ $user->id }})" class="p-2 bg-white/5 hover:bg-emerald-500/20 text-gray-300 hover:text-emerald-400 rounded-lg transition-colors border border-white/5" title="Configurar Taxas">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" /></svg>
+                                    </button>
+                                    <button onclick="openChangeGatewayModal({{ $user->id }}, '{{ str_replace("'", "\'", $user->name) }}', {{ $user->assignedGateway ? $user->assignedGateway->id : 'null' }})" class="p-2 bg-white/5 hover:bg-[#D4AF37]/20 text-gray-300 hover:text-[#D4AF37] rounded-lg transition-colors border border-white/5" title="Alterar Gateway">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" /></svg>
+                                    </button>
+                                    <button onclick="openUserActionsModal({{ $user->id }}, '{{ str_replace("'", "\'", $user->name) }}', {{ $user->isBlocked() ? 'true' : 'false' }})" class="p-2 bg-white/5 hover:bg-red-500/20 text-gray-300 hover:text-red-400 rounded-lg transition-colors border border-white/5" title="Ações Críticas">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" /></svg>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="5" class="px-6 py-12 text-center">
+                                <div class="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-4 border border-white/10">
+                                    <svg class="w-8 h-8 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                                </div>
+                                <p class="text-white font-medium text-lg">Nenhum usuário classificado</p>
+                                <p class="text-gray-500 text-sm mt-1">O filtro aplicado não retornou resultados do banco de dados.</p>
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
         </div>
-    @endif
+        
+        <!-- Pagination Injectable -->
+        @if($users->hasPages())
+            <div class="px-6 py-4 border-t border-white/5 bg-black/20">
+                {{ $users->links('vendor.pagination.tailwind') }}
+            </div>
+        @endif
+    </div>
 </div>
 
 <!-- User Details Modal -->

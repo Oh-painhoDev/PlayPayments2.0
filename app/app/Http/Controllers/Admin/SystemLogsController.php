@@ -50,31 +50,45 @@ class SystemLogsController extends Controller
     public function getLiveLogs(Request $request)
     {
         $logFile = storage_path('logs/laravel.log');
-        $lastCheck = $request->input('last_check', time() - 5);
+        $lastCheck = $request->input('last_check', Carbon::now()->subSeconds(5)->timestamp);
         $logs = [];
         
         if (File::exists($logFile)) {
+            // Read more lines to ensure we don't miss anything during high traffic
             $content = File::get($logFile);
             $lines = explode("\n", $content);
             
-            foreach (array_slice($lines, -100) as $line) {
-                if (empty($line)) continue;
+            foreach (array_slice($lines, -200) as $line) {
+                if (empty($line) || strlen($line) < 10) continue;
                 
                 $timestamp = $this->extractTimestamp($line);
                 
-                if ($timestamp && strtotime($timestamp) > $lastCheck) {
-                    $logs[] = [
-                        'timestamp' => $timestamp,
-                        'level' => $this->extractLevel($line),
-                        'message' => $line,
-                        'is_error' => $this->isError($line)
-                    ];
+                if ($timestamp) {
+                    $logTime = Carbon::parse($timestamp)->timestamp;
+                    if ($logTime > $lastCheck) {
+                        $logs[] = [
+                            'timestamp' => Carbon::parse($timestamp)->format('H:i:s'),
+                            'level' => $this->extractLevel($line),
+                            'message' => $line,
+                            'is_error' => $this->isError($line)
+                        ];
+                    }
                 }
             }
         }
         
+        // Also return fresh stats for the UI
+        $stats = $this->getApiStats();
+        
         return response()->json([
-            'logs' => array_reverse($logs),
+            'logs' => $logs,
+            'stats' => [
+                'current_minute' => $stats['current_minute'],
+                'current_hour' => $stats['current_hour'],
+                'current_day' => $stats['current_day'],
+                'usage' => $stats['usage'],
+                'hourly_breakdown' => $stats['hourly_breakdown']
+            ],
             'timestamp' => time()
         ]);
     }

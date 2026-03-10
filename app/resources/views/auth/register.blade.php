@@ -293,11 +293,11 @@
             border-bottom: 2px solid rgba(255, 255, 255, 0.2);
             color: var(--text);
             font-family: inherit;
-            padding: 12px 40px 12px 15px;
+            padding: 10px 40px 10px 12px;
             outline: none;
             transition: all 0.3s ease;
             box-sizing: border-box;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
         }
 
         .cyber-input:focus {

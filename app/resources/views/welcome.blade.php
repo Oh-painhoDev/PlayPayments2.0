@@ -351,6 +351,8 @@
             .section-header h2 { font-size: 2.5rem; }
         }
     </style>
+    <!-- PWA Padrão da Plataforma -->
+    @include('components.pwa-head')
 </head>
 <body>
 
@@ -516,5 +518,7 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
     </script>
+    <!-- Modal Popup Instalação App -->
+    @include('components.pwa-prompt')
 </body>
 </html>

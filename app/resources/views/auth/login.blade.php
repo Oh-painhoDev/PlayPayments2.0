@@ -350,11 +350,11 @@
             border-bottom: 2px solid rgba(255, 255, 255, 0.2);
             color: var(--text);
             font-family: inherit;
-            padding: 12px 40px 12px 15px;
+            padding: 10px 40px 10px 12px;
             outline: none;
             transition: all 0.3s ease;
             box-sizing: border-box;
-            font-size: 1rem;
+            font-size: 0.85rem;
         }
 
         .cyber-input::placeholder {
@@ -604,9 +604,18 @@
                         @enderror
                     </div>
 
-                    <!-- Forgot Password Link -->
-                    <div class="forgot-password">
-                        <a href="{{ route('password.request') }}">Esqueceu a senha?</a>
+                    <!-- Remember Me & Forgot Password -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: -0.5rem;">
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <input type="checkbox" id="remember" name="remember" {{ old('remember') ? 'checked' : '' }} 
+                                style="accent-color: var(--accent); cursor: pointer;">
+                            <label for="remember" style="font-family: var(--font-code); font-size: 0.7rem; color: rgba(255, 255, 255, 0.6); cursor: pointer; text-transform: uppercase;">
+                                Permanecer conectado por 30 dias
+                            </label>
+                        </div>
+                        <div class="forgot-password" style="margin-top: 0;">
+                            <a href="{{ route('password.request') }}">Esqueceu a senha?</a>
+                        </div>
                     </div>
 
                     <!-- Login Button -->

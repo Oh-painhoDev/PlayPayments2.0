@@ -386,6 +386,11 @@ Route::middleware(['auth', CheckUserBlocked::class, 'onboarding.gate'])->group(f
             return view('integracoes');
         })->name('integracoes');
         
+        // Premiações Route
+        Route::get('/premiacoes', function() {
+            return view('premiacoes');
+        })->name('premiacoes');
+        
         // UTMify Integration Routes
         Route::prefix('integracoes/utmfy')->name('integracoes.utmfy.')->group(function () {
             Route::get('/', [\App\Http\Controllers\UtmifyController::class, 'index'])->name('index');
@@ -673,3 +678,4 @@ Route::middleware(['auth', CheckUserBlocked::class])->group(function () {
         });
     });
 });
+Route::view('/offline', 'offline');

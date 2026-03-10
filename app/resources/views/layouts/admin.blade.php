@@ -88,6 +88,8 @@
             background-color: #000000 !important;
         }
     </style>
+    <!-- PWA Padrão da Plataforma -->
+    @include('components.pwa-head')
 </head>
 <body class="font-sans antialiased text-white overflow-hidden" style="background-color: #000000;">
     <div class="flex h-screen">
@@ -520,5 +522,7 @@
     @stack('scripts')
     <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     @include('components.MacosDock')
+    <!-- Modal Popup Instalação App -->
+    @include('components.pwa-prompt')
 </body>
 </html>

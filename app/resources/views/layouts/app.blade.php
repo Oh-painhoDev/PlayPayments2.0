@@ -123,6 +123,8 @@
             padding: 0;
         }
     </style>
+    <!-- PWA Padrão da Plataforma -->
+    @include('components.pwa-head')
 </head>
 <body class="font-sans antialiased text-gray-900">
     <div class="min-h-screen flex flex-col">

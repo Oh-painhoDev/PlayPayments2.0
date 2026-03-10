@@ -24,7 +24,7 @@ class WithdrawalController extends Controller
     /**
      * Show withdrawals page
      */
-    public function index()
+    public function index(Request $request)
     {
         $user = Auth::user();
         
@@ -39,20 +39,40 @@ class WithdrawalController extends Controller
             $user->refresh();
         }
         
-        // Buscar saldos por método de pagamento (saldo disponível para saque)
-        // O saldo PIX e Cartão devem ser o saldo total disponível no wallet
-        // dividido proporcionalmente ou simplesmente mostrar o mesmo valor
-        // Vamos usar o wallet_balance para ambos por enquanto
+        // Base query for transactions
+        $query = \App\Models\Transaction::where('user_id', $user->id);
+
+        // Advanced Filtering
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('transaction_id', 'like', "%{$search}%")
+                  ->orWhere('customer_data', 'like', "%{$search}%")
+                  ->orWhere('external_id', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('status') && $request->status !== 'all') {
+            $query->where('status', $request->status);
+        }
+
+        if ($request->filled('method') && $request->method !== 'all') {
+            $query->where('payment_method', $request->method);
+        }
+
+        if ($request->filled('date_start')) {
+            $query->whereDate('created_at', '>=', $request->date_start);
+        }
+
+        if ($request->filled('date_end')) {
+            $query->whereDate('created_at', '<=', $request->date_end);
+        }
+        
         $availableBalance = $user->wallet_balance;
         
         // Calcular saldos por método de pagamento (apenas para exibição)
-        // PIX: soma de net_amount das transações PIX pagas (já creditadas no wallet)
-        $pixBalance = $availableBalance; // Por enquanto, usar o saldo total disponível
-        // TODO: Calcular proporcionalmente baseado nas transações PIX
-        
-        // Cartão: soma de net_amount das transações de cartão pagas (já creditadas no wallet)
-        $cardBalance = 0.00; // Por enquanto, 0.00 pois não temos muitas transações de cartão
-        // TODO: Calcular proporcionalmente baseado nas transações de cartão
+        $pixBalance = $availableBalance; 
+        $cardBalance = 0.00;
         
         // Saldo a receber (transações pendentes que ainda não foram pagas)
         $pendingAmount = \App\Models\Transaction::where('user_id', $user->id)
@@ -62,12 +82,63 @@ class WithdrawalController extends Controller
         // Reserva financeira (saldo bloqueado/reservado)
         $reservedBalance = $user->wallet->blocked_balance ?? 0.00;
         
-        // Buscar transações para a seção de movimentações
-        $transactions = \App\Models\Transaction::where('user_id', $user->id)
-            ->with(['gateway', 'user'])
+        // Execute filtered query
+        $transactions = $query->with(['gateway', 'user'])
             ->orderBy('created_at', 'desc')
-            ->paginate(20);
+            ->paginate(20)
+            ->appends($request->all());
         
+        // Extended Stats for Wallet Dashboard
+        $statsBase = \App\Models\Transaction::where('user_id', $user->id);
+        
+        $todayStats = (clone $statsBase)->whereDate('created_at', now())->where('status', 'paid');
+        $revenueToday = $todayStats->sum('net_amount');
+        $paidTodayCount = $todayStats->count();
+
+        $allTimePaid = (clone $statsBase)->where('status', 'paid');
+        $avgTicket = $allTimePaid->avg('amount') ?? 0;
+        
+        $totalCount = (clone $statsBase)->count();
+        $paidCount = (clone $statsBase)->where('status', 'paid')->count();
+        $conversionRate = $totalCount > 0 ? ($paidCount / $totalCount) * 100 : 0;
+
+        // Growth comparison
+        $yesterdayRevenue = (clone $statsBase)->whereDate('created_at', now()->subDay())->where('status', 'paid')->sum('net_amount');
+        $growth = $yesterdayRevenue > 0 ? (($revenueToday - $yesterdayRevenue) / $yesterdayRevenue) * 100 : 0;
+
+        // Chart Data (Last 7 Days)
+        $chartDataReceived = [];
+        $chartDataWithdrawals = [];
+        $chartLabels = [];
+        
+        for ($i = 6; $i >= 0; $i--) {
+            $date = now()->subDays($i);
+            // Label em português: D, S, T, Q, Q, S, S
+            $diasSemana = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'];
+            $chartLabels[] = $diasSemana[$date->dayOfWeek];
+            
+            // Recebimentos no dia
+            $received = \App\Models\Transaction::where('user_id', $user->id)
+                ->whereDate('created_at', $date->format('Y-m-d'))
+                ->where('status', 'paid')
+                ->sum('net_amount');
+            $chartDataReceived[] = $received;
+                
+            // Saques no dia
+            $withdrawn = \App\Models\Withdrawal::where('user_id', $user->id)
+                ->whereDate('created_at', $date->format('Y-m-d'))
+                ->whereIn('status', ['completed', 'approved', 'processing', 'pending'])
+                ->sum('amount');
+            $chartDataWithdrawals[] = $withdrawn;
+        }
+        
+        // Find max value to normalize chart heights
+        $maxChartVal = max(
+            count($chartDataReceived) > 0 ? max($chartDataReceived) : 1,
+            count($chartDataWithdrawals) > 0 ? max($chartDataWithdrawals) : 1
+        );
+        if ($maxChartVal <= 0) $maxChartVal = 1;
+
         // Buscar saques
         $withdrawals = Withdrawal::where('user_id', $user->id)
             ->orderBy('created_at', 'desc')
@@ -123,6 +194,20 @@ class WithdrawalController extends Controller
             'pendingAmount' => $pendingAmount,
             'reservedBalance' => $reservedBalance,
             'availableBalance' => $availableBalance,
+            'filters' => $request->all(),
+            'chart' => [
+                'dataReceived' => $chartDataReceived,
+                'dataWithdrawals' => $chartDataWithdrawals,
+                'labels' => $chartLabels,
+                'max' => $maxChartVal
+            ],
+            'stats' => [
+                'revenue_today' => $revenueToday,
+                'paid_today_count' => $paidTodayCount,
+                'avg_ticket' => $avgTicket,
+                'conversion_rate' => $conversionRate,
+                'growth' => $growth
+            ]
         ]);
     }
     

@@ -53,6 +53,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/light.css">
 
@@ -631,6 +633,9 @@
             background-color: #1f1f1f !important;
         }
     </style>
+
+    <!-- PWA Padrão da Plataforma -->
+    @include('components.pwa-head')
 </head>
 <body class="font-sans antialiased" style="background-color: #000000; color: #FFFFFF;" x-data="{ sidebarOpen: false, sidebarCollapsed: false }">
     <div class="dashboard-wrapper flex h-screen w-full overflow-hidden">
@@ -824,6 +829,23 @@
                                     </a>
                                 </div>
                             </div>
+                            <div>
+                                <div class="px-5">
+                                    <a class="relative flex items-center w-full transition-all duration-200 py-2 {{ request()->routeIs('premiacoes') ? 'text-white' : 'text-[#6B7280]' }}" href="{{ route('premiacoes') }}">
+                                        @if(request()->routeIs('premiacoes'))
+                                        <div class="absolute -left-5 top-1/2 transform -translate-y-1/2 bg-[#D4AF37] w-1.5 h-[26px] rounded-br-[4px] rounded-tr-[4px]"></div>
+                                        @endif
+                                        <div class="flex items-center gap-2.5">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" class="h-5 w-5 flex-shrink-0 {{ request()->routeIs('premiacoes') ? 'text-[#D4AF37]' : 'text-[#6B7280]' }}">
+                                                <path fill="currentColor" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                                            </svg>
+                                            <div class="flex items-center gap-2 whitespace-nowrap min-w-0">
+                                                <span class="text-sm font-semibold tracking-[-0.28px] {{ request()->routeIs('premiacoes') ? 'text-white' : 'text-[#6B7280]' }}" style="font-family: Manrope, sans-serif;">Premiações</span>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     @enddocumentsApproved
@@ -887,6 +909,33 @@
                         </div>
                     </div>
                     @enddocumentsApproved
+                    
+                    <!-- Admin Center (Only for Admins/Managers) -->
+                    @if(auth()->user()->isAdminOrManager())
+                    <div id="section-admin" class="space-y-2">
+                        <h3 class="px-5 text-sm font-semibold tracking-[-0.28px] text-[#D4AF37]">Administração</h3>
+                        <div class="space-y-1">
+                            <div>
+                                <div class="px-5">
+                                    <a class="relative flex items-center w-full transition-all duration-200 py-2 {{ request()->is('admin*') ? 'text-white' : 'text-[#6B7280]' }}" href="{{ route('admin.dashboard') }}">
+                                        @if(request()->is('admin*'))
+                                        <div class="absolute -left-5 top-1/2 transform -translate-y-1/2 bg-[#D4AF37] w-1.5 h-[26px] rounded-br-[4px] rounded-tr-[4px]"></div>
+                                        @endif
+                                        <div class="flex items-center gap-2.5">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" class="h-5 w-5 flex-shrink-0 {{ request()->is('admin*') ? 'text-[#D4AF37]' : 'text-[#6B7280]' }}">
+                                                <path fill="currentColor" d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12c5.16-1.26 9-6.45 9-12V5l-9-4m0 6a3 3 0 1 1-3 3a3 3 0 0 1 3-3m0 12c-2.7 0-5.8-1.28-6-3c.03-2.12 3.89-3 6-3c2.1 0 5.97.88 6 3c-.2 1.72-3.3 3-6 3Z"></path>
+                                            </svg>
+                                            <div class="flex items-center gap-2 whitespace-nowrap min-w-0">
+                                                <span class="text-sm font-semibold tracking-[-0.28px] {{ request()->is('admin*') ? 'text-white' : 'text-[#6B7280]' }}" style="font-family: Manrope, sans-serif;">Painel Admin</span>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @endif
+
                             
                     <!-- Sistema -->
                     <div id="section-sistema" class="space-y-2">
@@ -998,51 +1047,57 @@
         <!-- Main Content -->
             <main class="main-content flex-1 flex flex-col overflow-hidden" style="background-color: #000000;">
             <!-- Header -->
-            <header class="w-full sticky top-0 z-40 transition-all duration-300 flex-shrink-0" style="background-color: #000000; box-shadow: none;">
+            <header class="w-full sticky top-0 z-40 transition-all duration-300 flex-shrink-0 backdrop-blur-md border-b border-white/5" 
+                    style="background-color: rgba(0, 0, 0, 0.8); box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);">
                 <!-- Desktop Header -->
-                <div class="hidden lg:flex container mx-auto px-4 md:px-6 items-center justify-between h-[80px] gap-2 sm:gap-4">
-                    <!-- Conteúdo do Header (lado direito) - Centralizado Verticalmente -->
-                    <div class="flex items-center justify-end gap-2 sm:gap-4 ml-auto">
+                <div class="hidden lg:flex container mx-auto px-4 md:px-6 items-center justify-between h-[80px]">
+                    <!-- Right Content (Goals & Settings) -->
+                    <div class="flex items-center justify-end gap-6 ml-auto">
                         @if(isset($goals) && $goals->count() > 0)
                             @php
-                                // Pegar apenas a primeira meta não completada
                                 $currentGoal = $goals->first();
                             @endphp
                             @if($currentGoal)
-                                <!-- Card de Meta - Desktop e Mobile -->
-                                <div class="flex items-center gap-3 px-4 py-3 rounded-lg h-16" style="align-self: center; background: transparent;">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trophy h-5 w-5 text-[#D4AF37] flex-shrink-0">
-                                        <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
-                                        <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
-                                        <path d="M4 22h16"></path>
-                                        <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path>
-                                        <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path>
-                                        <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path>
-                                    </svg>
-                                    <div class="flex flex-col gap-1.5 justify-center min-w-[120px] sm:min-w-[210px]">
-                                        <!-- Barra de progresso com % ao lado direito -->
-                                        <div class="flex items-center gap-2 w-full">
-                                            <div class="flex-1 rounded-[40px] p-[2px] bg-[#161616]">
-                                                <div class="bg-[#D4AF37] h-[6px] rounded-[40px] transition-all duration-500" style="width: {{ min(100, $currentGoal['percentage']) }}%;"></div>
-                                            </div>
-                                            <span class="text-[12px] sm:text-[14px] font-semibold font-['Manrope'] tracking-[-0.26px] sm:tracking-[-0.28px] text-white flex-shrink-0">{{ number_format($currentGoal['percentage'], 0) }}%</span>
+                                <!-- Goal Card -->
+                                <div class="group flex items-center gap-4 px-5 py-2 rounded-2xl transition-all duration-300 hover:bg-white/5" style="align-self: center;">
+                                    <div class="relative">
+                                        <div class="absolute inset-0 bg-[#D4AF37] blur-md opacity-20 group-hover:opacity-40 transition-opacity"></div>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trophy h-6 w-6 text-[#D4AF37] relative z-10 animate-pulse">
+                                            <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
+                                            <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
+                                            <path d="M4 22h16"></path>
+                                            <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path>
+                                            <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path>
+                                            <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path>
+                                        </svg>
+                                    </div>
+                                    <div class="flex flex-col gap-2 justify-center min-w-[240px]">
+                                        <div class="flex items-center justify-between mb-1">
+                                            <span class="text-[10px] uppercase font-bold tracking-widest text-gray-500 font-['JetBrains Mono']">Meta Atual</span>
+                                            <span class="text-[13px] font-bold text-[#D4AF37] shadow-[#D4AF37]/20 drop-shadow-sm">{{ number_format($currentGoal['percentage'], 1) }}%</span>
                                         </div>
-                                        <!-- Valores R$ 0,00 e R$ 100,00 -->
-                                        <div class="flex justify-between items-center text-[10px] sm:text-[12px] text-gray-400">
-                                            <span class="truncate">R$ {{ number_format($currentGoal['current_value'], 2, ',', '.') }}</span>
-                                            <span class="ml-1 flex-shrink-0">R$ {{ number_format($currentGoal['target_value'], 2, ',', '.') }}</span>
+                                        <div class="relative h-2 w-full bg-white/5 rounded-full overflow-hidden border border-white/5">
+                                            <div class="absolute top-0 left-0 h-full bg-gradient-to-r from-[#8a6d1d] via-[#D4AF37] to-[#f5de8a] rounded-full transition-all duration-1000 shadow-[0_0_15px_rgba(212,175,55,0.4)]" 
+                                                 style="width: {{ min(100, $currentGoal['percentage']) }}%;">
+                                                <div class="absolute inset-0 w-full h-full animate-[shimmer_2s_infinite] bg-gradient-to-r from-transparent via-white/30 to-transparent"></div>
+                                            </div>
+                                        </div>
+                                        <div class="flex justify-between items-center text-[11px] font-medium font-['Inter']">
+                                            <span class="text-white/70">R$ {{ number_format($currentGoal['current_value'], 2, ',', '.') }}</span>
+                                            <span class="text-white/40">R$ {{ number_format($currentGoal['target_value'], 2, ',', '.') }}</span>
                                         </div>
                                     </div>
                                 </div>
-                                <!-- Divisor (apenas desktop, antes do botão de configurações) -->
-                                <div class="hidden lg:block h-4 w-[1px] bg-[#AAAAAA] opacity-30" style="align-self: center;"></div>
+                                <div class="hidden lg:block h-8 w-[1px] bg-gradient-to-b from-transparent via-white/10 to-transparent" style="align-self: center;"></div>
                             @endif
                         @endif
                         
-                        
-                        <!-- Botão de Configurações -->
-                        <a class="hidden lg:flex items-center justify-center rounded-lg h-10 w-10 sm:h-12 sm:w-12 bg-[#161616] hover:bg-[#252525] transition-colors duration-200" href="{{ route('settings.index') }}" style="align-self: center;">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-settings h-[16px] w-[16px] sm:h-[18px] sm:w-[18px] text-[#AAAAAA]">
+                        <!-- Settings Button -->
+                        <a class="group relative flex items-center justify-center rounded-xl h-12 w-12 bg-white/5 hover:bg-[#D4AF37] transition-all duration-500 overflow-hidden" 
+                           href="{{ route('settings.index') }}" style="align-self: center;">
+                            <div class="absolute inset-0 bg-[#D4AF37] opacity-0 group-hover:opacity-20 blur-xl transition-all"></div>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
+                                 class="lucide lucide-settings h-5 w-5 text-gray-400 group-hover:text-white group-hover:rotate-90 transition-all duration-500">
                                 <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path>
                                 <circle cx="12" cy="12" r="3"></circle>
                             </svg>
@@ -1051,52 +1106,34 @@
                 </div>
                 
                 <!-- Mobile Header -->
-                <div class="lg:hidden flex flex-col w-full px-4 py-3 gap-3">
-                    <!-- Primeira linha: Menu + Meta + Configurações -->
-                    <div class="flex items-center justify-between gap-2">
-                        <!-- Botão de Menu Mobile (Lado Esquerdo) -->
-                        <button @click="sidebarOpen = !sidebarOpen" class="flex items-center justify-center w-10 h-10 rounded-lg bg-[#1E1E1E] shadow-sm border border-[#2D2D2D] mr-2 hover:bg-[#252525] transition-colors">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-menu h-5 w-5 text-gray-300">
+                <div class="lg:hidden flex flex-col w-full px-4 py-4 backdrop-blur-xl border-b border-white/5" style="background: rgba(0,0,0,0.5);">
+                    <div class="flex items-center justify-between gap-4">
+                        <button @click="sidebarOpen = !sidebarOpen" class="active:scale-95 flex items-center justify-center w-11 h-11 rounded-xl bg-white/5 border border-white/10 text-gray-400 hover:text-white transition-all">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-menu h-6 w-6">
                                 <line x1="4" x2="20" y1="12" y2="12"></line>
                                 <line x1="4" x2="20" y1="6" y2="6"></line>
                                 <line x1="4" x2="20" y1="18" y2="18"></line>
                             </svg>
                         </button>
                         
-                        <!-- Meta no Mobile (Meio) -->
+                        <!-- Meta Mobile -->
                         @if(isset($goals) && $goals->count() > 0)
-                            @php
-                                $currentGoal = $goals->first();
-                            @endphp
+                            @php $currentGoal = $goals->first(); @endphp
                             @if($currentGoal)
-                                <div class="flex items-center gap-2 px-3 py-2 rounded-lg flex-1" style="background: transparent;">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trophy h-4 w-4 text-[#D4AF37] flex-shrink-0">
-                                        <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
-                                        <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
-                                        <path d="M4 22h16"></path>
-                                        <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path>
-                                        <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path>
-                                        <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path>
-                                    </svg>
-                                    <div class="flex flex-col gap-1 justify-center flex-1 min-w-0">
-                                        <div class="flex items-center gap-2 w-full">
-                                            <div class="flex-1 rounded-[40px] p-[2px] bg-[#161616]">
-                                                <div class="bg-[#D4AF37] h-[4px] rounded-[40px] transition-all duration-500" style="width: {{ min(100, $currentGoal['percentage']) }}%;"></div>
-                                            </div>
-                                            <span class="text-[10px] font-semibold font-['Manrope'] tracking-[-0.24px] text-white flex-shrink-0">{{ number_format($currentGoal['percentage'], 0) }}%</span>
-                                        </div>
-                                        <div class="flex justify-between items-center text-[9px] text-gray-400">
-                                            <span class="truncate">R$ {{ number_format($currentGoal['current_value'], 2, ',', '.') }}</span>
-                                            <span class="ml-1 flex-shrink-0">R$ {{ number_format($currentGoal['target_value'], 2, ',', '.') }}</span>
-                                        </div>
+                                <div class="flex flex-col flex-1 gap-1">
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-[11px] font-bold text-[#D4AF37]">{{ number_format($currentGoal['percentage'], 0) }}%</span>
+                                        <span class="text-[9px] text-gray-500 font-mono">META ATIVA</span>
+                                    </div>
+                                    <div class="relative h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+                                        <div class="absolute top-0 left-0 h-full bg-[#D4AF37] shadow-[0_0_10px_rgba(212,175,55,0.4)]" style="width: {{ min(100, $currentGoal['percentage']) }}%;"></div>
                                     </div>
                                 </div>
                             @endif
                         @endif
                         
-                        <!-- Botão de Configurações (Lado Direito) -->
-                        <a class="flex items-center justify-center rounded-lg h-10 w-10 sm:h-12 sm:w-12 bg-[#161616] hover:bg-[#252525] transition-colors" href="{{ route('settings.index') }}">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-settings h-[16px] w-[16px] sm:h-[18px] sm:w-[18px] text-[#AAAAAA]">
+                        <a class="active:scale-95 flex items-center justify-center rounded-xl h-11 w-11 bg-white/5 border border-white/10" href="{{ route('settings.index') }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-settings text-gray-400">
                                 <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path>
                                 <circle cx="12" cy="12" r="3"></circle>
                             </svg>
@@ -1104,6 +1141,13 @@
                     </div>
                 </div>
             </header>
+            
+            <style>
+                @keyframes shimmer {
+                    0% { transform: translateX(-100%); }
+                    100% { transform: translateX(100%); }
+                }
+            </style>
             
 
             <!-- Content Area -->
@@ -1212,5 +1256,7 @@
     </script>
 
     @include('components.MacosDock')
+    <!-- Modal Popup Instalação App -->
+    @include('components.pwa-prompt')
 </body>
 </html>

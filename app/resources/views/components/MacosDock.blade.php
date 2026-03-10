@@ -1,9 +1,13 @@
 <!-- MacOSDock Component -->
 @auth
-<div id="macos-dock-container" class="w-full flex justify-center bg-transparent shrink-0 pointer-events-none">
+<div id="macos-dock-container" class="w-full flex justify-center bg-transparent shrink-0 pointer-events-none {{ request()->routeIs('dashboard') ? 'dock-on-dashboard' : '' }}">
     <div id="macos-dock-wrapper" class="z-[9999] flex items-end justify-center pointer-events-none">
         <div id="macos-dock" class="backdrop-blur-md pointer-events-auto flex items-end"
-             style="background: rgba(45, 45, 45, 0.75); border: 1px solid rgba(255, 255, 255, 0.15);">
+             style="background: rgba(45, 45, 45, 0.75); border: 1px solid rgba(255, 255, 255, 0.15); position: relative;">
+            <!-- Tooltip Element -->
+            <div id="dock-tooltip" class="absolute left-1/2 -translate-x-1/2 -top-10 px-3 py-1 bg-white/10 backdrop-blur-lg border border-white/20 text-white text-xs font-medium rounded-md opacity-0 transition-opacity duration-200 pointer-events-none whitespace-nowrap">
+                Tooltip Text
+            </div>
             <div id="macos-dock-icons-container" class="relative w-full overflow-visible">
                 <!-- Icons will be rendered here via JS -->
             </div>
@@ -21,7 +25,7 @@
         width: 100%;
         display: flex;
         justify-content: center;
-        padding-bottom: 1rem;
+        padding-bottom: 16px; /* Floating space from the bottom edge */
         background: transparent;
         pointer-events: none;
     }
@@ -31,22 +35,37 @@
     }
 
     /* 
-       CRITICAL: This ensures the page content NEVER goes under the dock.
-       The content area will strictly end above the dock's height.
+       Dock spacing adjustment: 
+       We use padding instead of margin to allow content to flow behind 
+       while remaining reachable.
     */
-    main, #main-content, .flex-1.overflow-y-auto, .min-h-screen {
-        margin-bottom: 90px !important; /* Reduced space for smaller dock */
-    }
-
-    /* Specific adjustment for the dashboard/admin scrollable areas */
     .scrollable-content {
-        padding-bottom: 20px !important;
+        padding-bottom: 80px !important; /* Balanced space for the dock */
+    }
+    
+    .dock-spacer {
+        height: 40px;
+        width: 100%;
+        display: block;
+        opacity: 0;
+        pointer-events: none;
     }
 
-    /* Mobile adjustments: less margin for smaller dock */
+    /* Remove the invasive margin-bottom that was creating the gap */
+    main, #main-content, .min-h-screen, .flex-1.overflow-y-auto {
+        margin-bottom: 0 !important;
+    }
+
+    /* Mobile specific: Left aligned ONLY on Dashboard home, centered on others */
     @media (max-width: 768px) {
-        main, #main-content, .flex-1.overflow-y-auto, .min-h-screen {
-            margin-bottom: 70px !important;
+        #macos-dock-container {
+            justify-content: center; /* Default for other pages */
+            padding-left: 0;
+        }
+        
+        #macos-dock-container.dock-on-dashboard {
+            justify-content: flex-start !important;
+            padding-left: 26px !important;
         }
     }
 </style>
@@ -121,13 +140,13 @@
         function getResponsiveConfig() {
             const smallerDimension = Math.min(window.innerWidth, window.innerHeight);
             if (smallerDimension < 480) {
-              return { baseIconSize: 32, maxScale: 1.3, effectWidth: 140 };
+              return { baseIconSize: 26, maxScale: 1.2, effectWidth: 100 };
             }
             if (smallerDimension < 768) {
-              return { baseIconSize: 40, maxScale: 1.4, effectWidth: 180 };
+              return { baseIconSize: 32, maxScale: 1.3, effectWidth: 140 };
             }
             if (smallerDimension < 1024) {
-              return { baseIconSize: 44, maxScale: 1.5, effectWidth: 220 };
+              return { baseIconSize: 40, maxScale: 1.4, effectWidth: 180 };
             }
             return {
               baseIconSize: 48,
@@ -212,6 +231,19 @@
                 dot.style.transform = "translateX(-50%)";
                 dot.style.display = (app.id === activeAppId) ? "block" : "none";
                 item.appendChild(dot);
+                
+                // Tooltip logic
+                item.onmouseenter = () => {
+                    const tooltip = document.getElementById('dock-tooltip');
+                    tooltip.innerText = app.name;
+                    tooltip.style.opacity = '1';
+                    tooltip.style.left = `${currentPositions[index] + 10}px`; // +10 for horizontal padding
+                    tooltip.style.top = `-${(config.baseIconSize * currentScales[index]) + 0}px`;
+                };
+                
+                item.onmouseleave = () => {
+                    document.getElementById('dock-tooltip').style.opacity = '0';
+                };
 
                 itemNodes.push({ wrapper: item, img, dot });
                 containerRef.appendChild(item);
@@ -301,6 +333,16 @@
             });
 
             updateStyles();
+
+            // Dynamic tooltip position follow
+            const tooltip = document.getElementById('dock-tooltip');
+            if (tooltip.style.opacity === '1') {
+                const hoveredIndex = apps.findIndex(app => app.name === tooltip.innerText);
+                if (hoveredIndex !== -1) {
+                    tooltip.style.left = `${currentPositions[hoveredIndex] + 10}px`;
+                    tooltip.style.top = `-${(config.baseIconSize * currentScales[hoveredIndex]) + 0}px`;
+                }
+            }
 
             if (needsUpdate || mouseX !== null) {
                 animationFrameRef = requestAnimationFrame(animate);
