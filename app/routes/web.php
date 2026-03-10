@@ -82,9 +82,9 @@ Route::get('/favicon.svg', function () {
     abort(404);
 });
 
-// Redirect root to login
+// Servir o arquivo index.html como a página inicial
 Route::get('/', function () {
-    return redirect('/auth/login');
+    return File::get(public_path('index.html'));
 });
 
 // Public checkout route (no auth required)
