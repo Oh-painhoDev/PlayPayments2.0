@@ -18,7 +18,7 @@
             --bg: #030303;
             --card-bg: rgba(10, 10, 10, 0.4);
             --text: #e0e0e0;
-            --accent: #ff003c;
+            --accent: #af8a2a;
             --accent-2: #ffffff;
             --border: rgba(255, 255, 255, 0.1);
             --font-display: 'Syncopate', sans-serif;
@@ -638,7 +638,7 @@
             zGap: 800,
             loopSize: 0,
             camSpeed: 2.5,
-            colors: ['#ff003c', '#ffffff', '#ccff00', '#ffffff']
+            colors: ['#af8a2a', '#ffffff', '#af8a2a', '#ffffff']
         };
         CONFIG.loopSize = CONFIG.itemCount * CONFIG.zGap;
 
@@ -813,7 +813,7 @@
                         // RGB Split effect on text
                         if (Math.abs(state.velocity) > 1) {
                             const offset = state.velocity * 2;
-                            item.el.style.textShadow = `${offset}px 0 #ff003c, ${-offset}px 0 rgba(255, 255, 255, 0.5)`;
+                            item.el.style.textShadow = `${offset}px 0 #af8a2a, ${-offset}px 0 rgba(255, 255, 255, 0.5)`;
                         } else {
                             item.el.style.textShadow = 'none';
                         }
