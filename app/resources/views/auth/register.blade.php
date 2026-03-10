@@ -318,11 +318,11 @@
             background: #af8a2a;
             color: #fff;
             border: none;
-            padding: 16px;
+            padding: 13px;
             width: 100%;
             box-sizing: border-box;
             font-family: var(--font-display);
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             letter-spacing: 1px;
             text-transform: uppercase;
             font-weight: 700;
