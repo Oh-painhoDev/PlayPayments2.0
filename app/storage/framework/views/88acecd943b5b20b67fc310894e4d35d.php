@@ -1,5 +1,5 @@
 <?php if(env('ENABLE_PWA_PROMPT', true)): ?>
-<div id="pwa-install-prompt" class="fixed bottom-0 left-0 right-0 z-[9999] transform translate-y-full transition-transform duration-500 ease-out hidden">
+<div id="pwa-install-prompt" class="fixed bottom-0 left-0 right-0 pwa-hidden-real" style="z-index: 2147483647 !important;">
     <!-- PWA Install Popup Background -->
     <div class="px-4 pb-4 pt-2">
         <div class="bg-[#1a1a1a] border border-[#D4AF37]/30 rounded-2xl shadow-2xl p-4 flex flex-col gap-3 relative overflow-hidden">
@@ -16,8 +16,8 @@
 
             <div class="flex items-center gap-4 z-10">
                 <!-- App Icon -->
-                <div class="w-14 h-14 bg-black rounded-xl border border-white/10 flex items-center justify-center p-2 flex-shrink-0 shadow-inner">
-                    <img src="<?php echo e(asset('images/playpayments-logo-top.webp')); ?>" alt="<?php echo e(config('app.name')); ?>" class="max-w-full h-auto object-contain">
+                <div class="w-14 h-14 bg-black rounded-xl border border-white/10 flex items-center justify-center p-1 flex-shrink-0 shadow-inner overflow-hidden">
+                    <img src="<?php echo e(asset('images/pwa-icon.png')); ?>" alt="<?php echo e(config('app.name')); ?>" class="w-full h-full object-contain">
                 </div>
                 
                 <!-- Content -->
@@ -55,88 +55,84 @@
 </div>
 
 <style>
-@keyframes pwaSlideUp {
-    from { transform: translateY(100%); }
-    to { transform: translateY(0); }
-}
-.pwa-animated-show {
+#pwa-install-prompt {
     display: block !important;
-    animation: pwaSlideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    transform: translateY(110%);
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+#pwa-install-prompt.pwa-visible {
+    transform: translateY(0);
+}
+#pwa-install-prompt.pwa-hidden-real {
+    display: none !important;
 }
 </style>
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-    // Check if user already dismissed or app is installed
     const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
     const isDismissed = localStorage.getItem('playpayments_pwa_dismissed') === 'true';
-    
-    // If already installed or dismissed, do nothing
-    if (isStandalone || isDismissed) {
-        return;
-    }
+
+    if (isStandalone || isDismissed) return;
 
     const popup = document.getElementById('pwa-install-prompt');
     const closeBtn = document.getElementById('pwa-close-btn');
     const installBtn = document.getElementById('pwa-install-btn');
     const iosInstructions = document.getElementById('pwa-ios-instructions');
-    
+
     let deferredPrompt;
-    
-    // Detect OS
     const userAgent = navigator.userAgent.toLowerCase();
     const isIOS = /iphone|ipad|ipod/.test(userAgent);
-    
-    // Auto show prompt after 3 seconds for smooth UX
+
     const showPopup = () => {
-        popup.classList.remove('hidden');
-        popup.classList.add('pwa-animated-show');
-        
-        // If it's iOS, we change the install button to just reveal instructions
+        popup.classList.remove('pwa-hidden-real');
+        // Force reflow so transition runs
+        void popup.offsetWidth;
+        popup.classList.add('pwa-visible');
+
         if (isIOS) {
             installBtn.innerText = 'Ver como instalar';
             installBtn.addEventListener('click', () => {
                 iosInstructions.classList.remove('hidden');
                 iosInstructions.classList.add('flex');
-                installBtn.classList.add('hidden'); // Hide button after clicking
+                installBtn.classList.add('hidden');
             });
         }
     };
 
-    // Chrome/Android handles this event
+    const hidePopup = () => {
+        popup.classList.remove('pwa-visible');
+        setTimeout(() => popup.classList.add('pwa-hidden-real'), 550);
+        localStorage.setItem('playpayments_pwa_dismissed', 'true');
+    };
+
     window.addEventListener('beforeinstallprompt', (e) => {
         e.preventDefault();
         deferredPrompt = e;
-        
-        if(!isIOS && !isDismissed && !isStandalone) {
-             setTimeout(showPopup, 2000);
+        if (!isIOS && !isDismissed && !isStandalone) {
+            setTimeout(showPopup, 2000);
         }
     });
-    
-    // If it's iOS, show anyway because we can't catch beforeinstallprompt
+
     if (isIOS && !isDismissed && !isStandalone) {
         setTimeout(showPopup, 3000);
     }
 
-    // Handle Install Button for Android/Chrome
     installBtn.addEventListener('click', async () => {
         if (!isIOS && deferredPrompt) {
             deferredPrompt.prompt();
             const { outcome } = await deferredPrompt.userChoice;
             if (outcome === 'accepted') {
-                console.log('User accepted the PWA prompt');
-                popup.classList.remove('pwa-animated-show');
-                popup.style.transform = 'translateY(100%)';
+                hidePopup();
             }
             deferredPrompt = null;
         }
     });
 
-    // Handle Close/Dismiss
-    closeBtn.addEventListener('click', () => {
-        popup.style.transform = 'translateY(100%)';
-        setTimeout(() => popup.classList.add('hidden'), 500);
-        localStorage.setItem('playpayments_pwa_dismissed', 'true');
+    // Close button — this is the main fix
+    closeBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        hidePopup();
     });
 });
 </script>

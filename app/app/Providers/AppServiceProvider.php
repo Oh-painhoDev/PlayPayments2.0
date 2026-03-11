@@ -110,6 +110,10 @@ class AppServiceProvider extends ServiceProvider
             
             // Check if it's a URL
             if (filter_var($setting->value, FILTER_VALIDATE_URL)) {
+                // Reject URLs that contain 'undefined' – those are broken uploads
+                if (str_contains($setting->value, 'undefined')) {
+                    return null;
+                }
                 return $setting->value;
             }
             
